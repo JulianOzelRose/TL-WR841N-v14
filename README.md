@@ -1,5 +1,6 @@
 # TL-WR841N
-The TP-Link TL-WR841N is a relatively inexpensive 300mbps WiFi router. This makes it a perfect device for reverse engineering and hardware hacking projects. My goal here was to gain shell access via the router's UART debugging port.
+![photo_2022-12-16_15-26-34](https://user-images.githubusercontent.com/95890436/208206724-dc6ea069-f0d3-42e3-a3aa-e40ebf6da23d.jpg)
+The TP-Link TL-WR841N is a relatively inexpensive 300mbps WiFi router. This makes it a perfect device for reverse engineering and hardware hacking projects. My goal here was to gain shell access via the router's UART debugging port, and see what can be done from there.
 # Tools
 #### Hardware
 - Klein Tools Digital Multimeter MM300
@@ -19,3 +20,7 @@ To avoid shorting both our TL-WR841N router and our serial device, we must first
 ![photo_2022-12-16_14-12-06 (3)](https://user-images.githubusercontent.com/95890436/208198729-9004ca52-7f22-4dff-9c04-627a84ff9245.jpg)
 After confirming that our UART port work at 3.3V and soldering header pins, we can now connect our UART Serial Converter. The next step is to use a serial communication program to interface with the device and read the output. For this step, we connect RX-RX, TX-RX, and RX-TX. It is not necessary to connect VCC, so long as we set our Serial USB device to use 3.3V.
 # Shell Access
+
+https://user-images.githubusercontent.com/95890436/208208294-a52cb65b-5a97-4c6f-9879-bd4f32af4083.mp4
+
+Once we have secured a connection between the Serial USB converter to the router's UART port, we can now modify the settings in PuTTy for serial communication. The main value we need to know is the UART port's baud rate. It is possible to use a logic analyzer to figure out what the baud rate is. However, there are several baud rates that are very common, so it is easy to guess common values until one works. In this particular case, the router's UART runs at 115200 baud rate. Other baud rates will produce garbage on the screen.
