@@ -1,6 +1,6 @@
 # TL-WR841N
-![photo_2022-12-16_15-26-34](https://user-images.githubusercontent.com/95890436/208206724-dc6ea069-f0d3-42e3-a3aa-e40ebf6da23d.jpg)
 The TP-Link TL-WR841N is a relatively inexpensive 300mbps WiFi router. This makes it a perfect device for reverse engineering and hardware hacking projects. My goal here was to gain shell access via the router's UART debugging port, and see what can be done from there.
+![photo_2022-12-16_15-26-34](https://user-images.githubusercontent.com/95890436/208206724-dc6ea069-f0d3-42e3-a3aa-e40ebf6da23d.jpg)
 # Tools
 #### Hardware
 - Klein Tools Digital Multimeter MM300
