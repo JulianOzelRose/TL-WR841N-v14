@@ -1,0 +1,1 @@
+USER=root HOME=/ TMPDIR=/var/tmp TERM=vt102 PATH=/sbin:/usr/sbin:/bin:/usr/bin SHELL=/bin/sh PWD=/ 
