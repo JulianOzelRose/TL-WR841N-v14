@@ -23,4 +23,5 @@ After confirming that our UART port work at 3.3V and soldering header pins, we c
 ![photo_2022-12-16_14-12-06 (3)](https://user-images.githubusercontent.com/95890436/208198729-9004ca52-7f22-4dff-9c04-627a84ff9245.jpg)
 # Shell Access
 Once we have secured a connection between the Serial USB converter to the router's UART port, we can now modify the settings in PuTTy for serial communication. The main value we need to know is the UART port's baud rate. It is possible to use a logic analyzer to figure out what the baud rate is. However, there are several baud rates that are very common, so it is easy to guess common values until one works. In this particular case, the router's UART runs at ```115200``` baud rate. Other baud rates will produce garbage on the screen. Lastly, I used the Linux command ```echo $USER``` to confirm root access of the device.
-https://user-images.githubusercontent.com/95890436/208208294-a52cb65b-5a97-4c6f-9879-bd4f32af4083.mp4
+
+https://user-images.githubusercontent.com/95890436/208210651-2abda33f-8d49-427b-b0d4-e28a94e7ee11.mp4
