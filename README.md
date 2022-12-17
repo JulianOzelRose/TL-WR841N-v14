@@ -22,7 +22,7 @@ To avoid shorting both our TL-WR841N router and our serial device, we must first
 Using my multimeter, I tested and confirmed a 3.3V ```VCC```, ```GND```, and ```TX``` pins. ```RX``` reads at 0.0V, because it is essentially a listening port, just waiting for data. We can safely assume ```RX``` recieves at 3.3V, just like the rest of the serial port. Once the voltage is confirmed to be 3.3V, I soldered four header pins over the UART copper pads.
 
 # Connecting UART to Serial USB Converter
-After confirming that our UART port work at 3.3V and soldering header pins, we can now connect our UART Serial Converter. The next step is to use a serial communication program to interface with the device and read the output. For this step, we connect ```RX-RX```, ```TX-RX```, and ```RX-TX```. It is not necessary to connect ```VCC```, so long as we set our Serial USB device to use 3.3V.
+After confirming that our UART port work at 3.3V and soldering header pins, we can now connect our UART Serial Converter. The next step is to use a serial communication program to interface with the device and read the output. For this step, we connect ```GND-GND```, ```RX-TX```, and ```TX-RX```. It is not necessary to connect ```VCC```, so long as we set our Serial USB device to use 3.3V.
 
 ![photo_2022-12-16_14-12-06 (3)](https://user-images.githubusercontent.com/95890436/208198729-9004ca52-7f22-4dff-9c04-627a84ff9245.jpg)
 
