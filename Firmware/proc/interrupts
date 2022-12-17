@@ -1,0 +1,9 @@
+           CPU0       
+  3:        264          Ralink  eth0
+  4:     340330          Ralink  ra0
+  5:    2137042          Ralink  timer
+  6:          0          Ralink  ralink_gpio
+ 17:          1          Ralink  Ralink_ESW
+ 20:      85702          Ralink  serial
+
+ERR:          0
