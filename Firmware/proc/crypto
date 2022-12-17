@@ -1,0 +1,53 @@
+name         : ecb(arc4)
+driver       : ecb(arc4-generic)
+module       : kernel
+priority     : 0
+refcnt       : 1
+selftest     : passed
+type         : blkcipher
+blocksize    : 1
+min keysize  : 1
+max keysize  : 256
+ivsize       : 0
+geniv        : <default>
+
+name         : stdrng
+driver       : krng
+module       : kernel
+priority     : 200
+refcnt       : 1
+selftest     : passed
+type         : rng
+seedsize     : 0
+
+name         : arc4
+driver       : arc4-generic
+module       : kernel
+priority     : 0
+refcnt       : 1
+selftest     : passed
+type         : cipher
+blocksize    : 1
+min keysize  : 1
+max keysize  : 256
+
+name         : aes
+driver       : aes-generic
+module       : kernel
+priority     : 100
+refcnt       : 1
+selftest     : passed
+type         : cipher
+blocksize    : 16
+min keysize  : 16
+max keysize  : 32
+
+name         : sha1
+driver       : sha1-generic
+module       : kernel
+priority     : 0
+refcnt       : 1
+selftest     : passed
+type         : shash
+blocksize    : 64
+digestsize   : 20
