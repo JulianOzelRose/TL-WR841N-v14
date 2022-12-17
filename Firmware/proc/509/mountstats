@@ -1,0 +1,5 @@
+device rootfs mounted on / with fstype rootfs
+device /dev/root mounted on / with fstype squashfs
+device proc mounted on /proc with fstype proc
+device ramfs mounted on /var with fstype ramfs
+device /sys mounted on /sys with fstype sysfs
