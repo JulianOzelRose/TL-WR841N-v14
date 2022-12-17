@@ -31,4 +31,8 @@ Once we have secured a connection between the serial USB converter to the router
 
 However, there are several baud rates that are very common, so it is easy to guess common values until one works. In this particular case, the router's UART runs at ```115200``` baud rate. Other baud rates will produce garbage on the screen. We will also use the following settings: 8 data bits, 1 stop bits, no parity, no flow control. After gaining access to the shell, I used the Linux command ```echo $USER``` to confirm root access of the device. We know we have achieved this, as the device returns ```root```.
 
-https://user-images.githubusercontent.com/95890436/208212759-f1e04f3c-021b-427d-892f-6508d08d004a.mp4
+
+
+https://user-images.githubusercontent.com/95890436/208254191-7d6bdf81-cf2c-470f-bc04-1bbeaad90dae.mp4
+
+
