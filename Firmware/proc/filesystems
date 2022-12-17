@@ -1,0 +1,11 @@
+nodev	sysfs
+nodev	rootfs
+nodev	bdev
+nodev	proc
+nodev	tmpfs
+nodev	sockfs
+nodev	pipefs
+nodev	anon_inodefs
+	squashfs
+nodev	ramfs
+nodev	mtd_inodefs
