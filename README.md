@@ -17,7 +17,7 @@ The UART/serial port is primarily used during the manufacturing process for debu
 
 ![photo_2022-12-16_14-12-06 (5)](https://user-images.githubusercontent.com/95890436/208197839-11598118-c562-45e7-9051-d94d1c914e86.jpg)
 # Testing UART Port Voltages
-To avoid shorting both our TL-WR841N router and our serial USB device, we must first confirm that we are using the correct voltages. This is an important step, as using the wrong voltage can damage the router, the Serial USB device, or both. UART ports are typically either 3.3V, or 5V. Thankfully, TP-Link has gone ahead and labled the pins for us -- so there is no ambiguity over which pin is ```RX```, ```TX```, ```GND```, or ```VCC```.
+To avoid shorting both our TL-WR841N router and our serial USB device, we must first confirm that we are using the correct voltages. This is an important step, as using the wrong voltage can damage the router, the serial USB device, or both. UART ports are typically either 3.3V, or 5V. Thankfully, TP-Link has gone ahead and labled the pins for us -- so there is no ambiguity over which pin is ```RX```, ```TX```, ```GND```, or ```VCC```.
 
 Using my multimeter, I tested and confirmed a 3.3V ```VCC```, ```GND```, and ```TX``` pins. ```RX``` reads at 0.0V, because it is essentially a listening port, just waiting for information. We can safely assume ```RX``` recieves at 3.3V, just like the rest of the serial port. Once the voltage is confirmed to be 3.3V, the next step is to connect the 3.3V serial USB converter.
 
