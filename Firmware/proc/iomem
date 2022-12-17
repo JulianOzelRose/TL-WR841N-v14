@@ -1,0 +1,3 @@
+00000000-01ffffff : System RAM
+  00000000-00221013 : Kernel code
+  00221014-002b2fdf : Kernel data
