@@ -1,0 +1,1 @@
+console=ttyS1,115200 root=/dev/mtdblock2 rootfstype=squashfs init=/sbin/init
