@@ -1,0 +1,5 @@
+rootfs / rootfs rw 0 0
+/dev/root / squashfs ro,relatime 0 0
+proc /proc proc rw,relatime 0 0
+ramfs /var ramfs rw,relatime 0 0
+/sys /sys sysfs rw,relatime 0 0
