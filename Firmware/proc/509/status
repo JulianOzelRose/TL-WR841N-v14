@@ -1,0 +1,36 @@
+Name:	dropbear
+State:	S (sleeping)
+Tgid:	509
+Pid:	509
+PPid:	1
+TracerPid:	0
+Uid:	0	0	0	0
+Gid:	0	0	0	0
+FDSize:	32
+Groups:	
+VmPeak:	    1136 kB
+VmSize:	    1136 kB
+VmLck:	       0 kB
+VmHWM:	     308 kB
+VmRSS:	     308 kB
+VmData:	     288 kB
+VmStk:	     136 kB
+VmExe:	     256 kB
+VmLib:	     424 kB
+VmPTE:	      12 kB
+VmSwap:	       0 kB
+Threads:	1
+SigQ:	0/228
+SigPnd:	00000000000000000000000000000000
+ShdPnd:	00000000000000000000000000000000
+SigBlk:	00000000000000000000000080000000
+SigIgn:	00000000000000000000000000001004
+SigCgt:	00000000000000000000000000004402
+CapInh:	0000000000000000
+CapPrm:	ffffffffffffffff
+CapEff:	ffffffffffffffff
+CapBnd:	ffffffffffffffff
+Cpus_allowed:	1
+Cpus_allowed_list:	0
+voluntary_ctxt_switches:	1
+nonvoluntary_ctxt_switches:	0
