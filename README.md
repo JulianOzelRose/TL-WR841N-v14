@@ -1,5 +1,5 @@
 # TL-WR841N
-The TP-Link TL-WR841N is a relatively inexpensive 300mbps WiFi router. This makes it a perfect device for reverse engineering and hardware hacking projects. My goal here was to gain shell access via the router's UART debugging port, and see what can be done from there.
+The TP-Link TL-WR841N is a relatively inexpensive 300mbps WiFi router. This makes it a perfect device for reverse engineering and hardware hacking projects. My goal here was to gain shell access via the router's UART debugging port and see what can be done from there.
 
 ![photo_2022-12-16_15-26-34](https://user-images.githubusercontent.com/95890436/208206724-dc6ea069-f0d3-42e3-a3aa-e40ebf6da23d.jpg)
 # Tools
@@ -12,6 +12,7 @@ The TP-Link TL-WR841N is a relatively inexpensive 300mbps WiFi router. This make
 #### Software
 - PuTTy
 - XCTU
+
 # Serial UART Port
 The UART/serial port is primarily used during the manufacturing process for debugging purposes. You can find UART ports on virtually any IOT device. With the proper tools, it is possible to access the shell using this port. From there, you can dump the firmware, flash hacked firmware, get device info, give yourself remote/backdoor access, and more. The UART pin layout is ```GND```, ```TX```, ```RX```, and ```VCC```.
 
@@ -31,8 +32,7 @@ Once we have secured a connection between the serial USB converter to the router
 
 However, there are several baud rates that are very common, so it is easy to guess common values until one works. In this particular case, the router's UART runs at ```115200``` baud rate. Other baud rates will produce garbage on the screen. We will also use the following settings: 8 data bits, 1 stop bits, no parity, no flow control. After gaining access to the shell, I used the Linux command ```echo $USER``` to confirm root access of the device. We know we have achieved this, as the device returns ```root```.
 
-
-
 https://user-images.githubusercontent.com/95890436/208254191-7d6bdf81-cf2c-470f-bc04-1bbeaad90dae.mp4
 
-
+# Read-Only Console
+Before I was able to access the shell and issue commands, I was stuck in a read only console. I learned that this is because TP-Link shorts the ```RX``` pin of the UART port as a security measure. There is a single voltage-limiting resistor just next to the ```RX``` pin on this particular model. Pulling that resistor out with a pair of tweezers did the trick, and I was then able to write to the console and issue commands.
