@@ -1,7 +1,9 @@
 # TL-WR841N
 The TP-Link TL-WR841N is a relatively inexpensive 300mbps WiFi router. This makes it a perfect device for reverse engineering and hardware hacking projects. My goal here was to gain shell access via the router's UART debugging port and see what can be done from there.
 
-![photo_2022-12-16_15-26-34](https://user-images.githubusercontent.com/95890436/208206724-dc6ea069-f0d3-42e3-a3aa-e40ebf6da23d.jpg)
+![IMG_9762](https://user-images.githubusercontent.com/95890436/208492928-3936bd76-56dc-43e2-8519-299447747682.jpg)
+
+
 # Tools
 #### Hardware
 - Klein Tools Digital Multimeter MM300
@@ -35,4 +37,7 @@ However, there are several baud rates that are very common, so it is easy to gue
 https://user-images.githubusercontent.com/95890436/208254191-7d6bdf81-cf2c-470f-bc04-1bbeaad90dae.mp4
 
 # Read-Only Console
-Before I was able to access the shell and issue commands, I was stuck in a read only console. I learned that this is because TP-Link shorts the ```RX``` pin of the UART port as a security measure. There is a single voltage-limiting resistor just next to the ```RX``` pin on this particular model. Pulling that resistor out with a pair of tweezers did the trick, and I was then able to write to the console and issue commands.
+At first I was only able to access the shell, but not issue commands -- I was stuck in a read-only console. I learned that this is because TP-Link shorts the ```RX``` pin of the UART port as a security measure. There is a single voltage-limiting resistor just next to the ```RX``` pin on this particular model. Pulling that resistor out with a pair of tweezers did the trick, and I was then able to write to the console and issue commands. Take note of the missing resistor at R18 above ```RX```.
+
+![IMG_9832 - Copy](https://user-images.githubusercontent.com/95890436/208493479-fe79a047-e249-4d27-b693-82f5032896c4.jpg)
+
