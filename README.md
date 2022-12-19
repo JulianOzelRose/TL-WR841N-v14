@@ -13,7 +13,6 @@ The TP-Link TL-WR841N is a relatively inexpensive 300mbps WiFi router. This make
 - Header Pins
 #### Software
 - PuTTy
-- XCTU
 
 # Serial UART Port
 The UART/serial port is primarily used during the manufacturing process for debugging purposes. You can find UART ports on virtually any IOT device. With the proper tools, it is possible to access the shell using this port. From there, you can dump the firmware, flash hacked firmware, get device info, give yourself remote/backdoor access, and more. The UART pin layout is ```GND```, ```TX```, ```RX```, and ```VCC```.
