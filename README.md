@@ -27,7 +27,8 @@ Using my multimeter, I tested and confirmed a 3.3V ```VCC```, ```GND```, and ```
 # Connecting UART to Serial USB Converter
 After confirming that the UART port works at 3.3V and soldering a set of header pins, we can safely connect our USB serial converter. Next we use a serial communication program to interface with the device and read the output. For this step, we connect ```GND-GND```, ```RX-TX```, and ```TX-RX```. It is not necessary to connect ```VCC```, so long as we set our serial USB device to use 3.3V.
 
-![photo_2022-12-16_14-12-06 (3)](https://user-images.githubusercontent.com/95890436/208198729-9004ca52-7f22-4dff-9c04-627a84ff9245.jpg)
+![208198729-9004ca52-7f22-4dff-9c04-627a84ff9245](https://user-images.githubusercontent.com/95890436/208494179-916da9d5-439a-450f-9ddd-7170eec90d49.jpg)
+
 
 # Shell Access
 Once we have secured a connection between the serial USB converter to the router's UART port, we can now modify the settings in PuTTy for serial communication. The main value we need to know is the UART port's baud rate. It is possible to use a logic analyzer to figure out what the baud rate is. 
