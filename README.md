@@ -34,7 +34,7 @@ Once we have secured a connection between the serial USB converter to the router
 
 However, there are several baud rates that are very common, so it is easy to guess common values until one works. In this particular case, the router's UART runs at ```115200``` baud rate. Other baud rates will produce garbage on the screen. We will also use the following settings: 8 data bits, 1 stop bits, no parity, no flow control. After gaining access to the shell, I used the Linux command ```echo $USER``` to confirm root access of the device. We know we have achieved this, as the device returns ```root```.
 
-https://user-images.githubusercontent.com/95890436/208254191-7d6bdf81-cf2c-470f-bc04-1bbeaad90dae.mp4
+https://user-images.githubusercontent.com/95890436/210302395-a6e57035-7ccb-4920-a188-e5a738f05ad6.mp4
 
 # Read-Only Console
 At first I was only able to access the shell, but not issue commands -- I was stuck in a read-only console. I learned that this is because TP-Link shorts the ```RX``` pin of the UART port as a security measure. There is a single voltage-limiting resistor just next to the ```RX``` pin on this particular model. Pulling that resistor out with a pair of tweezers did the trick, and I was then able to write to the console and issue commands. Take note of the missing resistor at R18 above ```RX```.
