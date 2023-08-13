@@ -1,0 +1,204 @@
+<script type="text/javascript">var ledCtrlEnabled=true;var startHour=21;var startMinute=0;var endHour=9;var endMinute=0;</script>
+
+<script type="text/javascript">function checkTime(startHour,startMinute,endHour,endMinute){if(startHour==undefined){startHour=$.id("start_hour").value}if(startMinute==undefined){startMinute=$.id("start_minute").value}if(endHour==undefined){endHour=$.id("end_hour").value}if(endMinute==undefined){endMinute=$.id("end_minute").value}return true}function validateInput(e){checkTime()}function ledCtrlToggle(){var ledCtrlEnabled=$.id("t_led_en").checked;if(ledCtrlEnabled){$.id("start_hour").disabled=false;$.id("start_minute").disabled=false;$.id("end_hour").disabled=false;$.id("end_minute").disabled=false;$.removeClass($.id("ledTimeCfg"),"gray")}else{$.id("start_hour").disabled=true;$.id("start_minute").disabled=true;$.id("end_hour").disabled=true;$.id("end_minute").disabled=true;$.addClass($.id("ledTimeCfg"),"gray")}}function init(){var ledControl=$.act(ACT_GET,LED_CONTROL,null,null);if(!$.exe()){ledCtrlEnabled=(ledControl.enable!=0);startHour=ledControl.startHour;startMinute=ledControl.startMinute;endHour=ledControl.endHour;endMinute=ledControl.endMinute}if(ledCtrlEnabled){$.id("t_led_en").checked=true}else{$.id("t_led_en").checked=false}$.id("start_hour").value=startHour;$.id("start_minute").value=startMinute;$.id("end_hour").value=endHour;$.id("end_minute").value=endMinute;ledCtrlToggle()}function doSave(){var newLedCtrlEnabled=($.id("t_led_en").checked==true?1:0);var newStartHour=$.id("start_hour").value;var newStartMinute=$.id("start_minute").value;var newEndHour=$.id("end_hour").value;var newEndMinute=$.id("end_minute").value;if(checkTime(newStartHour,newStartMinute,newEndHour,newEndMinute)==false){return false}var ledControlObj={enable:newLedCtrlEnabled,startHour:newStartHour,startMinute:newStartMinute,endHour:newEndHour,endMinute:newEndMinute};$.addLoading($.id("saveLedCtrlBtn"));$.act(ACT_SET,LED_CONTROL,null,null,ledControlObj);$.exe(function(ret){if(!ret){$.reload()}})};</script>
+
+<p class="et T" id="et">LED Control</p>
+<div class="con1 XL" id="ledControlContainer">
+<p class="bl"></p>
+
+<p class="L2">
+    <b class="fl M T" id="t_nightMode">Night Mode:</b>
+    <input type="checkbox" id="t_led_en" onclick="ledCtrlToggle();"/>
+</p>
+
+<p class="L2" id="ledTimeCfg">
+    <b class="fl M T" id="t_ledOffTime">LED Off Time:</b>
+    <select id="start_hour" onchange="validateInput(this);">
+        <option value="0">00</option>
+        <option value="1">01</option>
+        <option value="2">02</option>
+        <option value="3">03</option>
+        <option value="4">04</option>
+        <option value="5">05</option>
+        <option value="6">06</option>
+        <option value="7">07</option>
+        <option value="8">08</option>
+        <option value="9">09</option>
+        <option value="10">10</option>
+        <option value="11">11</option>
+        <option value="12">12</option>
+        <option value="13">13</option>
+        <option value="14">14</option>
+        <option value="15">15</option>
+        <option value="16">16</option>
+        <option value="17">17</option>
+        <option value="18">18</option>
+        <option value="19">19</option>
+        <option value="20">20</option>
+        <option value="21">21</option>
+        <option value="22">22</option>
+        <option value="23">23</option>
+    </select>
+    <span>:</span> 
+    <select id="start_minute" onchange="validateInput(this);">
+        <option value="0">00</option>
+        <option value="1">01</option>
+        <option value="2">02</option>
+        <option value="3">03</option>
+        <option value="4">04</option>
+        <option value="5">05</option>
+        <option value="6">06</option>
+        <option value="7">07</option>
+        <option value="8">08</option>
+        <option value="9">09</option>
+        <option value="10">10</option>
+        <option value="11">11</option>
+        <option value="12">12</option>
+        <option value="13">13</option>
+        <option value="14">14</option>
+        <option value="15">15</option>
+        <option value="16">16</option>
+        <option value="17">17</option>
+        <option value="18">18</option>
+        <option value="19">19</option>
+        <option value="20">20</option>
+        <option value="21">21</option>
+        <option value="22">22</option>
+        <option value="23">23</option>
+        <option value="24">24</option>
+        <option value="25">25</option>
+        <option value="26">26</option>
+        <option value="27">27</option>
+        <option value="28">28</option>
+        <option value="29">29</option>
+        <option value="30">30</option>
+        <option value="31">31</option>
+        <option value="32">32</option>
+        <option value="33">33</option>
+        <option value="34">34</option>
+        <option value="35">35</option>
+        <option value="36">36</option>
+        <option value="37">37</option>
+        <option value="38">38</option>
+        <option value="39">39</option>
+        <option value="40">40</option>
+        <option value="41">41</option>
+        <option value="42">42</option>
+        <option value="43">43</option>
+        <option value="44">44</option>
+        <option value="45">45</option>
+        <option value="46">46</option>
+        <option value="47">47</option>
+        <option value="48">48</option>
+        <option value="49">49</option>
+        <option value="50">50</option>
+        <option value="51">51</option>
+        <option value="52">52</option>
+        <option value="53">53</option>
+        <option value="54">54</option>
+        <option value="55">55</option>
+        <option value="56">56</option>
+        <option value="57">57</option>
+        <option value="58">58</option>
+        <option value="59">59</option>
+    </select>
+    <span style="padding: 0 10px;">-</span>
+    <select id="end_hour" onchange="validateInput(this);">
+        <option value="0">00</option>
+        <option value="1">01</option>
+        <option value="2">02</option>
+        <option value="3">03</option>
+        <option value="4">04</option>
+        <option value="5">05</option>
+        <option value="6">06</option>
+        <option value="7">07</option>
+        <option value="8">08</option>
+        <option value="9">09</option>
+        <option value="10">10</option>
+        <option value="11">11</option>
+        <option value="12">12</option>
+        <option value="13">13</option>
+        <option value="14">14</option>
+        <option value="15">15</option>
+        <option value="16">16</option>
+        <option value="17">17</option>
+        <option value="18">18</option>
+        <option value="19">19</option>
+        <option value="20">20</option>
+        <option value="21">21</option>
+        <option value="22">22</option>
+        <option value="23">23</option>
+    </select>
+    <span>:</span> 
+    <select id="end_minute" onchange="validateInput(this);">
+        <option value="0">00</option>
+        <option value="1">01</option>
+        <option value="2">02</option>
+        <option value="3">03</option>
+        <option value="4">04</option>
+        <option value="5">05</option>
+        <option value="6">06</option>
+        <option value="7">07</option>
+        <option value="8">08</option>
+        <option value="9">09</option>
+        <option value="10">10</option>
+        <option value="11">11</option>
+        <option value="12">12</option>
+        <option value="13">13</option>
+        <option value="14">14</option>
+        <option value="15">15</option>
+        <option value="16">16</option>
+        <option value="17">17</option>
+        <option value="18">18</option>
+        <option value="19">19</option>
+        <option value="20">20</option>
+        <option value="21">21</option>
+        <option value="22">22</option>
+        <option value="23">23</option>
+        <option value="24">24</option>
+        <option value="25">25</option>
+        <option value="26">26</option>
+        <option value="27">27</option>
+        <option value="28">28</option>
+        <option value="29">29</option>
+        <option value="30">30</option>
+        <option value="31">31</option>
+        <option value="32">32</option>
+        <option value="33">33</option>
+        <option value="34">34</option>
+        <option value="35">35</option>
+        <option value="36">36</option>
+        <option value="37">37</option>
+        <option value="38">38</option>
+        <option value="39">39</option>
+        <option value="40">40</option>
+        <option value="41">41</option>
+        <option value="42">42</option>
+        <option value="43">43</option>
+        <option value="44">44</option>
+        <option value="45">45</option>
+        <option value="46">46</option>
+        <option value="47">47</option>
+        <option value="48">48</option>
+        <option value="49">49</option>
+        <option value="50">50</option>
+        <option value="51">51</option>
+        <option value="52">52</option>
+        <option value="53">53</option>
+        <option value="54">54</option>
+        <option value="55">55</option>
+        <option value="56">56</option>
+        <option value="57">57</option>
+        <option value="58">58</option>
+        <option value="59">59</option>
+    </select>
+</p>
+<p class="L2" id="t_systime_tips">
+Before enabling the LED Control, make sure <a class="link" href="javascript:void(0);" onclick="$.loadMain('time.htm')">System Time</a> is correct.
+</p>
+<p class="bl"></p>
+<p class="tail">
+<input id="saveLedCtrlBtn" class="button L T T_save" value="Save" type="button" onclick="doSave();" />
+</p>
+</div>
+<script type="text/javascript">$.loadHelpFrame("ledControlHelp.htm");init();if(INCLUDE_RUSSIA_SPEC){$.removeClass($.id("t_ledOffTime"),"M");$.removeClass($.id("t_nightMode"),"M");$.addClass($.id("t_ledOffTime"),"XL");$.addClass($.id("t_nightMode"),"XL")};</script>

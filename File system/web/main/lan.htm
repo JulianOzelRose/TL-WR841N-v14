@@ -1,0 +1,16 @@
+﻿<script language="javascript" type="text/javascript">$.loadHelp("lanEdit_h.htm");var brList;var dhcpInfo;var ipList;function init(){var dhcp_tbl=$.id("dhcpcfg");brList=$.act(ACT_GL,L2_BRIDGING_ENTRY,null,null,["bridgeName"]);if(!$.exe()){if(brList.length==1){$.addClass($.id("lanList"),"nd");$.loadMain("lanEdit.htm",brList[0].bridgeName);return}else{$.removeClass($.id("lanList"),"nd");for(var index=0;index<brList.length;index++){dhcpInfo=$.act(ACT_GET,LAN_HOST_CFG,brList[index].__stack,null,null);ipList=$.act(ACT_GS,LAN_IP_INTF,null,brList[index].__stack,["IPInterfaceIPAddress","IPInterfaceSubnetMask","__ifName"]);if(!$.exe()){var row=dhcp_tbl.insertRow(-1);var thisStk="["+brList[index].__stack+"]";row.insertCell(0).innerHTML=brList[index].bridgeName;row.insertCell(1).innerHTML=ipList[0].IPInterfaceIPAddress;row.insertCell(2).innerHTML=ipList[0].IPInterfaceSubnetMask;row.insertCell(3).innerHTML=((dhcpInfo.DHCPServerEnable==1)?"<span class='T T_enabled'>"+m_str.enabled+"</span>":"<span class='T T_disabled'>"+m_str.disabled+"</span>");row.insertCell(4).innerHTML=dhcpInfo.minAddress+"-"+dhcpInfo.maxAddress;row.insertCell(5).innerHTML="<span class='a T T_edit' onclick='$.loadMain(\"lanEdit.htm\", \""+brList[index].bridgeName+"\");'>"+m_str.edit+"</span>"}}}}}init();</script>
+
+<p class="et T" id="et">LAN Settings</p>
+<div class="con1 XL" id="lanList">
+<p class="ct"></p>
+<p class="bl"></p>
+<div class="con2">
+<p class="L1 T" id="t_info">This page shows the information of the LAN interface.</p>
+<p class="br"></p>
+<table class="tc bdr XL" id="dhcpcfg" cellspacing="0" cellpadding="0" >
+<tr><th class="T T_group">Group</th><th class="T T_ipaddr">IP Address</th><th class="T T_netmask">Subnet Mask</th><th>DHCP</th><th class="T" id="t_pool">DHCP Pool</th><th class="T T_edit">Edit</th></tr>
+</table>
+</div>
+<p class="bl"></p>
+<p class="tail" id="tail"></p>
+</div>

@@ -1,4 +1,0 @@
-9 1 31:2 / / ro,relatime - squashfs /dev/root ro
-10 9 0:3 / /proc rw,relatime - proc proc rw
-11 9 0:9 / /var rw,relatime - ramfs ramfs rw
-12 9 0:10 / /sys rw,relatime - sysfs /sys rw

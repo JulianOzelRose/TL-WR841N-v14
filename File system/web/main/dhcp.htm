@@ -1,0 +1,23 @@
+﻿<script language="javascript" type="text/javascript">$.loadHelp("dhcpEdit_h.htm");function init(){var brList;var dhcpCfg;var ipList;var dhcp_tbl=$.id("dhcpcfg");var row,cell;brList=$.act(ACT_GL,L2_BRIDGING_ENTRY,null,null,["bridgeName"]);$.exe(function(err){if(!err){if(brList.length==1){$.addClass($.id("dhcpList"),"nd");$.loadMain("dhcpEdit.htm",brList[0].bridgeName)}else{$.removeClass($.id("dhcpList"),"nd");for(var index=0;index<brList.length;index++){dhcpCfg=$.act(ACT_GET,LAN_HOST_CFG,brList[index].__stack,null,null);ipList=$.act(ACT_GS,LAN_IP_INTF,null,brList[index].__stack,["IPInterfaceIPAddress","IPInterfaceSubnetMask","__ifName"]);if(!$.exe()){row=dhcp_tbl.insertRow(-1);cell=row.insertCell(-1);cell.width="25%";cell.innerHTML=brList[index].bridgeName;cell=row.insertCell(-1);cell.innerHTML=dhcpCfg.minAddress+"-"+dhcpCfg.maxAddress;cell=row.insertCell(-1);cell.width="15%";cell.innerHTML=((dhcpCfg.DHCPServerEnable==1)?"<span class='T T_enabled'>"+m_str.enabled+"</span>":"<span class='T T_disabled'>"+m_str.disabled+"</span>");cell=row.insertCell(-1);cell.width="15%";cell.innerHTML="<span class='a T T_edit' onclick='$.loadMain(\"dhcpEdit.htm\",\""+brList[index].bridgeName+"\");'>"+m_str.edit+"</span>"}}$.resize($.id("dhcpcfg"),8);$.fixTbl()}}})}init();</script>
+<div id="dhcpList" class="nd">
+<p class="et T" id="et">DHCP Server</p>
+<div class="con1 XL">
+<p class="ct"></p>
+<p class="bl"></p>
+<div class="con2">
+<p class="L1 T" id="t_info">This page displays all the current DHCP service and allows you to configure DHCP service by clicking the Edit button.</p>
+<p class="br"></p>
+<div class="L thead" ><table class="L bdr tc">
+	<tr>
+	<th class="T T_group" width="25%">Group</th>
+	<th class="T" id="t_pool">DHCP Pool</th>
+	<th class="T T_status"width="15%">Status</th>
+	<th class="T T_edit" width="15%">Edit</th>
+	</tr>
+</table></div>
+<div class="L tbody"><table id="dhcpcfg" class="L bdr tc"></table></div>
+</div>
+<p class="bl"></p>
+<p class="tail" id="tail"><input type="button" class="button L T T_refresh" value="Refresh" id="updateBtn" onclick="$.addLoading(this, 200, function(){$.reload()})"/></p>
+</div>
+</div>

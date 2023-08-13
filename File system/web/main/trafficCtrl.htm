@@ -1,0 +1,107 @@
+﻿<script language="javascript" type="text/javascript">var selAll;var index;var allStk;var tc_stack;var tc_stackIndex;var param=[];var tcEntry;var upstreamCurrRate;var downstreamCurrRate;var wanDslStatus;function init(){var wanComInfList=$.act(ACT_GL,WAN_COMMON_INTF_CFG,null,null,["WANAccessType"]);if(!$.exe()){var dslStk;$.each(wanComInfList,function(){if(this.WANAccessType=="DSL"){dslStk=this.__stack}})}if(INCLUDE_ADSLWAN){var wanDslCfg=$.act(ACT_GET,WAN_DSL_INTF_CFG,dslStk,null,["status","upstreamCurrRate","downstreamCurrRate"]);if(!$.exe()){wanDslStatus=wanDslCfg.status;if(wanDslCfg.status=="Up"){$.removeClass($.id("t_dslUp"),"nd");$.h($.id("upStreamCurrRate"),wanDslCfg.upstreamCurrRate+"&nbspKbps");$.removeClass($.id("t_dslDown"),"nd");$.h($.id("downStreamCurrRate"),wanDslCfg.downstreamCurrRate+"&nbspKbps")}}upstreamCurrRate=wanDslCfg.upstreamCurrRate;downstreamCurrRate=wanDslCfg.downstreamCurrRate}$.id("other_type").checked=1}function selectObj(id){var element=$.id(id);if(element){element.focus();element.select()}}function doAdd(){param[0]=0;$.loadMain("trafCtrlEdit.htm",param)}function doEdit(val){param[0]=1;param[1]=val;$.loadMain("trafCtrlEdit.htm",param)}function doSelAll(){if(selAll==0){for(var i=1;i<=index;i++){var tcid="tcid"+i;$.id(tcid).checked=1}tc_stack=[];tc_stackIndex=index;for(var j=0;j<tc_stackIndex;j++){tc_stack[j]=allStk[j]}selAll=1}else{if(selAll==1){for(var i=1;i<=index;i++){var tcid="tcid"+i;$.id(tcid).checked=0}tc_stack=[];tc_stackIndex=0;selAll=0}}}function doClick(){if(selAll==1){$.id("selAll").checked=0;selAll=0}}function selEntry(){tc_stackIndex=0;tc_stack=[];for(var i=1;i<=index;i++){var tmpEntryId="tcid"+i;if($.id(tmpEntryId).checked==1){tc_stack[tc_stackIndex]=allStk[i-1];tc_stackIndex++}}}if(INCLUDE_LAN_WLAN_GUESTNETWORK){function initTcRuleListForGN(ruleList){selAll=0;param=[];tc_stack=[];tc_stackIndex=0;var tbl=$.id("guesttctbl");$.each(ruleList,function(){if(1==this.ruleType){var thisStk="["+this.__stack+"]";var row=tbl.insertRow(-1);var tmpIP;if((this.startIP==0)&&(this.endIP==0)){tmpIP=""}else{if((this.startIP==0)&&(this.endIP!=0)){tmpIP=$.num2ip(parseInt(this.endIP,10))+" /"}else{if((this.startIP!=0)&&(this.endIP==0)){tmpIP=$.num2ip(parseInt(this.startIP,10))+" /"}else{if(this.startIP==this.endIP){tmpIP=$.num2ip(parseInt(this.startIP,10))+" /"}else{if((this.startIP!=0)&&(this.endIP!=0)){tmpIP=$.num2ip(parseInt(this.startIP,10))+"-"+$.num2ip(parseInt(this.endIP,10))+" /"}}}}}var tmpPort;if((this.startPort==0)&&(this.endPort==0)){tmpPort=""}else{if((this.startPort==0)&&(this.endPort!=0)){tmpPort=this.endPort+" /"}else{if((this.startPort!=0)&&(this.endPort==0)){tmpPort=this.startPort+" /"}else{if(this.startPort==this.endPort){tmpPort=this.startPort+" /"}else{if((this.startPort!=0)&&(this.endPort!=0)){tmpPort=this.startPort+"-"+this.endPort+" /"}}}}}var tmpProtcl;if(this.protocol==0){tmpProtcl="<span class='T T_all'>"+s_str.all+"</span>"}else{if(this.protocol==6){tmpProtcl="TCP"}else{if(this.protocol==17){tmpProtcl="UDP"}}}cell=row.insertCell(-1);cell.innerHTML=tmpIP+tmpPort+tmpProtcl;cell=row.insertCell(-1);cell.width="9%";cell.innerHTML=this.precedence;cell=row.insertCell(-1);cell.width="12%";if(0!=this.upMinBW){cell.innerHTML=this.upMinBW}else{cell.innerHTML=""}cell=row.insertCell(-1);cell.width="13%";if(0!=this.upMaxBW){cell.innerHTML=this.upMaxBW}else{cell.innerHTML=""}cell=row.insertCell(-1);cell.width="12%";if(0!=this.downMinBW){cell.innerHTML=this.downMinBW}else{cell.innerHTML=""}cell=row.insertCell(-1);cell.width="13%";if(0!=this.downMaxBW){cell.innerHTML=this.downMaxBW}else{cell.innerHTML=""}cell=row.insertCell(-1);cell.width="10%";cell.innerHTML=(this.enable==1)?"<span class='T T_en'>"+m_str.en+"</span>":"<span class='T T_dis'>"+m_str.dis+"</span>";$.resize($.id("guesttctbl"),8);return false}})}}function initTcRuleList(ruleList){selAll=0;index=0;allStk=[];param=[];tc_stack=[];tc_stackIndex=0;var tbl=$.id("tctbl");$.each(ruleList,function(){if(1!=this.ruleType){var thisStk="["+this.__stack+"]";var row=tbl.insertRow(-1);index++;var cell=row.insertCell(-1);cell.width="5%";cell.innerHTML="<input type='checkbox' id='tcid"+index+"' onclick='doClick();'/>";var tmpIP;if((this.startIP==0)&&(this.endIP==0)){tmpIP=""}else{if((this.startIP==0)&&(this.endIP!=0)){tmpIP=$.num2ip(parseInt(this.endIP,10))+" /"}else{if((this.startIP!=0)&&(this.endIP==0)){tmpIP=$.num2ip(parseInt(this.startIP,10))+" /"}else{if(this.startIP==this.endIP){tmpIP=$.num2ip(parseInt(this.startIP,10))+" /"}else{if((this.startIP!=0)&&(this.endIP!=0)){tmpIP=$.num2ip(parseInt(this.startIP,10))+"-"+$.num2ip(parseInt(this.endIP,10))+" /"}}}}}var tmpPort;if((this.startPort==0)&&(this.endPort==0)){tmpPort=""}else{if((this.startPort==0)&&(this.endPort!=0)){tmpPort=this.endPort+" /"}else{if((this.startPort!=0)&&(this.endPort==0)){tmpPort=this.startPort+" /"}else{if(this.startPort==this.endPort){tmpPort=this.startPort+" /"}else{if((this.startPort!=0)&&(this.endPort!=0)){tmpPort=this.startPort+"-"+this.endPort+" /"}}}}}var tmpProtcl;if(this.protocol==0){tmpProtcl="<span class='T T_all'>"+s_str.all+"</span>"}else{if(this.protocol==6){tmpProtcl="TCP"}else{if(this.protocol==17){tmpProtcl="UDP"}}}cell=row.insertCell(-1);cell.innerHTML=tmpIP+tmpPort+tmpProtcl;cell=row.insertCell(-1);cell.width="9%";cell.innerHTML=this.precedence;cell=row.insertCell(-1);cell.width="11%";if(0!=this.upMinBW){cell.innerHTML=this.upMinBW}else{cell.innerHTML=""}cell=row.insertCell(-1);cell.width="10%";if(0!=this.upMaxBW){cell.innerHTML=this.upMaxBW}else{cell.innerHTML=""}cell=row.insertCell(-1);cell.width="12%";if(0!=this.downMinBW){cell.innerHTML=this.downMinBW}else{cell.innerHTML=""}cell=row.insertCell(-1);cell.width="11%";if(0!=this.downMaxBW){cell.innerHTML=this.downMaxBW}else{cell.innerHTML=""}cell=row.insertCell(-1);cell.width="10%";cell.innerHTML=(this.enable==1)?"<span class='T T_en'>"+m_str.en+"</span>":"<span class='T T_dis'>"+m_str.dis+"</span>";cell=row.insertCell(-1);cell.width="7%";cell.innerHTML="<span class='a T T_edit' onclick='doEdit("+thisStk+");'>"+m_str.edit+"</span>";allStk[index-1]=this.__stack}});$.resize($.id("tctbl"),8)}function doEnable(obj){selEntry();if(tc_stackIndex==0){$.alert(ERR_SEL_INVAD);return}$.addLoading(obj);for(var i=0;i<tc_stackIndex;i++){$.act(ACT_SET,TC_RULE,tc_stack[i],null,["enable=1","flag=0"])}$.exe(function(ret){if(!ret){$.reload()}})}function doDisable(obj){selEntry();if(tc_stackIndex==0){$.alert(ERR_SEL_INVAD);return}$.addLoading(obj);for(var i=0;i<tc_stackIndex;i++){$.act(ACT_SET,TC_RULE,tc_stack[i],null,["enable=0","flag=1"])}$.exe(function(ret){if(!ret){$.reload()}})}function doDel(obj){selEntry();if(tc_stackIndex==0){$.alert(ERR_SEL_INVAD);return}$.addLoading(obj);for(var i=0;i<tc_stackIndex;i++){$.act(ACT_DEL,TC_RULE,tc_stack[i],null)}$.exe(function(ret){if(!ret){$.reload()}})}function initTc(){var flag=false;if(!INCLUDE_QOS){$.id("enableTc").checked=(tcEntry.enable==3)?1:0;$.id("adsl_type").checked=(tcEntry.linkType==1)?1:0;$.id("other_type").checked=(tcEntry.linkType==1)?0:1;$.id("upTotalBW").value=(tcEntry.upTotalBW==0)?"":tcEntry.upTotalBW;$.id("downTotalBW").value=(tcEntry.downTotalBW==0)?"":tcEntry.downTotalBW}if(INCLUDE_IPTV){$.removeClass($.id("en_iptv_con"),"nd");if(INCLUDE_VOIP){$.removeClass($.id("en_voip_con"),"nd")}}else{if(INCLUDE_VOIP){$.removeClass($.id("en_voip_con"),"nd")}}if(INCLUDE_VOIP){$.id("enableVoIPTc").checked=(tcEntry.voIPEnable==1)?1:0;if(0==(tcEntry.enable&1)){$.id("enableVoIPTc").disabled=true}else{flag=true}}if(INCLUDE_IPTV){if(1==tcEntry.iptvEnable){$.id("enableIptvTc").checked=1;$.removeClass($.id("iptv_elem"),"nd")}else{$.id("enableIptvTc").checked=0;$.addClass($.id("iptv_elem"),"nd")}$.id("iptvUpMinBW").value=(tcEntry.iptvUpMinBW==0)?"":tcEntry.iptvUpMinBW;$.id("iptvDownMinBW").value=(tcEntry.iptvDownMinBW==0)?"":tcEntry.iptvDownMinBW;if(0==(tcEntry.enable&1)){$.id("iptvUpMinBW").disabled=true}else{flag=true}if(0==(tcEntry.enable&2)){$.id("iptvDownMinBW").disabled=true}else{flag=true}if(0==(tcEntry.enable&3)){$.id("enableIptvTc").disabled=true}}if(INCLUDE_QOS){if(!flag){$.addClass($.id("saveBtn"),"nd");$.addClass($.id("savebl"),"nd")}}if(INCLUDE_LAN_WLAN_GUESTNETWORK){if(1==guestnetObj.TCEnable&&1==guestnetObj.enable||(1==guestnetObj5G.TCEnable&&1==guestnetObj5G.enable)){$.removeClass($.id("guest_tc_div"),"nd")}else{$.addClass($.id("guest_tc_div"),"nd")}}}function doSave(){var warnLargerThanCurr=0;$.addClass($.id("warning1"),"nd");$.addClass($.id("warning2"),"nd");if(wanDslStatus=="Up"){if(parseInt($.id("upTotalBW").value,10)>upstreamCurrRate){$.removeClass($.id("warning1"),"nd");warnLargerThanCurr=1}if(parseInt($.id("downTotalBW").value,10)>downstreamCurrRate){$.removeClass($.id("warning2"),"nd");warnLargerThanCurr=2}if(warnLargerThanCurr!=0){return false}}if(!INCLUDE_QOS){var upTotalBW=parseInt($.id("upTotalBW").value,10);var downTotalBW=parseInt($.id("downTotalBW").value,10);if(($.id("upTotalBW").value=="")||(!$.isnum($.id("upTotalBW").value))||(0==upTotalBW)){$.alert(ERR_TC_NUM_INVAD);selectObj("upTotalBW");return false}if(($.id("downTotalBW").value=="")||(!$.isnum($.id("downTotalBW").value))||(0==downTotalBW)){$.alert(ERR_TC_NUM_INVAD);selectObj("downTotalBW");return false}}if($.id("enableIptvTc").checked==0){if(!$.isnum($.id("iptvUpMinBW").value)){$.alert(ERR_TC_NUM_INVAD);selectObj("iptvUpMinBW");return false}if(!$.isnum($.id("iptvDownMinBW").value)){$.alert(ERR_TC_NUM_INVAD);selectObj("iptvDownMinBW");return false}}if($.id("enableIptvTc").checked==1){if(1==(tcEntry.enable&1)&&($.id("iptvUpMinBW").value==""||(!$.isnum($.id("iptvUpMinBW").value))||(0==parseInt($.id("iptvUpMinBW").value,10)))){$.alert(ERR_TC_NUM_INVAD);selectObj("iptvUpMinBW");return false}if(2==(tcEntry.enable&2)&&($.id("iptvDownMinBW").value==""||(!$.isnum($.id("iptvDownMinBW").value))||(0==parseInt($.id("iptvDownMinBW").value,10)))){$.alert(ERR_TC_NUM_INVAD);selectObj("iptvDownMinBW");return false}}var iptvUpMinBW=($.id("iptvUpMinBW").value)?parseInt($.id("iptvUpMinBW").value,10):0;var iptvDownMinBW=($.id("iptvDownMinBW").value)?parseInt($.id("iptvDownMinBW").value,10):0;if(!INCLUDE_QOS){var arg={enable:$.id("enableTc").checked==1?3:0,linkType:$.id("adsl_type").checked==1?1:0,upTotalBW:upTotalBW,downTotalBW:downTotalBW}}else{var arg={enable:tcEntry.enable,linkType:tcEntry.linkType,upTotalBW:tcEntry.upTotalBW,downTotalBW:tcEntry.downTotalBW}}if(INCLUDE_IPTV){arg.iptvEnable=$.id("enableIptvTc").checked==1?1:0;arg.iptvUpMinBW=iptvUpMinBW;arg.iptvDownMinBW=iptvDownMinBW}if(INCLUDE_VOIP){arg.voIPEnable=$.id("enableVoIPTc").checked==1?1:0}$.addLoading($.id("saveBtn"));$.act(ACT_SET,TC,null,null,arg);$.exe(function(ret){if(!ret){$.removeLoading()}if(INCLUDE_LAN_WLAN_GUESTNETWORK){if($.mainParam!==undefined){if($.mainParam[0]=="wlGuest.htm"){$.loadMain("wlGuest.htm",$.mainParam)}}}})}function doClickIptv(){if($.id("enableIptvTc").checked==1){$.removeClass($.id("iptv_elem"),"nd")}else{if($.id("enableIptvTc").checked==0){$.addClass($.id("iptv_elem"),"nd")}}};</script>
+<p class="et T" id="et">Bandwidth Control</p>
+
+<div class="con1 L">
+<p class="ct"></p>
+<p class="bl"></p>
+<div class="con2">
+
+<div class="nd" id="total_bw_setting">
+<p class="L1 nd" id="traf_ctrl_no"><span class="T" id="t_info1">Bandwidth control enables you to control bandwidth for computers in LAN. This page allows you to enable or disable Bandwidth Control, and set control rules. Only when the Bandwidth Control is enabled can the rules take effect.</span></p>
+<p class="L1 nd" id="traf_ctrl_no1"><span class="T" id="t_info2">Bandwidth control enables you to control bandwidth for computers in LAN. This page allows you to enable or disable Bandwidth Control and IPTV Bandwidth Guarantee, and set control rules. Only when the Bandwidth Control is enabled can the rules take effect.</span></p>
+<p class="L1 nd" id="traf_ctrl_no2"><span class="T" id="t_info3">Bandwidth control enables you to control bandwidth for computers in LAN. This page allows you to enable or disable Bandwidth Control and VoIP Bandwidth Guarantee, and set control rules. Only when the Bandwidth Control is enabled can the relevant configurations take effect.</span></p>
+<p class="L1 nd" id="traf_ctrl_no3"><span class="T" id="t_info4">Bandwidth control enables you to control bandwidth for computers in LAN. This page allows you to enable or disable Bandwidth Control, IPTV Bandwidth Guarantee and VoIP Bandwidth guarantee. Only when the Bandwidth Control is enabled can the rules take effect.</span></p>
+
+
+<div class="bdr XXL">
+	<p class="L1"><input type="checkbox" id="enableTc"/><span class="T" id="t_en">Enable bandwidth control</span></p>
+	
+	<p class="br"></p>
+	<p class="L2 nd"><b class="item T" id="t_type">Line Type:</b>
+		<input name="linktype" id="adsl_type" type="radio" />ADSL
+		<input name="linktype" id="other_type" type="radio" /><span class="T" id="t_other">Other</span>
+	</p>
+	<p class="L2"><b class="item T" id="t_tup">Total Upstream Bandwidth:</b><input type="text" class="text XL" id="upTotalBW" maxlength="7"/>Kbps&nbsp; <i id="t_dslUp" class="nd">Current Up Stream Rate:</i><i id="upStreamCurrRate"></i></p>
+	<p class="L2"><b class="item T" id="t_tdown">Total Downstream Bandwidth:</b><input type="text" class="text XL" id="downTotalBW" maxlength="7"/>Kbps&nbsp; <i id="t_dslDown" class="nd">Current Down Stream Rate:</i><i id="downStreamCurrRate"></i></p>
+    <p class="br"></p>
+</div>
+</div>
+
+
+
+<p class="nd" id="en_voip_con"><input type="checkbox" id="enableVoIPTc" /><span class="T" id="t_enVoip">Enable VoIP Bandwidth Guarantee</span></p>
+<p class="nd" id="en_iptv_con"><input type="checkbox" id="enableIptvTc" onclick="doClickIptv();"/><span class="T" id="t_graiptvon">Enable IPTV Bandwidth Guarantee</span></p>
+<div id="iptv_elem" class="nd">
+	<p class="br"></p>
+	<p class="L2"><b class="item T" id="t_upgrabd">Upstream Bandwidth Guarantee:</b><input type="text" class="text XL" id="iptvUpMinBW" maxlength="6"/>Kbps</p>
+	<p class="L2"><b class="item T" id="t_downgrabd">Downstream Bandwidth Guarantee:</b><input type="text" class="text XL" id="iptvDownMinBW" maxlength="6"/>Kbps</p>
+	<p class="br"></p>
+</div>
+
+<div id="warning">
+<p id="warning1" class="nd"><i class="T" id="t_warning1">Your input upstream bandwidth is larger than max bandwidth!</i></p>
+<p id="warning2" class="nd"><i class="T" id="t_warning2">Your input downstream bandwidth is larger than max bandwidth!</i></p>
+</div>
+
+<p class="L1">
+<input type="button" class="button L T T_save" id="saveBtn" value="Save" onclick="doSave();" /></p>
+<p class="br"></p>
+<div class="con1 XXL">
+	<p class="st T" id="t_rule">Bandwidth Control Rules</p>
+	<p class="br"></p>
+<div class="XXL thead" style="overflow:hidden"><table class="XXL bdr tc" id="tctbl">
+<tr>
+<th rowspan="2" width="5%"><input type="checkbox" id="selAll" onclick="doSelAll();"/></th>
+<th rowspan="2" class="T T_desc">Description</th>
+<th rowspan="2" width="9%" class="T" id="t_listpri">Priority</th>
+<th colspan="2" width="21%"class="T" id="t_listupbd">Egress Bandwidth (Kbps)</th>
+<th colspan="2" width="23%"class="T" id="t_listdownbd">Ingress Bandwidth (Kbps)</th>
+<th rowspan="2" width="10%" class="T T_status">Status</th>
+<th rowspan="2" width="7%" class="T T_edit">Edit</th>
+</tr>
+<tr>
+<th width="11%" class="T T_min">Min</th>
+<th class="T T_max">Max</th>
+<th width="12%" class="T T_min">Min</th>
+<th class="T T_max">Max</th>
+</tr>
+</table>
+</div>
+
+<p class="br"></p>
+<p class="L1">
+	<input type="button" class="button XL T T_addnew" value="Add New" onclick="doAdd();"/>
+	<input type="button" class="button XL T T_ensel" value="Enable Selected" onclick="doEnable(this);"/>
+	<input type="button" class="button XL T T_dissel" value="Disable Selected" onclick="doDisable(this);"/>
+	<input type="button" class="button XL T T_delsel" value="Delete Selected" onclick="doDel(this);"/></p>
+	
+</div>
+<p class="br"></p>
+<div id="guest_tc_div" class="con1 XXL nd">
+	<p class="st T" id="t_guest_rule">Guest Network Bandwidth Control Rules</p>
+	<p class="br"></p>
+<div class="XXL thead" ><table class="XXL bdr tc">
+<tr>
+<th rowspan="2" class="T T_desc">Description</th>
+<th rowspan="2" width="9%" class="T" id="t_listpri">Priority</th>
+<th colspan="2" width="25%"class="T" id="t_listupbd">Egress Bandwidth (Kbps)</th>
+<th colspan="2" width="25%"class="T" id="t_listdownbd">Ingress Bandwidth (Kbps)</th>
+<th rowspan="2" width="10%" class="T T_status">Status</th>
+
+</tr>
+<tr>
+<th width="12%" class="T T_min">Min</th>
+<th width="13%" class="T T_max">Max</th>
+<th width="12%" class="T T_min">Min</th>
+<th width="13%" class="T T_max">Max</th>
+</tr>
+</table>
+</div>
+<div class="XXL tbody" ><table class="XXL bdr tc" id="guesttctbl"></table></div>
+<p class="br"></p>
+</div>
+
+<p class="bl"></p>
+</div>
+</div>
+<script language="javascript" type="text/javascript">$.loadHelpFrame("QoSCfgHelpRpm.htm");init();if(!INCLUDE_QOS){$.removeClass($.id("total_bw_setting"),"nd")}else{$.removeClass($.id("tc_info"),"nd")}tcEntry=$.act(ACT_GET,TC,null,null);var tcRuleList=$.act(ACT_GL,TC_RULE,null,null);if(INCLUDE_LAN_WLAN_GUESTNETWORK){var basicList=$.act(ACT_GL,LAN_WLAN,null,null,["name","Standard","SSID","RegulatoryDomain","PossibleChannels","AutoChannelEnable","Channel","X_TP_Bandwidth","Enable","SSIDAdvertisementEnabled","BeaconType","BasicEncryptionModes","WPAEncryptionModes","IEEE11iEncryptionModes","X_TP_Configuration_Modified","WMMEnable","X_TP_FragmentThreshold"]);if(!$.exe()){wlanObj=basicList[0];var guestnetObj=$.act(ACT_GET,LAN_WLAN_GUESTNET,wlanObj.__stack,null,["Enable","IsModified","LANAccessEnable","USBAccessEnable","TCEnable","TCMaxUpBW","TCMinUpBW","TCMaxDownBW","TCMinDownBW","TCRuleID"]);wlanObj5G=basicList[1];var guestnetObj5G=$.act(ACT_GET,LAN_WLAN_GUESTNET,wlanObj5G.__stack,null,["Enable","IsModified","LANAccessEnable","USBAccessEnable","TCEnable","TCMaxUpBW","TCMinUpBW","TCMaxDownBW","TCMinDownBW","TCRuleID"])}}if(!$.exe()){initTc();initTcRuleList(tcRuleList);if(INCLUDE_LAN_WLAN_GUESTNETWORK){initTcRuleListForGN(tcRuleList)}};</script>

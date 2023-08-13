@@ -1,0 +1,55 @@
+﻿<script language="javascript" type="text/javascript">var opt=$.mainParam[0];var stk=$.mainParam[1];var qosList;var upQueueList=[];var upQueueNum=0;var dscp_list=new Array(["AF13","56"],["AF12","48"],["AF11","40"],["CS1","32"],["AF23","88"],["AF22","80"],["AF21","72"],["CS2","64"],["AF33","120"],["AF32","112"],["AF31","104"],["CS3","96"],["AF43","152"],["AF42","144"],["AF41","136"],["CS4","128"],["EF","184"],["CS5","160"],["CS6","192"],["CS7","224"]);var app_name_list=new Array(["VoIP","VOIP"],["TR069","TR069"],["Other","OTHER"]);function draw_one_option(id,name,value){var option=$.id(id).options;var opt=new Option(name,option.length);opt.value=value;option.add(opt)}function draw_app_option(){$.each(app_name_list,function(){draw_one_option("app_name",this[0],this[1])})}function draw_cos_option(id){for(var i=0;i<8;i++){draw_one_option(id,i,i)}}function draw_dscp_option(id){$.each(dscp_list,function(){draw_one_option(id,this[0],this[1])})}function draw_queue_option(queueNameList,queueNum){for(var i=0;i<queueNum;i+=2){draw_one_option("qos_queue",queueNameList[i],queueNameList[i+1])}}function init(){qosList=$.act(ACT_GL,QOS_INTF,null,null,["interfaceKey"]);var queueList=$.act(ACT_GL,QOS_QUEUE,null,null,["queueName","queueKey"]);if(1==opt){var appCfg=$.act(ACT_GET,QOS_APP,stk,null)}if(!$.exe()){$.each(queueList,function(){if(qosList[0].__stack==$.stkPop(this.__stack,1)){upQueueList[upQueueNum++]=this.queueName;upQueueList[upQueueNum++]=this.queueKey}});draw_app_option();$.id("qos_dir").value="Upstream";draw_queue_option(upQueueList,upQueueNum);draw_cos_option("cos_mark");draw_dscp_option("dscp_mark");if(1==opt){$.id("app_name").value=appCfg.appName;$.id("status").value=appCfg.appEnable;$.id("qos_queue").value=appCfg.classQueue;$.id("dscp_mark").value=appCfg.DSCPMark;$.id("cos_mark").value=appCfg.ethernetPriorityMark}else{$.id("qos_queue").value="-1";$.id("cos_mark").value="-1";$.id("dscp_mark").value="-1"}}}function selectObj(id){var element=$.id(id);if(element){element.focus();element.select()}}function doSave(){var appArg={};if(""==$.id("app_name").value){$.alert(ERR_QOS_APP_NAME);selectObj("app_name");return false}appArg.appName=$.id("app_name").value;appArg.appEnable=$.id("status").value;if(-1==$.id("qos_queue").value||""==$.id("qos_queue").value){$.alert(ERR_QOS_EMPTY_QUEUE);selectObj("qos_queue");return false}appArg.classQueue=$.id("qos_queue").value;appArg.classInterface=qosList[0].interfaceKey;appArg.DSCPMark=parseInt($.id("dscp_mark").value,10);appArg.ethernetPriorityMark=parseInt($.id("cos_mark").value,10);$.addLoading($.id("saveBtn"));var optCode=ACT_ADD;var stack=null;if(1==opt){optCode=ACT_SET;stack=stk}$.act(optCode,QOS_APP,stack,null,appArg);$.exe(function(ret){if(!ret){$.loadMain("qosList.htm")}})};</script>
+<p class="et"><b>Business Classification Configuration</b></p>
+
+<div class="con1 L">
+	<p class="ct"></p>
+	<p class="bl"></p>
+<div class="con2">
+	<p class="br"></p>
+	
+	<p class="L2"><b class="item T" id="name" >Business Name:</b>
+		<select id="app_name" class="M"></select>
+	</p>
+	<p class="L2"><b class="item T" id="cls_stu">Status:</b>
+		<select id="status" class="M">
+			<option id="en" value="1">Enable</option>
+			<option id="dis" value="0" selected>Disable</option>
+		</select>
+	</p>
+
+	<p class="br"></p>
+	<p class="L1"><b class="T" >Specify Classification Results</b><span>(A blank criteria indicates no operation.)</span></p>
+	<p class="L2">
+		<b class="item T" id="dir">Direction:</b>
+		<input type="text" class="text" id="qos_dir" disabled />
+	</p>
+	<p class="L2">
+		<b class="item T" id="queue">Queue:</b>
+		<select id="qos_queue" class="XL">
+			<option value="-1"></option>
+		</select>
+	</p>
+	<p class="L2">
+		<b class="item T" >Mark Differentiated Service Code Point (DSCP):</b>
+		<select id="dscp_mark" class="M">
+			<option value="-1"></option>
+		</select>
+	</p>
+<div id="8021p_mark">
+	<p class="L2">
+		<b class="item T" >Mark 802.1P Priority:</b>
+		<select id="cos_mark" class="M">
+			<option value="-1"></option>
+		</select>
+	</p>
+</div>
+
+</div>
+<p class="bl"></p>
+<p class="tail" id="tail">
+	<input type="button" class="button L T T_save" id="saveBtn" value="Save" onclick="doSave();" />
+	<input type="button" class="button L T T_back" value="Back" onclick="$.loadMain('qosList.htm');" />
+</p>
+</div>
+
+<script language="javascript" type="text/javascript">$.loadHelp();$.removeClass($.id("8021p_mark"),"nd");init();</script>

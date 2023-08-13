@@ -1,0 +1,60 @@
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+<HTML>
+<HEAD><TITLE>Archer C7</TITLE>
+<META http-equiv=Pragma content=no-cache>
+<META http-equiv=Expires content="wed, 26 Feb 1997 08:21:57 GMT">
+<LINK href="../css/css_help.css" rel=stylesheet type="text/css">
+<script src="../js/oid_str.js" type="text/javascript"></script>
+<SCRIPT language="javascript" type="text/javascript"></SCRIPT>
+
+<script language="JavaScript" src="../js/custom.js" type="text/JavaScript"></script>
+<HTML><HEAD><TITLE></TITLE>
+<META http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+</head>
+
+<h1 class="header">Wireless Settings Help</H1>
+<p class="brief"><B>Note</B>: The operating distance or range of your wireless connection varies significantly based on the physical placement of the Router. For best results, place your Router:</P>
+
+<ul>
+<li class="s_0">Near the center of the area in which your wireless stations will operate.</lI>
+<li class="s_1">In an elevated location such as a high shelf.</lI>
+<li class="s_2">Away from the potential sources of interference, such as PCs, microwaves, and cordless phones.</lI>
+<li class="s_3">With the Antenna in the upright position.</lI>
+<li class="s_4">Away from large metal surfaces.</lI>
+</ul>
+
+<p class="note"><B>Note</B>: Failure to follow these guidelines can result in significant performance degradation or inability to wirelessly connect to the Router.</p>
+<p class="wireless"><B>Wireless Network Name</B> - Enter a value of up to 32 characters. The same Name (SSID) must be assigned to all wireless devices in your network.</p>
+<p class="region nd"><strong>Region</strong> - Select your region from the pull-down list. This field specifies the region where the wireless function of the Router can be used. It may be illegal to use the wireless function of the Router in a region other than one of those specified in this filed. If your country or region is not listed, please contact your local government agency for assistance.</p>
+
+<DIV id="display_lockap" style="display:none">
+<p class="lock_to_ap"><B>Lock to AP</B> - If selected, the device’s connection will be restricted to only the network with this specific MAC address.</p>
+</DIV>
+
+
+
+<p class="mode"><B>Mode</B> - You can choose the appropriate "Mixed" mode. </p>
+
+<p class="chan_width"><B>Channel Width</B> - The bandwidth of the wireless channel.</p>
+
+<p class="channel"><B>Channel</B> - This field determines which operating frequency will be used. It is not necessary to change the wireless channel unless you notice interference problems with another nearby access point. If you select auto, then AP will choose the best channel automatically.</p>
+
+
+
+<p class="broadcast"><B>Enable SSID Broadcast</B> - If you select the <B>Enable SSID Broadcast</B> checkbox, the wireless router will broadcast its name (SSID) on the air. </p>
+
+<DIV id="display_wds" style="display:none">
+<p class="enab_wds"><B>Enable WDS</B> - You can select this to enable WDS Bridging, with this function, the Router can bridge two or more Wlans. NOTE: If this checkbox is selected, you had better make sure the following settings are correct. </p>
+<p class="bridged"><B>SSID(to be bridged)</B> - The SSID of the AP your Router is going to connect to as a client. You can also use the scan function to select the SSID to join.</p>
+<p class="address"><B>MAC Address(to be bridged)</B> - The MAC Address of the AP your Router is going to connect to as a client. You can also use the scan function to select the MAC Address to join.</p>
+<p class="scan"><B>Scan</B> - Click this button, you can search the AP which runs in the current channel.</p>
+<p class="key_type"><B>Key type</B> - This option should be chosen according to the AP's security configuration.It is recommended that the security type is the same as your AP's security type</p>
+<p class="wep_inde"><B>WEP Index</B> - This option should be chosen if the key type is WEP(ASCII) or WEP(HEX).It indicates the index of the WEP key.</p>
+<p class="auth_type"><B>Authentication Type</B> - This option should be chosen if the key type is WEP(ASCII) or WEP(HEX).It indicates the authorization type of the Root AP.</p>
+<p class="encryption"><B>Encryption</B> - Please select encryption type base on the source AP.</p>
+<p class="password"><B>Password</B> - If the AP your Router is going to connect needs password, you need to fill the password in this blank.</p>
+</DIV>
+
+<SCRIPT type="text/javascript">document.getElementById("display_wds").style.display=wlan_wds==1?"":"none";</SCRIPT>
+<SCRIPT type="text/javascript">if(INCLUDE_LOCK_TO_AP&&(window.parent.$.sysMode=="Hotspot")){document.getElementById("display_lockap").style.display=""};</SCRIPT>
+<script language="javascript" type="text/javascript">window.parent.$.transHelp(document.URL);</script>

@@ -1,0 +1,54 @@
+ <META http-equiv=Content-Type content="text/html; charset=utf-8">
+<HTML>
+<HEAD><TITLE>Archer C7</TITLE>
+<META http-equiv=Pragma content=no-cache>
+<META http-equiv=Expires content="wed, 26 Feb 1997 08:21:57 GMT">
+<LINK href="../css/css_help.css" rel=stylesheet type="text/css">
+<SCRIPT language="javascript" type="text/javascript"></SCRIPT>
+
+<HTML><HEAD><TITLE></TITLE>
+<META http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+</head>
+
+
+	 <h1 class="header">Port Trigger Help</H1> 
+	 <p class="brief">Some applications require multiple connections, like Internet games, video conferencing, Internet telephoning  and so on. Port Triggering is used for some of these applications that cannot work with a pure NAT Router. </p> 
+	 <p class="configured"><B>Once configured, operation is as follows</B>:</P> 
+	 <ol type=1> 
+	 <li class="trig_port">A local host makes an outgoing connection to an external host using a destination port number defined in the <B>Trigger Port</B> field.</lI> 
+	 <li class="port_trig">The Router records this connection, opens the incoming port or ports associated with this entry in the <B>Port Triggering</B> table, and associates them with the local host.</lI> 
+	 <li class="open_port">When necessary, the external host will be able to connect to the local host using one of the ports defined in the <B>Open Port</B> field.</lI> 
+	 </ol> 
+	 <p class="rules"><B>Rules</B>:</P> 
+	 <ul> 
+	 <li class="trig_port_0"><B>Trigger Port</B> - The port for outgoing traffic. An outgoing connection using this port will trigger this rule.</lI> 
+	 <li class="trigger_prot"><B>Trigger Protocol</B> - The protocol used for Trigger Ports, either <B>TCP, </B><B>UDP</B>, or <B>All</B> (all protocols supported by the Router).</lI> 
+	 <li class="open_port_0"><B>Open Port</B> - The port or port range used by the remote system when it responds to the outgoing request. A response using one of these ports will be forwarded to the PC which triggered this rule. You can input at most 5 groups of ports (or port sections).  Every group of ports must be separated with ",", for example, 2000-2038, 2046, 2050-2051, 2085, 3010-3030.</lI> 
+	 <li class="open_prot"><B>Open Protocol</B> - The protocol used for Incoming Port, either <B>TCP, </B><B>UDP</B>, or <B>ALL </B>(all protocols supported by the Router).</lI> 
+	 <li class="status"><B>Status</B> - The status of this entry, Enabled means the Port Triggering entry is enabled.</lI> 
+	 <li class="edit"><b>Edit</b> - To edit an existing entry.</li>
+	 </ul> 
+	 <p class="following"><B>To add a new rule do the following on the Port Trigger screen</B>:</P> 
+	 <ol type=1> 
+	 <li class="add_new">Click the <B>Add New</B> button. </lI> 
+	 <li class="s_0">Enter a port number used by the application to send an outgoing request in the Trigger Port box. </lI> 
+	 <li class="trig_port_1">Select the protocol used for the <B>Trigger Port</B> from the pull-down list of Trigger Protocol, either <B>TCP</B>, <B>UDP</B>, or <B>All</B>.</lI> 
+	 <li class="s_1">Enter the range of port numbers used by the remote system when it responds to the PC's request in the Open Port box.</lI> 
+	 <li class="open_port_1">Select the protocol used for <B>Open Port</B> range from the pull-down list, either <B>TCP</B>, <B>UDP</B>, or <B>All</B>.</lI> 
+	 <li class="enabled">Select the <B>Enabled</B> option in the <B>Status</B> pull-down list.</lI> 
+	 <li class="save">Click the <B>Save</B>  button to save the new rule.</lI> 
+	 </ol> 
+	 <p class="service">There are many popular applications in the <B>Common Service Port</B> list. You can select an application and then the boxes of Trigger Port and Open Port will be automatically filled in. This has the same effect as adding a new rule.</P> 
+
+	 <p class="enable_sele">Click the <B>Enable Selected</B> button to enable selected entries.</P> 
+	 <p class="disable_sele">Click the <B>Disable Selected</B> button to disable selected entries.</P> 
+	 <p class="delete_sele">Click the <B>Delete Selected</B> button to delete selected entries.</P> 
+	
+	 <p class="note"><B>Note:</B></P> 
+	 <ol type=1> 
+	 <li class="s_2">When the trigger connection is released, the corresponding opened ports will be closed.</lI> 
+	 <li class="s_3">Each rule can only be used by one host on the LAN at a time. The trigger connection of other hosts on the LAN will be refused.</lI> 
+	 <li class="open_port_2"><B>Open Port</B> ranges cannot overlap each other.</lI> 
+	 </ol> 
+
+<script language="javascript" type="text/javascript">window.parent.$.transHelp(document.URL);</script>

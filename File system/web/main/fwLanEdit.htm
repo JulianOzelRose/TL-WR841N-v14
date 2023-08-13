@@ -1,0 +1,32 @@
+﻿<script language="javascript" type="text/javascript">var opt=$.mainParam[0];var returnPage=$.mainParam[1];var stk=$.mainParam[2];function doReturn(){if(returnPage==1){var param=[];if($.mainParam[2]!=undefined&&$.mainParam[2]!=-1){param[0]=1;param[1]=$.mainParam[2]}else{param[0]=0;param[1]=-1}$.loadMain("fwRulesEdit.htm",param)}else{if(returnPage==2){$.loadMain("fwRules.htm")}else{$.loadMain("fwLan.htm")}}}function changeMode(){if($.id("ipMode").selected==1){$.removeClass($.id("ipMode_elem"),"nd");$.addClass($.id("macMode_elem"),"nd")}else{if($.id("macMode").selected==1){$.addClass($.id("ipMode_elem"),"nd");$.removeClass($.id("macMode_elem"),"nd")}}}function init(){if(opt==1){var fwCfg=$.act(ACT_GET,INTERNAL_HOST,stk,null);$.exe(function(err){if(!err){if(fwCfg.type==0){$.id("ipMode").selected=1;$.removeClass($.id("ipMode_elem"),"nd");$.addClass($.id("macMode_elem"),"nd");$.id("entryName").value=fwCfg.entryName;if(fwCfg.IPStart==fwCfg.IPEnd){$.id("ipStart").value=(fwCfg.IPStart!=0)?$.num2ip(parseInt(fwCfg.IPStart,10)):"";$.id("ipEnd").value=""}else{$.id("ipStart").value=(fwCfg.IPStart!=0)?$.num2ip(parseInt(fwCfg.IPStart,10)):"";$.id("ipEnd").value=(fwCfg.IPEnd!=0)?$.num2ip(parseInt(fwCfg.IPEnd,10)):""}if(fwCfg.portStart==fwCfg.portEnd){$.id("portStart").value=(fwCfg.portStart!=0)?fwCfg.portStart:"";$.id("portEnd").value=""}else{$.id("portStart").value=(fwCfg.portStart!=0)?fwCfg.portStart:"";$.id("portEnd").value=(fwCfg.portEnd!=0)?fwCfg.portEnd:""}}else{if(fwCfg.type==1){$.id("macMode").selected=1;$.addClass($.id("ipMode_elem"),"nd");$.removeClass($.id("macMode_elem"),"nd");$.id("entryName").value=fwCfg.entryName;$.id("macAddr").value=fwCfg.mac}}}})}}function doSave(){var fwAttrs={};if($.id("mode").value==0){if(!$.isname($.id("entryName").value)){$.alert(ERR_FW_ENTRYNAME_INVAD);var element=$.id("entryName");if(element){element.focus();element.select()}return false}if(($.id("ipStart").value!="")&&($.ifip($.id("ipStart").value,true))){$.alert(ERR_IP_FORMAT);var element=$.id("ipStart");if(element){element.focus();element.select()}return false}if(($.id("ipEnd").value!="")&&($.ifip($.id("ipEnd").value,true))){$.alert(ERR_IP_FORMAT);var element=$.id("ipEnd");if(element){element.focus();element.select()}return false}if(($.id("ipStart").value!="")&&($.id("ipEnd").value!="")&&(!$.isOrderIp($.id("ipStart").value,$.id("ipEnd").value))){$.alert(ERR_TC_IP_ORDER_INVAD);var element=$.id("ipEnd");if(element){element.focus();element.select()}return false}if(($.id("portStart").value!="")&&(!$.isnum($.id("portStart").value))||(parseInt($.id("portStart").value,10)<1)||(parseInt($.id("portStart").value,10)>65535)){$.alert(ERR_PORT_NUM_INVAD);var element=$.id("portStart");if(element){element.focus();element.select()}return false}if(($.id("portEnd").value!="")&&(!$.isnum($.id("portEnd").value))||(parseInt($.id("portEnd").value,10)<1)||(parseInt($.id("portEnd").value,10)>65535)){$.alert(ERR_PORT_NUM_INVAD);var element=$.id("portEnd");if(element){element.focus();element.select()}return false}if(($.id("portStart").value!="")&&($.id("portEnd").value!="")&&(parseInt($.id("portEnd").value,10)<parseInt($.id("portStart").value,10))){$.alert(ERR_PORT_ORDER_INVAD);var element=$.id("portEnd");if(element){element.focus();element.select()}return false}if(($.id("ipStart").value=="")&&($.id("ipEnd").value=="")&&($.id("portStart").value=="")&&($.id("portEnd").value=="")){$.alert(ERR_TC_IP_PORT_INVAD);var element=$.id("ipStart");if(element){element.focus();element.select()}return false}fwAttrs.type=0;fwAttrs.entryName=$.id("entryName").value;fwAttrs.IPStart=($.id("ipStart").value)?$.ip2num($.id("ipStart").value):0;fwAttrs.IPEnd=($.id("ipEnd").value)?$.ip2num($.id("ipEnd").value):0;fwAttrs.portStart=($.id("portStart").value)?parseInt($.id("portStart").value,10):0;fwAttrs.portEnd=($.id("portEnd").value)?parseInt($.id("portEnd").value,10):0}else{if($.id("mode").value==1){if(!$.isname($.id("entryName").value)){$.alert(ERR_FW_ENTRYNAME_INVAD);return}if($.mac($.id("macAddr").value)){return}fwAttrs.type=1;fwAttrs.entryName=$.id("entryName").value;fwAttrs.mac=$.id("macAddr").value}}if(opt==0){$.act(ACT_ADD,INTERNAL_HOST,null,null,fwAttrs)}else{if(opt==1){$.act(ACT_SET,INTERNAL_HOST,stk,null,fwAttrs)}}$.addLoading($.id("saveBtn"));$.exe(function(err){if(!err){$.loadMain("fwLan.htm")}})};</script>
+<p class="et T" id="et">Add or Edit A Host Entry</p>
+<div class="con1 L">
+<p class="ct"></p>
+<p class="bl"></p>
+<div class="con2">
+<p class="L1"><b class="item T T_mode">Mode:</b>
+<select id="mode" onchange="changeMode();">
+<option value="0" id="ipMode" class="T T_ipaddr">IP Address</option>
+<option value="1" id="macMode" class="T T_macaddr">MAC Address</option>
+</select></p>
+<p class="br"></p>
+<p class="L1"><b class="item T T_desc">Description:</b><input type="text" class="text" size="17" id="entryName" maxlength="15"/></p>
+<div id="ipMode_elem">
+<p class="L1"><b class="item T T_ipaddr">IP Address:</b>
+<input type="text" class="text" id="ipStart" maxlength="15" size="17"/>-
+<input type="text" class="text" id="ipEnd" maxlength="15" size="17"/>
+</p>
+<p class="L1"><b class="item T T_port">Port:</b>
+<input type="text" class="text" id="portStart" size="10"/>-
+<input type="text" class="text" id="portEnd" size="10"/></p>
+</div>
+<div id="macMode_elem" class="nd">
+<p class="L1"><b class="item T T_macaddr">MAC Address:</b><input type="text" class="text" size="17" maxlength="17" id="macAddr"/></p>
+</div>
+</div>
+<p class="bl"></p>
+<p class="tail" id="tail">
+<input type="button" class="button L T T_save" id="saveBtn" value="Save" onclick="doSave();" />
+<input type="button" class="button L T T_back" value="Back" onclick="doReturn();" /></p>
+</div>
+<script language="javascript" type="text/javascript">$.loadHelpFrame("AccessCtrlHostsListsAdvHelpRpm.htm");init();</script>

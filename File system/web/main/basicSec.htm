@@ -1,0 +1,42 @@
+﻿<script language="javascript" type="text/javascript">function initSPI(){var wan_iplist_sta={};var wan_iplist_dyn={};var wan_iplist_bpa={};var wan_pppoelist={};var wan_l2tp_list={};var wan_pptp_list={};if(INCLUDE_BPA){var wanIPList=$.act(ACT_GL,WAN_IP_CONN,null,null,["enable","addressingType","X_TP_IPv4Enabled","X_TP_BpaEnable"])}else{var wanIPList=$.act(ACT_GL,WAN_IP_CONN,null,null,["enable","addressingType","X_TP_IPv4Enabled"])}var wanPPPList=$.act(ACT_GL,WAN_PPP_CONN,null,null,["enable","transportType","X_TP_IPv4Enabled"]);if(INCLUDE_L2TP){var wanL2tpList=$.act(ACT_GL,WAN_L2TP_CONN,null,null,["enable","addressingType","transportType"])}if(INCLUDE_PPTP){var wanPptpList=$.act(ACT_GL,WAN_PPTP_CONN,null,null,["enable","addressingType","transportType"])}var wanTypes=$.act(ACT_GL,WAN_COMMON_INTF_CFG,null,null,["WANAccessType"]);if(!$.exe()){$.each(wanTypes,function(){if(this.WANAccessType=="Ethernet"){pStk=this.__stack}});var ethWan=$.act(ACT_GET,WAN_ETH_INTF,pStk,null,["enable"]);$.each(wanIPList,function(){var tmpStk=$.stkPop(this.__stack,2);if(pStk==tmpStk&&this.X_TP_IPv4Enabled==1){if(this.addressingType=="Static"){staticStk=this.__stack;wan_iplist_sta=$.act(ACT_GET,WAN_IP_CONN,this.__stack,null,["X_TP_FirewallEnabled"])}if(this.addressingType=="DHCP"){if(INCLUDE_BPA&&this.X_TP_BpaEnable==1){bpaStk=this.__stack;wan_iplist_bpa=$.act(ACT_GET,WAN_IP_CONN,this.__stack,null,["X_TP_FirewallEnabled"])}else{dynStk=this.__stack;wan_iplist_dyn=$.act(ACT_GET,WAN_IP_CONN,this.__stack,null,["X_TP_FirewallEnabled"])}}if((this.enable==1)&&(this.addressingType=="Static")){type="staticIp"}else{if((this.enable==1)&&(this.addressingType=="DHCP")){type="dynamicIp"}}if(INCLUDE_BPA&&(this.X_TP_BpaEnable==1)&&(this.enable==1)){type="bpa"}}});$.each(wanPPPList,function(){var tmpStk=$.stkPop(this.__stack,2);if(pStk==tmpStk&&this.X_TP_IPv4Enabled==1){if(this.transportType=="PPPoE"){PPPoEStk=this.__stack;wan_pppoelist=$.act(ACT_GET,WAN_PPP_CONN,this.__stack,null,["X_TP_FirewallEnabled"])}if((this.enable==1)&&(this.transportType=="PPPoE")){type="pppoe"}}});if(INCLUDE_L2TP){$.each(wanL2tpList,function(){var tmpStk=$.stkPop(this.__stack,1);if(pStk==tmpStk){l2tpStk=this.__stack;wan_l2tp_list=$.act(ACT_GET,WAN_L2TP_CONN,this.__stack,null,["FirewallEnabled"]);if(this.enable==1){type="l2tp"}}})}if(INCLUDE_PPTP){$.each(wanPptpList,function(){var tmpStk=$.stkPop(this.__stack,1);if(pStk==tmpStk){pptpStk=this.__stack;wan_pptp_list=$.act(ACT_GET,WAN_PPTP_CONN,this.__stack,null,["FirewallEnabled"]);if(this.enable==1){type="pptp"}}})}if(!$.exe()){if(type=="staticIp"){$.id("enable_spi").checked=(wan_iplist_sta.X_TP_FirewallEnabled==1)?true:false}else{if(type=="dynamicIp"){$.id("enable_spi").checked=(wan_iplist_dyn.X_TP_FirewallEnabled==1)?true:false}else{if(type=="bpa"){$.id("enable_spi").checked=(wan_iplist_bpa.X_TP_FirewallEnabled==1)?true:false}else{if(type=="pppoe"){$.id("enable_spi").checked=(wan_pppoelist.X_TP_FirewallEnabled==1)?true:false}else{if(type=="l2tp"){$.id("enable_spi").checked=(wan_l2tp_list.firewallEnabled==1)?true:false}else{if(type=="pptp"){$.id("enable_spi").checked=(wan_pptp_list.firewallEnabled==1)?true:false}}}}}}}}}function initVPNAndALG(){algEntry=$.act(ACT_GET,ALG_CFG,null,null);if(!$.exe()){if(algEntry.pptpAlg==1){$.id("pptpEnable").checked=true}else{$.id("pptpDisable").checked=true}if(algEntry.l2tpAlg==1){$.id("l2tpEnable").checked=true}else{$.id("l2tpDisable").checked=true}if(algEntry.ipSecAlg==1){$.id("ipSecEnable").checked=true}else{$.id("ipSecDisable").checked=true}if(algEntry.ftpAlg==1){$.id("ftpEnable").checked=true}else{$.id("ftpDisable").checked=true}if(algEntry.tftpAlg==1){$.id("tftpEnable").checked=true}else{$.id("tftpDisable").checked=true}if(algEntry.rtspAlg==1){$.id("rtspEnable").checked=true}else{$.id("rtspDisable").checked=true}if(INCLUDE_ALG_H323){$.removeClass($.id("h323"),"nd");if(algEntry.h323Alg==1){$.id("h323Enable").checked=true}else{$.id("h323Disable").checked=true}}if(INCLUDE_ALG_SIP){$.removeClass($.id("sip"),"nd");if(algEntry.sipAlg==1){$.id("sipEnable").checked=true}else{$.id("sipDisable").checked=true}}}}function spiSave(obj){$.act(ACT_SET,WAN_IP_CONN,staticStk,null,["X_TP_FirewallEnabled="+($.id("enable_spi").checked==true?1:0)]);$.act(ACT_SET,WAN_IP_CONN,dynStk,null,["X_TP_FirewallEnabled="+($.id("enable_spi").checked==true?1:0)]);$.act(ACT_SET,WAN_IP_CONN,bpaStk,null,["X_TP_FirewallEnabled="+($.id("enable_spi").checked==true?1:0)]);$.act(ACT_SET,WAN_PPP_CONN,PPPoEStk,null,["X_TP_FirewallEnabled="+($.id("enable_spi").checked==true?1:0)]);$.act(ACT_SET,WAN_L2TP_CONN,l2tpStk,null,["FirewallEnabled="+($.id("enable_spi").checked==true?1:0)]);$.act(ACT_SET,WAN_PPTP_CONN,pptpStk,null,["FirewallEnabled="+($.id("enable_spi").checked==true?1:0)])}function algSave(obj){var arg={};arg.pptpAlg=($.id("pptpEnable").checked==true)?1:0;arg.ipSecAlg=($.id("ipSecEnable").checked==true)?1:0;arg.l2tpAlg=($.id("l2tpEnable").checked==true)?1:0;arg.ftpAlg=($.id("ftpEnable").checked==true)?1:0;arg.tftpAlg=($.id("tftpEnable").checked==true)?1:0;arg.rtspAlg=($.id("rtspEnable").checked==true)?1:0;if(INCLUDE_ALG_H323){arg.h323Alg=($.id("h323Enable").checked==true)?1:0}if(INCLUDE_ALG_SIP){arg.sipAlg=($.id("sipEnable").checked==true)?1:0}$.addLoading(obj);$.act(ACT_SET,ALG_CFG,null,null,arg);$.exe(function(err){if(!err){$.reload()}})}function doSave(obj){spiSave(obj);algSave(obj)};</script>
+<p class="et T" id="et">Basic Security</p>
+<div class="con1 L">
+<p class="ct"></p>
+<p class="bl"></p>
+<div class="con2">
+<p class="st T" id="t_stat">Firewall</p>
+<div class="bdr L">
+<p class="L1"><b class="item L T T_enspi">Enable SPI Firewall</b><input type="checkbox" id="enable_spi" />&nbsp;</p>
+</div>
+<p class="br"></p>
+<p class="bl"></p>
+<p class="st T" id="t_account">VPN</p>
+<div class="bdr L">
+<p class="L1"><b class="item M T" id="t_pptp">PPTP Pass-through:</b><input type="radio" id="pptpEnable" name="pptpAlg" /><span class="T T_en">Enable</span>
+<input type="radio" id="pptpDisable" name="pptpAlg" /><span class="T T_dis">Disable</span></p>
+<p class="L1"><b class="item M T" id="t_l2tp">L2TP Pass-through:</b><input type="radio" id="l2tpEnable" name="l2tpAlg" /><span class="T T_en">Enable</span>
+<input type="radio" id="l2tpDisable" name="l2tpAlg" /><span class="T T_dis">Disable</span></p>
+<p class="L1"><b class="item M T" id="t_ipsec">IPSec Pass-through:</b><input type="radio" id="ipSecEnable" name="ipSecAlg" /><span class="T T_en">Enable</span>
+<input type="radio" id="ipSecDisable" name="ipSecAlg" /><span class="T T_dis">Disable</span></p>
+</div>
+<p class="br"></p>
+<p class="bl"></p>
+<p class="st T" id="t_service">ALG</p>
+<div class="bdr M">
+<p class="L1"><b class="item M"> FTP ALG:</b><input type="radio" id="ftpEnable" name="ftpAlg" /><span class="T T_en">Enable</span>
+<input type="radio" id="ftpDisable" name="ftpAlg" /><span class="T T_dis">Disable</span></p>
+<p class="L1"><b class="item M"> TFTP ALG:</b><input type="radio" id="tftpEnable" name="tftpAlg" /><span class="T T_en">Enable</span>
+<input type="radio" id="tftpDisable" name="tftpAlg" /><span class="T T_dis">Disable</span></p>
+<p class="L1 nd" id="h323"><b class="item M"> H323 ALG:</b><input type="radio" id="h323Enable" name="h323Alg" /><span class="T T_en">Enable</span>
+<input type="radio" id="h323Disable" name="h323Alg" /><span class="T T_dis">Disable</span></p>
+<p class="L1 nd"  id="sip"><b class="item M"> SIP ALG:</b><input type="radio" id="sipEnable" name="sipAlg" /><span class="T T_en">Enable</span>
+<input type="radio" id="sipDisable" name="sipAlg" /><span class="T T_dis">Disable</span></p>
+<p class="L1"  id="rtsp"><b class="item M"> RTSP ALG:</b><input type="radio" id="rtspEnable" name="rtspAlg" /><span class="T T_en">Enable</span>
+<input type="radio" id="rtspDisable" name="rtspAlg" /><span class="T T_dis">Disable</span></p>
+</div>
+</div>
+<p class="br"></p>
+<p class="bl"></p>
+<p class="tail" id="tail"><input type="button" class="button L T T_save" value="Save" onclick="doSave(this)" /></p>
+</div>
+<script language="javascript" type="text/javascript">$.loadHelpFrame("BasicSecurityHelpRpm.htm");var staticStk;var dynStk;var bpaStk;var PPPoEStk;var l2tpStk;var pptpStk;var pStk;var type="";initSPI();initVPNAndALG();</script>

@@ -1,0 +1,36 @@
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+<HTML>
+<HEAD><TITLE>Archer C7</TITLE>
+<META http-equiv=Pragma content=no-cache>
+<META http-equiv=Expires content="wed, 26 Feb 1997 08:21:57 GMT">
+<LINK href="../css/css_help.css" rel=stylesheet type="text/css">
+<SCRIPT language="javascript" type="text/javascript"></SCRIPT>
+
+<h1 class="header">Basic Security Help</H1>
+<p class="brief">You can configure the Basic Security Settings on this page. </P>
+<p class="firewall"><B>Firewall</B> - Here you can enable or disable the Router's firewall. </P>
+<UL>
+<li class="spi_fire"><B>SPI Firewall</B> - Stateful Packet Inspection (SPI) helps to prevent cyber attacks by tracking more state per session. It validates that the traffic passing through the session conforms to the protocol. SPI Firewall is enabled by factory default. If you want all the computers on the LAN exposed to the outside world, you can disable it.</lI>
+
+</UL>
+
+<p class="vpn"><B>VPN</B> - VPN Passthrough must be enabled if you want to allow VPN tunnels using VPN protocols to pass through the Router. </P>
+<UL>
+  	<li class="pptp_pass"><B>PPTP Passthrough</B> - PPTP Passthrough. Point-to-Point Tunneling Protocol (PPTP) allows the Point-to-Point Protocol (PPP) to be tunneled through an IP network. To allow PPTP tunnels to pass through the Router, click Enable.</LI>
+    <li class="l2tp_pass"><B>L2TP Passthrough</B> - Layer Two Tunneling Protocol (L2TP) is the method used to enable Point-to-Point sessions via the Internet on the Layer Two level. To allow L2TP tunnels to pass through the Router, click Enable. </LI>
+    <li class="ipsec_pass"><B>IPSec Passthrough</B> - Internet Protocol security (IPSec) is a suite of protocols for ensuring private, secure communications over Internet Protocol (IP) networks, through the use of cryptographic security services. To allow IPSec tunnels to pass through the Router, click Enable. </LI>
+</UL>
+
+<p class="alg"><B>ALG</B> - It is recommended to enable Application Layer Gateway (ALG) because ALG allows customized Network Address Translation (NAT) traversal filters to be plugged into the gateway to support address and port translation for certain application layer "control/data" protocols such as FTP, TFTP, H323 etc. </P>
+<UL>
+  	<li class="ftp_alg"><B>FTP ALG</B> - To allow FTP clients and servers to transfer data across NAT, click Enable.</LI>
+    <li class="tftp_alg"><B>TFTP ALG</B> - To allow TFTP clients and servers to transfer data across NAT, click Enable.</LI>
+    <li class="h323_alg"><B>H323 ALG</B> - To allow Microsoft NetMeeting clients to communicate across NAT, click Enable.</LI>
+    <li class="sip_alg"><B>SIP ALG</B> -To allow SIP clients and servers to transfer data across NAT, click Enable.</LI>
+    <li class="rtsp_alg"><B>RTSP ALG</B> - To allow some media player clients to communicate with some streaming media servers across NAT, click Enable.</LI>
+</UL>
+ 
+<p class="save">Click the <B>Save</B> button to save your settings. </P>
+</DIV>
+</BODY></HTML>
+<script language="javascript" type="text/javascript">window.parent.$.transHelp(document.URL);</script>

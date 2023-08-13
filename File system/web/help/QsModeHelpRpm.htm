@@ -1,0 +1,47 @@
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+<HTML>
+
+<HEAD>
+    <TITLE>Archer C7</TITLE>
+    <META http-equiv=Pragma content=no-cache>
+    <META http-equiv=Expires content="wed, 26 Feb 1997 08:21:57 GMT">
+    <LINK href="../css/css_help.css" rel=stylesheet type="text/css">
+	<script src="../js/oid_str.js" type="text/javascript"></script>
+    <SCRIPT language="javascript" type="text/javascript">function Click(){return false}document.oncontextmenu=Click;</SCRIPT>
+
+    <BODY>
+        <DIV id="autoWidth">
+            <H1 class="header">Operation Mode Help</H1>
+			<div id="m_router" style="display:none">
+            <P class="mode_router">
+                <B>Wireless Router</B>: In this mode, the device enables multiple users to share the Internet connection via Ethernet port. The LAN devices share the same IP from ISP through Wireless port. While connecting to Internet, the Ethernet port works as a WAN port at Wireless Router mode.</P>
+			</div>
+			<div id="m_modem" style="display:none">
+            <P class="mode_modem">
+                <B>3G/4G Router</B>: In this mode, the device enables multiple users to share the Internet connection via 3G/4G Modem. The LAN devices share the same IP from ISP through Wireless port. While connecting to Internet, the Ethernet port works as a LAN port at 3G/4G Router mode.</P>
+			</div>
+			<div id="m_hotspot" style="display:none">
+            <P class="mode_hotspot">
+                <B>Hotspot Router</B>: In this mode, the device enables multiple users to share Internet connection from WISP. The LAN port devices share the same IP from WISP through Wireless port. While connecting to WISP, the Wireless port works as a WAN port at WISP Client Router mode. The Ethernet port acts as a LAN port.</P>
+			</div>			
+			<div id="m_ap" style="display:none">
+			<P class="mode_ap">
+                <B>Access Point</B>: In this mode, this device can be connected to a wired network and transform the wired access into wireless that multiple devices can share together, especially for a home, office or hotel where only wired network is available.</P>
+            </div>
+			<div id="m_re" style="display:none">
+			<P class="mode_re">
+                <B>Range Extender</B>: In this mode, this device can copy and reinforce the existing wireless signal to extend the coverage of the signal, especially for a large space to eliminate signal-blind corners.</P>
+            </div>
+			<div id="m_client" style="display:none">            
+			<P class="mode_client">
+                <B>Client</B>: In this mode, this device can be connected to another device via Ethernet port and act as an adaptor to grant your wired devices access to a wireless network, especially for a Smart TV, Media Player, or game console only with an Ethernet port.</P>
+            </div>
+			<div id="m_mssid" style="display:none">
+				<p class="mode_mssid">
+                <B>Multi-SSID</B>: In this mode, this device can create up to 4 wireless networks labeled with different SSIDs and assign each SSID with different security or VLAN, especially for the situation when the various access policies and functions are required.</p>
+			</div>
+		</DIV>
+    </BODY>
+
+</HTML>
+<script language="javascript" type="text/javascript">window.onload=function(){if(INCLUDE_MULTIMODE_ROUTER){document.getElementById("m_router").style.display=""}if(INCLUDE_MULTIMODE_MODEM){document.getElementById("m_modem").style.display=""}if(INCLUDE_MULTIMODE_AP){document.getElementById("m_ap").style.display=""}if(INCLUDE_MULTIMODE_RE){document.getElementById("m_re").style.display=""}if(INCLUDE_MULTIMODE_CLIENT){document.getElementById("m_client").style.display=""}if(INCLUDE_MULTIMODE_MSSID){document.getElementById("m_mssid").style.display=""}if(INCLUDE_MULTIMODE_HOTSPOT){document.getElementById("m_hotspot").style.display=""}window.parent.$.transHelp(document.URL)};</script>

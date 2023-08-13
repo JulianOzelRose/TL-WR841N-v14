@@ -1,0 +1,42 @@
+﻿<script language="javascript" type="text/javascript">var showNum=10;function changeMode(obj){var mode;if(wlanObj.status!="Up"){$.alert(ERR_WLAN_MAC_FILTER_INVALID);return}if($.id("deny").checked==true){mode="deny"}else{mode="allow"}$.act(ACT_SET,LAN_WLAN,wlanObj.__stack,null,["X_TP_MACAddressControlRule="+mode]);$.addLoading(obj);$.exe(function(ret){if(!ret){$.reload()}})}function offFilter(obj){if(wlanObj.status!="Up"){$.alert(ERR_WLAN_MAC_FILTER_INVALID);return}$.addLoading(obj);$.act(ACT_SET,LAN_WLAN,wlanObj.__stack,null,["MACAddressControlEnabled=0"]);$.exe(function(ret){if(!ret){$.reload()}})}function onFilter(obj){if(wlanObj.status!="Up"){$.alert(ERR_WLAN_MAC_FILTER_INVALID);return}$.addLoading(obj);$.act(ACT_SET,LAN_WLAN,wlanObj.__stack,null,["MACAddressControlEnabled=1"]);$.exe(function(ret){if(!ret){$.reload()}})}function initTip(){if(1==wlanObj.MACAddressControlEnabled){$.removeClass($.id("acl_enabled"),"nd");$.removeClass($.id("acl_dis"),"nd")}else{$.removeClass($.id("acl_disabled"),"nd");$.removeClass($.id("acl_en"),"nd")}}function doSelectRow(){var obj,entryExist=false;$.each(wlanFilterList,function(arg,index){if(true==$.id("modify"+index).checked){entryExist=true}});if(entryExist==true){$.id("selEn").disabled=false;$.id("selDis").disabled=false;$.id("selDel").disabled=false}else{$.id("selEn").disabled=true;$.id("selDis").disabled=true;$.id("selDel").disabled=true}}function removeAll(){var tbl=$.id("macTbl");while(tbl.rows.length>0){tbl.deleteRow(-1)}}function del(obj){$.act(ACT_DEL,LAN_WLAN_MACTABLEENTRY,obj.__stack,null,{});$.exe();$.reload()}function modify(obj){$.loadMain("wlAclAdv.htm",obj)}function getSSIDByName(name){var ssid=wlanObj.SSID;if(INCLUDE_LAN_WLAN_MSSID){$.each(vapList,function(arg,index){if(this.name==name){ssid=this.SSID}})}return ssid}function getTbl(wlanFilterList){var tbl=$.id("macTbl");$.each(wlanFilterList,function(arg,index){row=tbl.insertRow(-1);cell=row.insertCell(-1);cell.innerHTML='<input type=checkbox name=modify id="modify'+index+"\" onclick='doSelectRow()'/>";cell.width="18px";cell=row.insertCell(-1);cell.innerHTML=this.MACAddress;cell.width="120px";cell=row.insertCell(-1);if(1==this.enabled){cell.innerHTML="<span class='T T_enabled'>"+m_str.enabled+"</span>"}else{cell.innerHTML="<span class='T T_disabled'>"+m_str.disabled+"</span>"}cell.width="90px";if(INCLUDE_LAN_WLAN_MSSID){var hostSSID=getSSIDByName(this.hostName);cell=row.insertCell(-1);cell.innerHTML=hostSSID;cell.width="190px"}cell=row.insertCell(-1);cell.innerHTML=$.htmlEncodeStr(this.description);cell=row.insertCell(-1);cell.innerHTML="<span class='a T T_edit' onclick=modify(wlanFilterList["+index+"])>"+m_str.edit+"</span>";cell.width="40px"});doSelectRow();$.resize(tbl,showNum)}function selectAll(){if(true==$.id("selectAll").checked){for(var index=0;index<wlanFilterList.length;index++){$.id("modify"+index).checked=true}}else{for(var index=0;index<wlanFilterList.length;index++){$.id("modify"+index).checked=false}}doSelectRow()}function doSelected(opt){var obj,entryExist=false;if(wlanFilterList.length==0){$.alert(ERR_WLAN_MAC_LIST_EMPTY);return}if(opt=="Enable"){obj=$.id("selEn");$.each(wlanFilterList,function(arg,index){if(true==$.id("modify"+index).checked){$.act(ACT_SET,LAN_WLAN_MACTABLEENTRY,this.__stack,null,["Enabled="+1]);entryExist=true}})}else{if(opt=="Disable"){obj=$.id("selDis");$.each(wlanFilterList,function(arg,index){if(true==$.id("modify"+index).checked){$.act(ACT_SET,LAN_WLAN_MACTABLEENTRY,this.__stack,null,["Enabled="+0]);entryExist=true}})}else{if(opt=="Delete"){obj=$.id("selDel");$.each(wlanFilterList,function(arg,index){if(true==$.id("modify"+index).checked){$.act(ACT_DEL,LAN_WLAN_MACTABLEENTRY,this.__stack,null,{});entryExist=true}})}else{}}}if(entryExist){$.addLoading(obj);$.exe(function(ret){if(!ret){$.reload()}})}};</script>
+<p class="et T" id="et">Wireless MAC Filtering settings</p> 
+<div class="con1 L">
+<p class="ct"></p> 
+<p class="bl"></p> 
+<div class="con2">
+<p class="line">
+<span class="T" id="t_info">You can configure the Wireless MAC Filtering to control the wireless access on this page.</span>
+</p>
+<p class="br"></p>
+<p>
+<b class="T" id="t_acl">Wireless MAC Filtering:</b>&nbsp;&nbsp;
+<span class="nd T T_enabled" id="acl_enabled">Enabled</span>
+<span class="nd T T_disabled" id="acl_disabled">Disabled</span>&nbsp;&nbsp;
+<input type=button id="acl_dis" class="button L nd T T_dis" value="Disable" onclick="offFilter(this);" />
+<input type=button id="acl_en" class="button L nd T T_en" value="Enable" onclick="onFilter(this)" />
+</p>
+<p>
+<b class="T" id="t_rule">Filtering Rules</b>
+</p>
+<p align="left">
+	<input type="radio" name="rule" id="deny" onclick="changeMode(this)" /><i class="T" id="t_deny">Deny</i>&nbsp;<span class="T" id="t_item1">the stations specified by any enabled entries in the list to access. </span>
+</p>
+<p align="left">
+	<input type="radio" name="rule" id="allow" onclick="changeMode(this)" /><i class="T" id="t_allow">Allow</i>&nbsp;<span class="T" id="t_item2">the stations specified by any enabled entries in the list to access.</span>
+</p>
+<p class="br"></p>
+<div class="L thead"><table class="L bdr tc" id="macTbl"><tr><th width="18px"><input type=checkbox id="selectAll" onclick="selectAll();" /></th><th class="T T_macaddr" width="120px">MAC Address</th><th class="T T_status" width="90px">Status</th><th class="T T_host nd" id="host"width="180px">Host</th><th class="T T_desc">Description</th><th class="T T_edit" width="40px">Edit</th></tr>
+</table></div>
+
+<p class="br"></p>
+<p class="L1">
+<input type="button" class="button XL T T_addnew" value="Add New" onclick="modify(null)" />
+<input type="button" class="button XL T T_ensel" value="Enable Selected" onclick="doSelected('Enable')" id="selEn" disabled />
+<input type="button" class="button XL T T_dissel" value="Disable Selected" onclick="doSelected('Disable')" id="selDis" disabled />
+<input type="button" class="button XL T T_delsel" value="Delete Selected" onclick="doSelected('Delete');" id="selDel" disabled />
+</p>
+</div>
+<p class="bl"></p>
+<p class="tail" id="tail"></p>
+</div>
+<script language="javascript" type="text/javascript">$.loadHelpFrame("WlanMacFilterHelpRpm.htm");var wlanFilterList,wlanObj;var wlanList=$.act(ACT_GL,LAN_WLAN,null,null,["name","Status","X_TP_MACAddressControlRule","MACAddressControlEnabled","SSID","X_TP_Band"]);if(INCLUDE_LAN_WLAN_MSSID){var vapList=$.act(ACT_GL,LAN_WLAN_MSSIDENTRY,null,null,["Enable","Name","SSID","SSIDAdvertisementEnable","BeaconType","WPAEncryptionModes","IEEE11iEncryptionModes"])}if(!$.exe()){wlanObj=wlanList[0];wlanFilterList=$.act(ACT_GS,LAN_WLAN_MACTABLEENTRY,null,wlanObj.__stack,["Enabled","MACAddress","Description","HostName"]);$.exe();initTip();if(INCLUDE_LAN_WLAN_MSSID){$.removeClass($.id("host"),"nd")}getTbl(wlanFilterList);if("allow"==wlanObj.X_TP_MACAddressControlRule){$.id("allow").checked=true}else{$.id("deny").checked=true}};</script>

@@ -1,0 +1,37 @@
+﻿<META http-equiv=Content-Type content="text/html; charset=utf-8">
+<HTML>
+<HEAD><TITLE>Archer C7</TITLE>
+<META http-equiv=Pragma content=no-cache>
+<META http-equiv=Expires content="wed, 26 Feb 1997 08:21:57 GMT">
+<LINK href="../css/css_help.css" rel=stylesheet type="text/css">
+<SCRIPT language="javascript" type="text/javascript">function Click(){return false}document.oncontextmenu=Click;</SCRIPT>
+
+<HTML>
+
+
+<h1 class="header">IPv6 LAN Help</H1>
+<p class="brief">In the page you can configure LAN IPv6 interface for your router.</P>
+
+<p class="configuration"><B>Address Auto-Configuration Type:</B> Select a type to assign IPv6 addresses to the computers in your LAN. RADVD and DHCPv6 Server are provided.</P>
+<p class="s_0">1)	If RADVD is selected, it doesnt need to be configured.</p>
+<p class="s_1">2)	If DHCPv6 Server is selected, please complete the following parameters.</p>
+<ul>
+<li class="address"><B>Start IPv6 Address</B> Enter a value for the DHCPv6 server to start with when issuing IPv6 addresses.</li>
+<li class="address_0"><B>End IPv6 Address</B> Enter a value for the DHCPv6 server to end with when issuing IPv6 addresses.</li>
+<li class="leas_time"><B>Leased Time</B> The Leased Time is the amount of time in which a network user will be allowed connection to the  router with their current dynamic IPv6 address. Enter the amount of time, in hours, then the user will be leased this dynamic IPv6 address. After the dynamic IPv6 address has expired, the user will be automatically assigned a new dynamic IPv6 address. The default is 86400 seconds.</li>
+</ul>
+</br>
+<p class="configuration_0"><B>Site Prefix Configuration Type</B> Select a type to assign IPv6 prefix addresses to the computers in your LAN. Delegated and Static are provided.</P>
+<p class="note"><B>Note:</B> If your IPv6 wan connection type is "Tunnel 6to4", the Site Prefix Configuration Type should be "Static" to make sure "Tunnel 6to4" works properly.</P>
+<p class="s_2">1)	If Delegated is selected.</P>
+<ul>
+<li class="connection"><B>Prefix Delegated WAN Connection</B> Show the WAN connection selected to assign prefix.</li>
+</ul>
+<p class="s_3">2)	If Static is selected.</p>
+<ul>
+<li class="site_pref"><B>Site Prefix</B> Enter a value for the site prefix.</li>
+<li class="prefix"><B>Site Prefix Length</B> Enter a value for the site prefix length.</li>
+</ul>
+
+</BODY></HTML>
+<script language="javascript" type="text/javascript">window.parent.$.transHelp(document.URL);</script>

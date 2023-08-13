@@ -1,0 +1,50 @@
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+<HTML>
+<HEAD><TITLE>Archer C7</TITLE>
+<META http-equiv=Pragma content=no-cache>
+<META http-equiv=Expires content="wed, 26 Feb 1997 08:21:57 GMT">
+<LINK href="../css/css_help.css" rel=stylesheet type="text/css">
+<script src="../js/oid_str.js" type="text/javascript"></script>
+<SCRIPT language="javascript" type="text/javascript"></SCRIPT>
+
+<HTML><HEAD><TITLE></TITLE>
+<META http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+</head>
+
+<h1 class="header">WAN Help</H1>
+
+<p class="brief"><B>WAN Connection Type:</B> </p>
+<p class="dyna_ip">If your ISP is running a DHCP server, select the <B>Dynamic IP</B> option.</p>
+<p class="stat_ip">If your ISP provides a static or fixed IP Address, Subnet Mask, Gateway and DNS setting, select the <B>Static IP</B> option.</p>
+<p class="pppoe">If your ISP provides a PPPoE connection, select <B>PPPoE</B> option.</p>
+
+<p class="bigp_cable">If your ISP provides BigPond Cable(or Heart Beat Signal) connection, please select <B>BigPond Cable</B> option.</p>
+<p class="l2tp">If your ISP provides L2TP connection, please select <B>L2TP</B> option.</p>
+<p class="pptp">If your ISP provides PPTP connection, please select <B>PPTP</B> option.</p>
+<p class="note"><B>Note</B>: If you don't know how to choose the appropriate connection type, click the <B>Detect</B> button to allow the Router to automatically search your Internet connection for servers and protocols. The connection type will be reported when an active Internet service is successfully detected by the Router. This report is for your reference only. To make sure the connection type your ISP provides, please refer to the ISP. The various types of Internet connections that the Router can detect are as follows:</p> 
+<ul> 
+<li class="pppoe_0"><B>PPPoE</B> - Connections which use PPPoE that requires a user name and password.</li>
+<li class="dyna_ip_0"><B>Dynamic IP</B>  - Connections which use dynamic IP address assignment.</li>
+<li class="stat_ip_0"><B>Static IP</B>  -  Connections which use static IP address assignment.</li>
+</ul> 
+<p class="password"><B>User Name/Password</B> - Enter the User Name and Password provided by your ISP. These fields are case-sensitive.</p>
+<p class="secondary_conn"><B>Secondary Connection</B> - Secondary Connection - It's available only for PPPoE Connection. If your ISP provides an extra Connection type such as Dynamic/Static IP to connect to a local area network, then you can check the radio button of  Dynamic/Static IP to activate this secondary connection. (The secondary connection shouldn't be in the same subnet with pppoe connection.)</p>
+<ul> 
+<li class="disabled"><B>Disabled</B> - The Secondary Connection is disabled by default, so there is PPPoE connection only. This is recommended.</li>
+<li class="dyna_ip_1"><B>Dynamic IP</B>  - Use dynamic IP address to connect to the local area network provided by ISP.</li>
+<li class="stat_ip_1"><B>Static IP</B>  -  Use static IP address to connect to the local area network provided by ISP. <B>IP Address</B>  -  IP Address - Enter the IP address provided by ISP for the secondary connection. This address is used only for accessing the local area network of the secondary connection. <B>Subnet Mask</B>  -  Enter the subnet mask provided by ISP for the secondary connection. </li>
+</ul>
+<p class="alwa_on"> <strong>Always on</strong> - Connect automatically after the Router is disconnected. To use this option, click the radio button.</p>
+<p class="connect"><B>Connect on Demand</B> - You can configure the Router to disconnect your Internet connection after a specified period of the Internet connectivity (<B>Max Idle Time</B>). If your Internet connection has been terminated due to inactivity, <B>Connect on Demand </B> enables the Router to automatically re-establish your connection when you attempt to access the Internet again. If you wish to activate <B>Connect on Demand</B>, put a check mark in the circle. If you want your Internet connection to remain active all the times, enter <B>0</B> in the <B>Max Idle Time</B> field. </p>
+<p class="note_0"><strong>Note:</strong> Sometimes the connection cannot be disconnected although you specify a time to <B>Max Idle Time</B>(0~99 mins) because some applications visit the Internet continually in the background.</p>
+<p class="connect_manu"> <strong>Connect Manually</strong> - You can configure the Router to make it connect or disconnect manually. After a specified period of inactivity (<B>Max Idle Time</B>), the Router will disconnect your Internet connection, and not be able to re-establish your connection automatically as soon as you attempt to access the Internet again. To use this option, click the radio button. If you want your Internet connection to remain active all the times, enter <B>0</B> in the <B>Max Idle Time</B> field. Otherwise, enter the number in minutes that you wish to have the Internet connecting last unless a new link requested.</p>
+<p class="note_1"><strong>Note:</strong> Sometimes the connection cannot be disconnected although you specify a <B>Max Idle Time</B>(0~99 mins) because some applications visit the Internet continually in the background.</p>
+
+<p class="note_2"><B>Note:</B> Only when you have set the system time on <B>System Tools</B> -> <B>Time Settings</B> page, the <B>Time-based Connecting</B> function can take effect. </p>
+<p class="connect_0">Click the <B>Connect</B> button to connect immediately.</p>
+<p class="disconnect">Click the <B>Disconnect</B> button to disconnect immediately.</p>
+<p class="advanced">Click the <B>Advanced</B> button to set up the advanced options.</p>
+<p class="save">Click the <B>Save</B> button to save your settings.</p>
+</DIV>
+</BODY></HTML>
+<script language="javascript" type="text/javascript">window.parent.$.transHelp(document.URL);if(INCLUDE_KOREA_SPEC||INCLUDE_BR_SPEC||INCLUDE_HIDE_WAN_TYPE_BPA){document.getElementsByClassName("bigp_cable")[0].style.display="none"};</script>

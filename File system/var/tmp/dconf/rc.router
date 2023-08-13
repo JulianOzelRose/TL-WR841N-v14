@@ -1,0 +1,73 @@
+#!/bin/sh
+
+#delete old rules
+/etc/iptables-stop
+
+#enable ip forward
+echo "1" > /proc/sys/net/ipv4/ip_forward
+/etc/iptables-stop
+
+#set policy
+iptables -P INPUT DROP
+iptables -P FORWARD DROP
+iptables -P OUTPUT ACCEPT
+iptables -t nat -P PREROUTING ACCEPT
+iptables -t nat -P POSTROUTING ACCEPT
+iptables -t nat -P OUTPUT ACCEPT
+
+iptables -N CTL
+iptables -N FORWARD_DMZ
+iptables -N FORWARD_UPNP
+iptables -N FORWARD_UPNP_SECCONN
+iptables -N FORWARD_PT
+iptables -N FORWARD_VS
+iptables -N FORWARD_VPN_PASSTHROUGH
+iptables -N PARENTCTL
+iptables -N PCRULE
+iptables -N PCDROP
+iptables -N FIREWALL
+iptables -N FIREWALL_DDOS
+iptables -N FWRULE
+iptables -N FWD_MARK_LAN
+iptables -N FWD_MARK_WAN
+iptables -N OUTPUT_MARK_LOCAL
+iptables -N BRIDGE_ISOLATION
+iptables -t nat -N PREROUTING_DMZ
+
+iptables -t nat -N PREROUTING_UPNP
+iptables -t nat -N PREROUTING_UPNP_SECCONN
+iptables -t nat -N PREROUTING_PT
+iptables -t nat -N PREROUTING_VS
+iptables -t nat -N POSTROUTING_NATLOOPBACK_VS
+iptables -t nat -N POSTROUTING_NATLOOPBACK_UPNP
+iptables -t nat -N NATLOOPBACK_UPNP_SECCONN
+iptables -t nat -N POSTROUTING_NATLOOPBACK_DMZ
+iptables -I OUTPUT -j OUTPUT_MARK_LOCAL
+iptables -t filter -A FORWARD -o br+ -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+iptables -A FORWARD -j CTL
+iptables -t filter -A FORWARD -i br+ -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+iptables -A FORWARD ! -i br+ -j FORWARD_VS
+iptables -A FORWARD -j FORWARD_PT
+iptables -A FORWARD ! -i br+ -j FORWARD_UPNP
+iptables -A FORWARD ! -i br+ -j FORWARD_UPNP_SECCONN
+iptables -A FORWARD ! -i br+ -j FORWARD_DMZ
+iptables -A FORWARD -j FORWARD_VPN_PASSTHROUGH
+iptables -t nat -A PREROUTING ! -i br+ -d 255.255.255.255 					-p udp --sport 67 --dport 68 -j ACCEPT
+iptables -t nat -A PREROUTING -d 224.0.0.0/4 -j ACCEPT
+iptables -t nat -A PREROUTING -j PREROUTING_VS
+iptables -t nat -A PREROUTING -j PREROUTING_PT
+iptables -t nat -A PREROUTING -j PREROUTING_UPNP
+iptables -t nat -A PREROUTING -j PREROUTING_UPNP_SECCONN
+iptables -t nat -A POSTROUTING -j POSTROUTING_NATLOOPBACK_VS
+iptables -t nat -A POSTROUTING -j POSTROUTING_NATLOOPBACK_UPNP
+iptables -t nat -A POSTROUTING -j NATLOOPBACK_UPNP_SECCONN
+iptables -t nat -A POSTROUTING -j POSTROUTING_NATLOOPBACK_DMZ
+iptables -t nat -A PREROUTING -j PREROUTING_DMZ
+
+iptables -t filter -A FORWARD -i br+ -j ACCEPT
+iptables -t filter -A FORWARD -d 224.0.0.0/4 -j ACCEPT
+iptables -t filter -A INPUT -i lo -p ALL -j ACCEPT 		-m comment --comment "loop back"
+iptables -t filter -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+iptables -t filter -A INPUT -d 224.0.0.0/4 -j ACCEPT
+iptables -A INPUT -p udp ! -i br+ --sport 67 --dport 68 -j ACCEPT
+iptables -A INPUT -p udp --dport 161 -j ACCEPT

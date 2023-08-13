@@ -1,0 +1,46 @@
+﻿<script language="javascript" type="text/javascript">var selAll;var index;var param;var allStk;var fw_stack;var fw_stackIndex;function clickSel(){if(selAll==1){$.id("selAll").checked=0;selAll=0}}function doClick(val1,val2){var tmpEntry;if(val1=="lan"){tmpEntry=$.act(ACT_GL,INTERNAL_HOST,null,null,["entryName"])}else{if(val1=="wan"){tmpEntry=$.act(ACT_GL,EXTERNAL_HOST,null,null,["entryName"])}else{if(val1=="schedule"){tmpEntry=$.act(ACT_GL,TASK_SCHEDULE,null,null,["entryName"])}}}if(!$.exe()){$.each(tmpEntry,function(){if(this.entryName==val2){param[0]=1;param[1]=2;param[2]=this.__stack;if(val1=="lan"){$.loadMain("fwLanEdit.htm",param)}else{if(val1=="wan"){$.loadMain("fwWanEdit.htm",param)}else{if(val1=="schedule"){$.loadMain("fwScheEdit.htm",param)}}}}})}}function doAdd(){param[0]=0;$.loadMain("fwRulesEdit.htm",param)}function doEdit(val){param[0]=1;param[1]=val;$.loadMain("fwRulesEdit.htm",param)}function doSelAll(){if(selAll==0){for(var i=1;i<=index;i++){var fwid="fwid"+i;$.id(fwid).checked=1}fw_stack=[];fw_stackIndex=index;for(var j=0;j<fw_stackIndex;j++){fw_stack[j]=allStk[j]}selAll=1}else{if(selAll==1){for(var i=1;i<=index;i++){var fwid="fwid"+i;$.id(fwid).checked=0}fw_stack=[];fw_stackIndex=0;selAll=0}}}function selEntry(){fw_stackIndex=0;fw_stack=[];for(var i=1;i<=index;i++){var tmpEntryId="fwid"+i;if($.id(tmpEntryId).checked==1){fw_stack[fw_stackIndex]=allStk[i-1];fw_stackIndex++}}}function init(){selAll=0;index=0;allStk=[];param=[];fw_stack=[];fw_stackIndex=0;$.resize($.id("fwtbl"),8);var fwList=$.act(ACT_GL,RULE,null,null);var fwCfg=$.act(ACT_GET,FIREWALL,null,null,["enable","defaultAction"]);$.exe(function(err){if(!err){$.id("enableFw").checked=(fwCfg.enable==1)?1:0;$.id("act_en").checked=(fwCfg.defaultAction==0)?1:0;$.id("act_dis").checked=(fwCfg.defaultAction==1)?1:0;var tbl=$.id("fwtbl");$.each(fwList,function(){if(this.isParentCtrl==0){var thisStk="["+this.__stack+"]";var row=tbl.insertRow(-1);index++;var cell=row.insertCell(-1);cell.width="4%";cell.innerHTML="<input type='checkbox' id='fwid"+index+"' onclick='clickSel();'/>";cell=row.insertCell(-1);cell.innerHTML=this.ruleName;cell=row.insertCell(-1);cell.width="15%";if(this.internalHostRef==""){cell.innerHTML="<span class='T T_any_host'>"+s_str.any_host+"</span>"}else{cell.innerHTML="<span class='a' onclick='doClick(\"lan\", \""+this.internalHostRef+"\");'>"+$.resizeStr(this.internalHostRef,7)+"</span>"}cell=row.insertCell(-1);cell.width="15%";if(this.externalHostRef==""){cell.innerHTML="<span class='T T_any_host'>"+s_str.any_host+"</span>"}else{cell.innerHTML="<span class='a' onclick='doClick(\"wan\", \""+this.externalHostRef+"\");'>"+$.resizeStr(this.externalHostRef,7)+"</span>"}cell=row.insertCell(-1);cell.width="15%";if(this.scheduleRef==""){cell.innerHTML="<span class='T T_any_time'>"+s_str.any_time+"</span>"}else{cell.innerHTML="<span class='a' onclick='doClick(\"schedule\", \""+this.scheduleRef+"\");'>"+$.resizeStr(this.scheduleRef,7)+"</span>"}cell=row.insertCell(-1);cell.width="7%";cell.innerHTML=(this.action==0)?"<span class='T T_allow'>"+m_str.allow+"</span>":"<span class='T T_deny'>"+m_str.deny+"</span>";cell=row.insertCell(-1);cell.width="10%";cell.innerHTML=(this.enable==1)?"<span class='T T_enabled'>"+m_str.enabled+"</span>":"<span class='T T_disabled'>"+m_str.disabled+"</span>";cell=row.insertCell(-1);cell.width="6%";cell.innerHTML="<span class='a T T_edit' onclick='doEdit("+thisStk+");'>"+m_str.edit+"</span>";allStk[index-1]=this.__stack}});$.resize($.id("fwtbl"),8)}})}function doClkSave(){var tmpEnable=($.id("enableFw").checked==1)?1:0;var tmpAction=($.id("act_en").checked==1)?0:1;$.act(ACT_SET,FIREWALL,null,null,["enable="+tmpEnable,"defaultAction="+tmpAction]);$.addLoading($.id("saveBtnClk"));$.exe(function(ret){if(!ret){$.reload()}})}function doEnable(obj){selEntry();if(fw_stackIndex==0){$.alert(ERR_SEL_INVAD);return}$.addLoading(obj);for(var i=0;i<fw_stackIndex;i++){$.act(ACT_SET,RULE,fw_stack[i],null,["enable=1"])}$.exe(function(err){if(!err){$.reload()}})}function doDisable(obj){selEntry();if(fw_stackIndex==0){$.alert(ERR_SEL_INVAD);return}$.addLoading(obj);for(var i=0;i<fw_stackIndex;i++){$.act(ACT_SET,RULE,fw_stack[i],null,["enable=0"])}$.exe(function(err){if(!err){$.reload()}})}function doDel(obj){selEntry();if(fw_stackIndex==0){$.alert(ERR_SEL_INVAD);return}$.addLoading(obj);for(var i=0;i<fw_stackIndex;i++){$.act(ACT_DEL,RULE,fw_stack[i],null)}$.exe(function(err){if(!err){$.reload()}})};</script>
+<p class="et T" id="et">Access Control Rule Management</p>
+<div class="con1 XXL">
+<p class="ct"></p>
+<p class="bl"></p>
+<div class="con2">
+<p class="L1 T" id="t_info">This device can restrict the internet behavior of certain LAN hosts. You can set flexible combined rules by selecting proper "LAN Host", "WAN Host" and "Schedule" to conduct powerful internet access control management.</p>
+<p class="br"></p>
+<div class="bdr XXL">
+<p><input type="checkbox" id="enableFw"/><span class="T" id="t_en">Enable Internet access control</span></p>
+<p class="br"></p>
+<p><b class="T" id="t_defrule">Default Filtering Rules</b>:</p>
+<p><input name="action" id="act_en" type="radio" /><b class="T" id="t_allow" style="color:#C11C66">Allow</b> <span class="T" id="t_rule1">the packets not specified by any filtering rules to pass through the device</span></p>
+<p><input name="action" id="act_dis" type="radio" checked /><b class="T" id="t_deny" style="color:#C11C66">Deny</b> <span class="T" id="t_rule2">the packets not specified by any filtering rules to pass through the device</span></p>
+
+<p class="br"></p>
+<p class="L1"><input type="button" class="button L T T_save" id="saveBtnClk" value="Save" onclick="doClkSave();" /></p>
+<p class="br"></p>
+</div>
+<p class="bl"></p>
+<p class="br"></p>
+<p class="br"></p>
+<div class="XXL thead" ><table class="XXL bdr tc">
+<tr>
+<th width="4%"><input type="checkbox" id="selAll" onclick="doSelAll();"/></th>
+<th class="T T_desc">Description</th>
+<th width="15%" class="T" id="t_host">LAN Host</th>
+<th width="15%" class="T" id="t_target">Target</th>
+<th width="15%" class="T" id="t_sche">Schedule</th>
+<th width="7%" class="T" id="t_rule">Rule</th>
+<th width="10%" class="T T_status">Status</th>
+<th width="6%" class="T T_edit">Edit</th>
+</tr>
+</table></div>
+<div class="XXL tbody"><table id="fwtbl" class="XXL bdr tc"></table></div>
+<p class="br"></p>
+<p class="L1">
+<input type="button" class="button XL T T_addnew" value="Add New" onclick="doAdd();"/>
+<input type="button" class="button XL T T_ensel" value="Enable Selected" onclick="doEnable(this);"/>
+<input type="button" class="button XL T T_dissel" value="Disable Selected" onclick="doDisable(this);"/>
+<input type="button" class="button XL T T_delsel" value="Delete Selected" onclick="doDel(this);"/></p>
+</div>
+<p class="bl"></p>
+<p class="tail" id="tail"></p>
+</div>
+<script language="javascript" type="text/javascript">$.loadHelpFrame("AccessCtrlAccessRulesHelpRpm.htm");init();</script>

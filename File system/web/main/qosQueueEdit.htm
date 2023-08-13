@@ -1,0 +1,46 @@
+﻿<script language="javascript" type="text/javascript">var opt=$.mainParam[0];var stk=$.mainParam[1];var upQosIntf;var downQosIntf;var allStack;function draw_one_option(name,value){var option=$.id("qos_dir").options;var opt=new Option(name,option.length);opt.value=value;option.add(opt)}function draw_empty_option(){var option=$.id("qos_dir").options;option.length=0}function init(){allStk=[];var index=0;var qosIntfList=$.act(ACT_GL,QOS_INTF,null,null,["interfaceKey","schedulerAlgorithm"]);if(opt==1){var queueCfg=$.act(ACT_GET,QOS_QUEUE,stk,null)}if(!$.exe()){upQosIntf=qosIntfList[0];downQosIntf=qosIntfList[1];$.each(qosIntfList,function(){allStk[index++]=this.__stack});if(opt==1){var sch;$.id("queue_name").value=queueCfg.queueName;$.id("qos_dir").value=queueCfg.classInterface;if(upQosIntf.__stack==$.stkPop(queueCfg.__stack,1)){draw_one_option("upStream",queueCfg.classInterface);if(2==upQosIntf.schedulerAlgorithm){$.id("sch_algm").value="SP";sch=1}else{$.id("sch_algm").value="WRR"}}else{draw_one_option("downStream",queueCfg.classInterface);if(2==downQosIntf.schedulerAlgorithm){$.id("sch_algm").value="SP";sch=1}else{$.id("sch_algm").value="WRR"}}$.id("qos_dir").disabled=true;$.id("status").value=(1==queueCfg.queueEnable)?1:0;if(1==sch){$.addClass($.id("wrr_queue"),"nd");$.removeClass($.id("sp_queue"),"nd");$.id("precedence").value=queueCfg.queuePrecedence}else{$.addClass($.id("sp_queue"),"nd");$.removeClass($.id("wrr_queue"),"nd");$.id("weight").value=queueCfg.queueWeight;$.id("force_weight_en").checked=(1==queueCfg.forceWeightEnable)?1:0}}else{if(1==upQosIntf.schedulerAlgorithm&&1==downQosIntf.schedulerAlgorithm){draw_empty_option();$.id("sch_algm").value="SP"}else{if(1!=downQosIntf.schedulerAlgorithm){draw_one_option("downStream",downQosIntf.interfaceKey);$.id("qos_dir").value=downQosIntf.interfaceKey;if(2==downQosIntf.schedulerAlgorithm){$.id("sch_algm").value="SP"}else{$.id("sch_algm").value="WRR"}}if(1!=upQosIntf.schedulerAlgorithm){draw_one_option("upStream",upQosIntf.interfaceKey);$.id("qos_dir").value=upQosIntf.interfaceKey;if(2==upQosIntf.schedulerAlgorithm){$.id("sch_algm").value="SP"}else{$.id("sch_algm").value="WRR"}}}$.id("queue_name").value="";$.id("weight").value="";if($.id("sch_algm").value=="SP"){$.addClass($.id("wrr_queue"),"nd");$.removeClass($.id("sp_queue"),"nd")}else{$.addClass($.id("sp_queue"),"nd");$.removeClass($.id("wrr_queue"),"nd")}}}}function selectObj(id){var element=$.id(id);if(element){element.focus();element.select()}}function doSave(){if(""==$.id("qos_dir").value){$.alert(ERR_QOS_QUEUE_DIR);selectObj("qos_dir");return false}if(!$.isname($.id("queue_name").value)){$.alert(ERR_QOS_QUEUE_NAME);selectObj("queue_name");return false}if($.id("queue_name").value.length>12){$.alert(ERR_QOS_QUEUE_NAME_LENGTH);selectObj("queue_name");return false}var optCode=ACT_ADD;var stack=null;var pstack=null;var queue_enable=$.id("status").value;var queue_name=$.id("queue_name").value;if(1==opt){optCode=ACT_SET;stack=stk}else{if(upQosIntf.interfaceKey==$.id("qos_dir").value){pstack=allStk[0]}else{pstack=allStk[1]}}if("SP"==$.id("sch_algm").value){var pre=$.id("precedence").value;$.act(optCode,QOS_QUEUE,stack,pstack,["queueEnable="+queue_enable,"queueName="+queue_name,"queueWeight=0","forceWeightEnable=0","queuePrecedence="+pre])}else{if("WRR"==$.id("sch_algm").value){if((""==$.id("weight").value)||(!$.isnum($.id("weight").value))){$.alert(ERR_QOS_QUEUE_WEIGHT_NUM);selectObj("weight");return false}var weight=parseInt($.id("weight").value,10);if(0==weight||100<weight){$.alert(ERR_QOS_QUEUE_WEIGHT_NUM);selectObj("weight");return false}var force_weight_en=(1==$.id("force_weight_en").checked)?1:0;$.act(optCode,QOS_QUEUE,stack,pstack,["queueEnable="+queue_enable,"queueName="+queue_name,"queueWeight="+weight,"forceWeightEnable="+force_weight_en,"queuePrecedence=1"])}else{$.alert(ERR_QOS_QUEUE_SCH);selectObj("sch_algm");return false}}$.addLoading($.id("saveBtn"));$.exe(function(ret){if(!ret){$.loadMain("qosList.htm")}})}function doClick(){var sch;if(1==$.id("qos_dir").value){if(3==upQosIntf.schedulerAlgorithm){sch=1}}else{if(2==$.id("qos_dir").value){if(3==downQosIntf.schedulerAlgorithm){sch=1}}else{return}}if(1==sch){$.addClass($.id("sp_queue"),"nd");$.removeClass($.id("wrr_queue"),"nd");$.id("sch_algm").value="WRR"}else{$.addClass($.id("wrr_queue"),"nd");$.removeClass($.id("sp_queue"),"nd");$.id("sch_algm").value="SP"}};</script>
+<p class="et"><b>Queue Configuration</b></p>
+<div class="con1 L">
+	<p class="ct"></p>
+	<p class="bl"></p>
+<div class="con2">
+
+	<p class="L2"><b class="item T" id="qos_direction">Direction:</b>
+		<select id="qos_dir" class="L" onchange="doClick();">
+		</select>
+	</p>
+	<p class="L2"><b class="item T">Scheduler Algorithm:</b><input type="text" class="text" id="sch_algm" size="16" maxlength="15" disabled /></p>
+	
+	<p class="L2"><b class="item T">Queue Name:</b><input type="text" class="text" id="queue_name" size="16" maxlength="12"/></p>
+	<p class="L2"><b class="item T" id="queue_en">Status:</b>
+		<select id="status" class="L">
+			<option id="en" value="1">Enable</option>
+			<option id="dis" value="0" selected>Disable</option>
+		</select>
+	</p>
+<div id="wrr_queue">
+	<p class="L2"><b class="item T">Weight:</b><input type="text" class="text L" id="weight" maxlength="3" /><b>&nbsp;%</b></p>
+	<p class="L2"><b class="item T">Enable Force Weight</b><input type="checkbox" id="force_weight_en" checked /></p>
+</div>
+<div id="sp_queue">
+	<p class="L2"><b class="item T" id="sp_pre">Precedence:</b>
+		<select id="precedence" class="L">
+			<option id="prec0" value="1">1</option>
+			<option id="prec1" value="2">2</option>
+			<option id="prec2" value="3">3</option>
+			<option id="prec3" value="4">4</option>
+			<option id="prec4" value="5">5</option>
+			<option id="prec5" value="6">6</option>
+			<option id="prec6" value="7">7</option>
+			<option id="prec7" value="8">8</option>
+		</select>
+	</p>
+</div>
+
+</div>
+	<p class="bl"></p>
+	<p class="tail" id="tail"><input type="button" class="button L T T_save" id="saveBtn" value="Save" onclick="doSave();" />
+	<input type="button" class="button L T T_back" value="Back" onclick="$.loadMain('qosList.htm');" /></p>
+</div>
+
+<script language="javascript" type="text/javascript">$.loadHelp();init();</script>

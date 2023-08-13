@@ -1,0 +1,43 @@
+﻿<script language="javascript" type="text/javascript">function formatIPv6(address){address=address.replace(/:(0){1,4}/g,":0");address=address.replace(/(?!((:0:)|(:0$)))(:0)/g,":");if(-1==address.indexOf("::")){address=address.replace(/(:0)+:/,"::")}else{address=address.replace(/(:0)*::/,"::")}return address}function init(){var wanComInfList=$.act(ACT_GL,WAN_COMMON_INTF_CFG,null,null,["WANAccessType"]);var wanIpConList=$.act(ACT_GL,WAN_IP_CONN,null,null);var wanPppConList=$.act(ACT_GL,WAN_PPP_CONN,null,null);if(INCLUDE_L2TP){var wanL2tpConList=$.act(ACT_GL,WAN_L2TP_CONN,null,null)}if(INCLUDE_PPTP){var wanPptpConList=$.act(ACT_GL,WAN_PPTP_CONN,null,null)}var wan6MainTunnel=$.act(ACT_GET,IP6_TUNNEL,null,null);if(INCLUDE_IPV6){$.removeClass($.id("ip6_lan_status"),"nd");var lanIp6List=$.act(ACT_GL,LAN_IP6_HOST_CFG,null,null);var lanIp6Info=$.act(ACT_GL,LAN_IP6_INTF,null,null)}if(!$.exe()){var ethStk;var foundShowConnection=false;if(INCLUDE_IPV6){$.each(lanIp6List,function(){if(this.__ifName=="br0"){if(this.RADVDEnable==1){$.h($.id("cfgtype"),"RADVD")}else{$.h($.id("cfgtype"),"DHCPv6")}}});$.each(lanIp6Info,function(){if(this.__ifName=="br0"){$.h($.id("lan6addr"),(this.IPv6InterfaceAddress)?(formatIPv6(this.IPv6InterfaceAddress)):"N/A");$.h($.id("lan6prelen"),this.IPv6InterfaceAddressPrefixLength)}})}$.each(wanComInfList,function(){if(this.WANAccessType=="Ethernet"){ethStk=this.__stack}});var tbl=$.id("wan_table");if(wan6MainTunnel.enabled==1){foundShowConnection=true;var intfName=s_str.noAvailIntf;var wanConn;var find=0;$.removeClass($.id("ip6_wan_tunnel_status"),"nd");$.addClass($.id("ip6_wan_status"),"nd");$.h($.id("tunnelConnType"),s_str.type6to4);$.each(wanIpConList,function(){var tmpStk=$.stkPop(this.__stack,2);if(this.enable==1&&this.X_TP_IPv4Enabled==1){wanConn=this;find=1}});$.each(wanPppConList,function(){var tmpStk=$.stkPop(this.__stack,2);if(this.enable==1&&this.X_TP_IPv4Enabled==1){wanConn=this;find=1}});if(find==1&&wanConn.connectionStatus=="Connected"&&wanConn.X_TP_IfName==wan6MainTunnel.associatedWanIfName){intfName=wanConn.name}if(INCLUDE_L2TP){find=0;$.each(wanL2tpConList,function(){var tmpStk=$.stkPop(this.__stack,2);if(this.enable==1){wanConn=this;find=1}});if(find==1&&wanConn.connectionStatus=="Connected"&&wanConn.ifName==wan6MainTunnel.associatedWanIfName){intfName=wanConn.name}}if(INCLUDE_PPTP){find=0;$.each(wanPptpConList,function(){var tmpStk=$.stkPop(this.__stack,2);if(this.enable==1){wanConn=this;find=1}});if(find==1&&wanConn.connectionStatus=="Connected"&&wanConn.ifName==wan6MainTunnel.associatedWanIfName){intfName=wanConn.name}}$.h($.id("tunnelInterName"),intfName)}else{if(INCLUDE_IPV6){var tbl=$.id("wan6_table");$.removeClass($.id("ip6_wan_status"),"nd");$.addClass($.id("ip6_wan_tunnel_status"),"nd");$.each(wanIpConList,function(){var tmpStk=$.stkPop(this.__stack,2);if(this.enable==1&&this.X_TP_IPv6Enabled==1){foundShowConnection=true;$.h($.id("interName"),this.name);if(this.X_TP_IPv6AddressingType=="Static"){$.h($.id("connType"),s_str.staip6)}else{$.h($.id("connType"),s_str.dynip6)}$.h($.id("ipv6Addr"),$.htmlEncodeStr(this.X_TP_ExternalIPv6Address+" /"+this.X_TP_PrefixLength));$.h($.id("ipv6Gateway"),(this.X_TP_DefaultIPv6Gateway!="::")?$.htmlEncodeStr(this.X_TP_DefaultIPv6Gateway):m_str.auto);$.h($.id("ipv6PriDns"),$.htmlEncodeStr(this.X_TP_IPv6DNSServers.split(",")[0]));$.h($.id("ipv6SecDns"),$.htmlEncodeStr(this.X_TP_IPv6DNSServers.split(",")[1]));if(INCLUDE_IP6_WAN_NOT_ASSIGN_ADDR&&this.X_TP_IPv6AddressingType=="None"){$.addClass($.id("wan6_addr"),"nd")}if(ethStk==tmpStk){if(this.X_TP_IPv6ConnStatus=="Connected"){$.h($.id("connStatus"),m_str.connected)}else{if((this.X_TP_IPv6ConnStatus=="Disconnected")||(this.X_TP_IPv6ConnStatus=="Unconfigured")){$.h($.id("connStatus"),m_str.disconnected)}else{$.h($.id("connStatus"),m_str.connecting)}}}}});$.each(wanPppConList,function(){var tmpStk=$.stkPop(this.__stack,2);if(this.enable==1&&this.X_TP_IPv6Enabled==1){foundShowConnection=true;$.h($.id("interName"),this.name);$.h($.id("connType"),"PPPoEv6");$.h($.id("ipv6Addr"),$.htmlEncodeStr(this.X_TP_ExternalIPv6Address+" /"+this.X_TP_PrefixLength));$.h($.id("ipv6Gateway"),(this.X_TP_DefaultIPv6Gateway!="::")?$.htmlEncodeStr(this.X_TP_DefaultIPv6Gateway):m_str.auto);$.h($.id("ipv6PriDns"),$.htmlEncodeStr(this.X_TP_IPv6DNSServers.split(",")[0]));$.h($.id("ipv6SecDns"),$.htmlEncodeStr(this.X_TP_IPv6DNSServers.split(",")[1]));if(INCLUDE_IP6_WAN_NOT_ASSIGN_ADDR&&this.X_TP_IPv6AddressingType=="None"){$.addClass($.id("wan6_addr"),"nd")}if(ethStk==tmpStk){if(this.X_TP_IPv6ConnStatus=="Connected"){$.h($.id("connStatus"),m_str.connected)}else{if((this.X_TP_IPv6ConnStatus=="Disconnected")||(this.X_TP_IPv6ConnStatus=="Unconfigured")){$.h($.id("connStatus"),m_str.disconnected)}else{$.h($.id("connStatus"),m_str.connecting)}}}}})}}if(foundShowConnection==false){$.removeClass($.id("ip6_wan_disabled_status"),"nd");$.addClass($.id("ip6_wan_status"),"nd");$.addClass($.id("ip6_wan_tunnel_status"),"nd");$.h($.id("disabledConnType"),m_str.disabled)}else{$.addClass($.id("ip6_wan_disabled_status"),"nd")}}};</script>
+<p class="et T" id="et">IPv6 Status</p>
+<p class="bl"></p>
+<div class="con1 L nd" id="ip6_wan_status">
+	<p class="br"></p>
+	<p class="st T T_wan">WAN</p>
+	<div id="wan6">
+		<p class="L2 nd"><b class="item T" id="t_interface">Interface Name:</b><span id="interName"></span></p>
+		<p class="L2"><b class="item T" id="t_connType">Connection Type:</b><span id="connType"></span></p>
+		<p class="L2"><b class="item T" id="t_connStatus">Connection Status:</b><span id="connStatus"></span></p>
+		<p class="L2" id="wan6_addr"><b class="item T" id="t_ip6Addr">IPv6 Address:</b><span id="ipv6Addr"></span></p>
+		<p class="L2"><b class="item T" id="t_ip6Gw">IPv6 Default Gateway:</b><span id="ipv6Gateway"></span></p>
+		<p class="L2"><b class="item T" id="t_ip6Dns">Primary IPv6 DNS:</b><span id="ipv6PriDns"></span></p>
+		<p class="L2"><b class="item T" id="t_ip6SecDns">Secondary IPv6 DNS:</b><span id="ipv6SecDns"></span></p>
+	</div>
+</div>
+<div class="con1 L nd" id="ip6_wan_tunnel_status">
+<p class="br"></p>
+	<p class="st">WAN</p>
+	<div id="wan6tunnel">
+		<p class="L2"><b class="item T T_conntype">Connection Type:</b><span id="tunnelConnType"></span></p>
+		<p class="L2"><b class="item T" id= "t_assint">Associate Interface:</b><span id="tunnelInterName"></span></p>
+	</div>
+</div>
+<div class="con1 L nd" id="ip6_wan_disabled_status">
+<p class="br"></p>
+	<p class="st">WAN</p>
+	<div id="wan6tunnel">
+		<p class="L2"><b class="item T T_conntype">Connection Type:</b><span id="disabledConnType"></span></p>
+	</div>
+</div>
+
+<p class="bl"></p>
+<div class="con1 L nd" id="ip6_lan_status">
+	<p class="st">IPv6 LAN</p>
+	<div id="lan6">
+		<p class="L2"><b class="item T" id="t_lan6cfgtype">IPv6 Address Type:</b><span id="cfgtype"></span></p>
+		<p class="L2"><b class="item T T_plen">Prefix Length:</b><span id="lan6prelen"></span></p>
+		<p class="L2"><b class="item T T_ip6addr">IPv6 Address:</b><span id="lan6addr"></span></p>
+	</div>
+</div>
+<p class="bl"></p>
+<script language="javascript" type="text/javascript">$.loadHelpFrame("IPv6StatusHelpRpm.htm");init();</script>

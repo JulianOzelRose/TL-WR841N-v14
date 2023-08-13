@@ -1,0 +1,25 @@
+﻿<script language="javascript" type="text/javascript">function doRefresh(){$.addLoading($.id("refresh"),200,function(){$.reload()})}function doClearAll(obj){$.addLoading(obj);$.act(ACT_SET,DDOS_CFG,null,null,["action=1"]);$.exe(function(ret){if(!ret){$.reload()}})}function doBack(){$.loadMain("ddos.htm")}function ddosHostInit(){$.resize($.id("dos_table"),8);var ddosList=$.act(ACT_GL,DOS_HOST,null,null);if(!$.exe()){for(var i=0;i<ddosList.length;i++){var dos_table=$.id("dos_table");var newrow=dos_table.insertRow(-1);var cell=newrow.insertCell(-1);cell.width="50px";cell.innerHTML=parseInt(i)+1;var string;var int1,int2,int3,int4;int4=ddosList[i].ipAddress%256;int3=(parseInt(ddosList[i].ipAddress/256))%256;int2=(parseInt(ddosList[i].ipAddress/Math.pow(256,2)))%256;int1=(parseInt(ddosList[i].ipAddress/Math.pow(256,3)));string=int1+"."+int2+"."+int3+"."+int4;cell=newrow.insertCell(-1);cell.width="200px";cell.innerHTML=string;cell=newrow.insertCell(-1);cell.innerHTML=ddosList[i].macAddress}}};</script>
+<p class="et">DDoS</p>
+<div class="con1 L">
+<p class="ct"></p>
+<p class="bl"></p>
+<div class="con2">
+	<p class="br"></p>
+	<div class="L thead" ><table class="L bdr tc">
+	<tr>
+		<th class="T T_id" width="50px">ID</th>
+		<th width="200px" class="T" id="t_ip">Host IP Address</th>
+		<th class="T" id="t_mac">Host MAC Address</th>
+	</tr>
+	</table></div>
+	<div class="L tbody"><table id="dos_table" class="L bdr tc"></table></div>
+	<p class="br"></p>
+</div>
+<p class="bl"></p>
+<p class="tail">
+	<input type="button" id="refresh" class="button L T T_refresh" value="Refresh" onClick="doRefresh()"/>
+	<input type="button" id="t_clear" class="button L T" value="Clear All" onClick="doClearAll(this)"/>
+	<input type="button" id="back" class="button L T T_back" value="Back" onClick="doBack()"/>
+</p>
+</div>
+<script language="javascript" type="text/javascript">ddosHostInit();</script>

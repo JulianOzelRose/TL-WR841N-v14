@@ -1,0 +1,29 @@
+﻿<script language="javascript" type="text/javascript">function init(){var routes=$.io("/cgi/route",false).split("\r\n");routes.pop();for(var i=1,l=routes.length;i<l;i++){var tbl=$.id("log_tbl");var row=tbl.insertRow(-1);var cell=row.insertCell(-1);routeTable=routes[i].split(",");cell.width="31px";$.addClass(cell,"tc");$.h(cell,i);cell=row.insertCell(-1);cell.width="120px";$.addClass(cell,"tc");$.h(cell,routeTable[0]);cell=row.insertCell(-1);$.addClass(cell,"tc");cell.width="120px";$.h(cell,routeTable[1]);cell=row.insertCell(-1);$.addClass(cell,"tc");cell.width="120px";$.h(cell,routeTable[2]);cell=row.insertCell(-1);$.addClass(cell,"tc");cell.width="120px";$.h(cell,if_str[routeTable[3]])}};</script>
+<p class="et T" id="et">System Routing Table</p>
+<div class="con1 XXL">
+<p class="ct"></p>
+<p class="bl"></p>
+<div class="con2">
+	<p class="br"></p>
+	<div class="thead XXL ts">
+		<table cellspacing="0" cellpadding="0" class="bdr XXL">
+			<tr>
+				<th width="31px" id="t_id">ID</th>
+				<th width="120px" id="t_dest">Destination Network</th>
+				<th width="120px" id="t_mask">Subnet Mask</th>
+				<th width="120px" id="t_gw">Gateway</th>
+				<th width="120px" id="t_intf">Interface</th>
+			</tr>
+		</table>
+	</div>
+	<div class="tbody XXL ts">
+		<table cellspacing="0" cellpadding="0" class="bdr XXL" id="log_tbl">
+		</table>
+	</div>
+</div>
+<p class="bl"></p>
+<p class="tail" id="tail">
+	<input type="button" class="button L T T_refresh>" value="Refresh" onclick="$.addLoading(this, 200, function(){$.reload()});" />
+</p>
+</div>
+<script language="javascript" type="text/javascript">$.loadHelpFrame("SysRouteTableHelpRpm.htm");init();</script>

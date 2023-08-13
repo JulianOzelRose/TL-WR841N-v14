@@ -1,0 +1,40 @@
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+<HTML>
+<HEAD><TITLE>Archer C7</TITLE>
+<META http-equiv=Pragma content=no-cache>
+<META http-equiv=Expires content="wed, 26 Feb 1997 08:21:57 GMT">
+<LINK href="../css/css_help.css" rel=stylesheet type="text/css">
+<SCRIPT language="javascript" type="text/javascript"></SCRIPT>
+<LINK href="../css/css_help.css" rel=stylesheet>
+
+<h1 class="header">Binding Settings Help</H1>
+<p class="brief">ARP Binding is useful for controlling access of specific computers in the LAN. </P>
+<ul>
+<li class="mac_addr"><B>MAC Address</B> - The MAC address of the controlled computer in the LAN.</lI>
+<li class="ip_addr"><B>IP Address</B> - The assigned IP address of the controlled computer in the LAN.</lI>
+<li class="bind"><B>Bind</B> - Check this option to enable ARP binding for a specific device.</lI>
+<li class="edit"><b>Edit</b>-To edit an existing entry.</li>
+</ul>
+<ul>
+<li class="add_new"><b>Add New</b> - Click the <b>Add New</b> button to add a new entry to the table.</li>
+<li class="enable_sele"><b>Enable Selected</b> - Click the <b>Enable Selected</b> button to enable selected entries.</b></li>
+<li class="disable_sele"><b>Disable Selected</b> - Click the <b>Disable Selected</b> button to disable selected entries.</b></li>
+<li class="delete_sele"><b>Delete Selected</b> - Click the <b>Delete Selected</b> button to delete selected entries.</b></li>
+<p class="example"><B>Example:</B> If you want to use binding to assign 192.168.0.4 to PC A (MAC: 00:E0:4C:00:07:BE) and to keep other PCs from using the address.  First, enable the "ARP Binding".  Then add a new item in the binding table so that the table resembles the one below.</p>
+<table border width=85%% valign = "middle" align="center" cellspacing=1 cellpadding=1>
+	<tr valign = "middle" align="center">
+	    <td align="center" width="26"><input disabled type="checkbox"></td>
+		<td align="center" class="td_mac" width="150">MAC Address</td>
+		<td align="center" class="td_ip" width="150">IP Address</td>
+		<td align="center" class="td_bind" width="150">Bind</td>
+		<td align="center" class="td_edit" width="150">Edit</td>
+	</tr>
+	<tr valign = "middle" align="center">
+		<td><input disabled type="checkbox"></td>
+		<td align="center">00:E0:4C:00:07:BE</td>
+		<td align="center">192.168.0.4</td>
+		<td ><input disabled type="checkbox" checked align="center" ></td>
+		<td align="center" class="td_edit">Edit</td>
+</tr>
+</table>
+<script language="javascript" type="text/javascript">window.parent.$.transHelp(document.URL);</script>

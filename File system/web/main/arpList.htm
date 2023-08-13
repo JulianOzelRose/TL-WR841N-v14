@@ -1,0 +1,23 @@
+﻿<script language="javascript" type="text/javascript">var selAll;var index;var allStk;var arp_stack;var allStkState;var arp_stackIndex;var arp_StkState;var arpIpStr;var all_ip;var all_mac;var arp_ip;var arp_mac;function selEntry(){arp_stack=[];arp_stackIndex=0;arp_StkState=[];arp_ip=[];arp_mac=[];for(var i=1;i<=index;i++){var tmpEntryId="arpid"+i;if($.id(tmpEntryId).checked==1){arp_stack[arp_stackIndex]=allStk[i-1];arp_StkState[arp_stackIndex]=allStkState[i-1];arp_ip[arp_stackIndex]=all_ip[i-1];arp_mac[arp_stackIndex]=all_mac[i-1];arp_stackIndex++}}}function doSelAll(){if(selAll==0){for(var i=1;i<=index;i++){var arpid="arpid"+i;$.id(arpid).checked=1}arp_stack=[];arp_StkState=[];arp_ip=[];arp_mac=[];arp_stackIndex=index;for(var j=0;j<arp_stackIndex;j++){arp_stack[j]=allStk[j];arp_StkState[j]=allStkState[j];arp_ip[j]=all_ip[j];arp_mac[j]=all_mac[j]}selAll=1}else{if(selAll==1){for(var i=1;i<=index;i++){var arpid="arpid"+i;$.id(arpid).checked=0}arp_stack=[];arp_stackIndex=0;arp_StkState=[];arp_ip=[];arp_mac=[];selAll=0}}}function doClick(){if(selAll==1){$.id("selAll").checked=0;selAll=0}}function init(){selAll=0;index=0;allStk=[];allStkState=[];all_ip=[];all_mac=[];arp_stackIndex=0;arp_StkState=[];arp_stack=[];arp_ip=[];arp_mac=[];var arpList=$.act(ACT_GL,ARP_ENTRY,null,null);$.exe(function(err){if(!err){var tbl=$.id("arptbl");$.each(arpList,function(){var thisStk="["+this.__stack+"]";var row=tbl.insertRow(-1);index++;var cell=row.insertCell(-1);cell.width="5%";cell.innerHTML="<input type='checkbox' id='arpid"+index+"' onclick='doClick();'/>";cell=row.insertCell(-1);cell.width="40%";cell.innerHTML=this.mac;cell=row.insertCell(-1);cell.innerHTML=$.num2ip(parseInt(this.ip,10));cell=row.insertCell(-1);cell.width="15%";if(this.flag==0){cell.innerHTML="<span class='T T_unloaded'>"+m_str.unloaded+"</span>"}else{if(this.flag==1){cell.innerHTML="<span class='T T_loaded'>"+m_str.loaded+"</span>"}else{if(this.flag==2){cell.innerHTML="<span class='T T_bound'>"+m_str.bound+"</span>"}}}allStk[index-1]=this.__stack;allStkState[index-1]=this.flag;all_ip[index-1]=this.ip;all_mac[index-1]=this.mac})}});$.resize($.id("arptbl"),8)}function doImport(){var flag=0;var addFlag=0;selEntry();if(arp_stackIndex==0){$.alert(ERR_SEL_INVAD);return}for(var i=0;i<arp_stackIndex;i++){if(arp_StkState[i]==0){$.act(ACT_ADD,ARP_BIND_ENTRY,null,null,["state=0","ip="+arp_ip[i],"mac="+arp_mac[i]]);addFlag=1}else{if((arp_StkState[i]==1)||(arp_StkState[i]==2)){flag=1}}}if(addFlag==1){$.addLoading($.id("importBtn"));$.exe(function(err){if(!err){if(flag==1){$.alert(ERR_ARP_CONFLICT)}$.reload()}})}else{if(addFlag==0){if(flag==1){$.alert(ERR_ARP_CONFLICT)}$.reload()}}}function doDel(obj){selEntry();if(arp_stackIndex==0){$.alert(ERR_SEL_INVAD);return}$.addLoading(obj);for(var i=0;i<arp_stackIndex;i++){$.act(ACT_DEL,ARP_ENTRY,arp_stack[i],null)}$.exe(function(err){if(!err){$.reload()}})};</script>
+<p class="et T" id="et">ARP List</p>
+<div class="con1 L">
+<p class="ct"></p>
+<p class="bl"></p>
+<div class="con2">
+<p class="br"></p>
+<div class="L thead" ><table class="L bdr tc">
+<tr>
+<th width="5%"><input type="checkbox" id="selAll" onclick="doSelAll();"/></th>
+<th width="40%" class="T T_macaddr">MAC Address</th>
+<th class="T T_ipaddr">IP Address</th>
+<th width="15%" class="T T_status">Status</th>
+</tr>
+</table></div>
+<div class="L tbody" ><table class="L bdr tc" id="arptbl"></table></div>
+<p class="br"></p>
+<p class="L1"><input type="button" class="button XL T" id="importBtn" value="Load Selected" onclick="doImport();"/><input type="button" class="button XL T T_delsel" value="Delete Selected" onclick="doDel(this);" /></p>
+</div>
+<p class="bl"></p>
+<p class="tail" id="tail"><input type="button" class="button L T T_refresh" value="Refresh" onclick="$.addLoading(this, 200, function(){$.reload()});"/></p>
+</div>
+<script language="javascript" type="text/javascript">$.loadHelpFrame("LanArpBindingListHelpRpm.htm");init();</script>

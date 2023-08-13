@@ -1,0 +1,33 @@
+﻿<script language="javascript" type="text/javascript">var severities=[s_str.emerg,s_str.alert,s_str.crit,m_str.err,m_str.warn,s_str.notice,s_str.info,s_str.debug];function doSave(obj){var arg={};arg.logToLocal=$.id("localLog").checked?1:0;arg.logToRemote=$.id("remoteLog").checked?1:0;arg.localSeverity=$.id("localSeverity").value;arg.remoteSeverity=$.id("remoteSeverity").value;arg.serverIP=$.id("serverip").value;if($.ifip(arg.serverIP)){return}arg.serverPort=$.id("serverport").value;if($.num(arg.serverPort,[1,65535])){return}arg.facility=$.id("facility").value;$.act(ACT_SET,SYSLOG_CFG,null,null,arg);$.addLoading(obj);$.exe(function(ret){if(!ret){$.loadMain("log.htm",$.mainParam)}})}function addSeverity(){var opt;var sel=$.id("localSeverity");for(var i=0,l=severities.length;i<l;i++){opt=$.c("option");opt.text=severities[i];opt.value=i;try{sel.add(opt,null)}catch(e){sel.add(opt)}}opt.selected=true;sel=$.id("remoteSeverity");for(var i=0,l=severities.length;i<l;i++){opt=$.c("option");opt.text=severities[i];opt.value=i;try{sel.add(opt,null)}catch(e){sel.add(opt)}}opt.selected=true}function adjustCheck(){var checks=[$.id("localLog"),$.id("remoteLog")];var cons=[$.id("localCon"),$.id("remoteCon")];$.each(checks,function(param,index){if(this.checked){$.removeClass(cons[index],"nd")}else{$.addClass(cons[index],"nd")}})}function init(){addSeverity();var syslogobj=$.act(ACT_GET,SYSLOG_CFG);if($.exe()){return}$.id("localLog").checked=syslogobj.logToLocal==1?true:false;$.id("remoteLog").checked=syslogobj.logToRemote==1?true:false;adjustCheck();$.id("localSeverity").value=syslogobj.localSeverity;$.id("remoteSeverity").value=syslogobj.remoteSeverity;$.id("serverip").value=syslogobj.serverIP;$.id("serverport").value=syslogobj.serverPort;$.id("facility").value=syslogobj.facility};</script>
+<p class="et T" id="et">Syslog Settings</p>
+<div class="con1 M">
+<p class="ct"></p>
+<p class="bl"></p>
+<div class="con2">
+	<p class="L1"><input type="checkbox" id="localLog" checked onclick="adjustCheck();" /><b class="T" id="t_local">Save Locally</b></p>
+	<div id="localCon">
+		<p class="L2"><b class="item T" id="t_minlvl1">Minimum Level</b><select id="localSeverity" class="L"></select></p>
+	</div>
+	<p class="br"></p>
+	<p class="L1"><input type="checkbox" id="remoteLog" onclick="adjustCheck();" /><b class="T" id="t_remote">Save Remotely</b></p>
+	<div id="remoteCon" class="nd">
+		<p class="L2"><b class="item T" id="t_minlvl2">Minimum Level</b><select id="remoteSeverity" class="L"></select></p>
+		<p class="L2"><b class="item T" id="t_ip">Server IP</b><input type="text" class="text" id="serverip" size="15" maxlength="15" /></p>
+		<p class="L2"><b class="item T" id="t_port">Server Port</b><input type="text" class="text" id="serverport" size="5" maxlength="5" /></p>
+		<p class="L2"><b class="item T" id="t_fcname">Local Facility Name</b><select id="facility" class="M">
+			<option value="1" selected>User</option>
+			<option value="16">Local0</option>
+			<option value="17">Local1</option>
+			<option value="18">Local2</option>
+			<option value="19">Local3</option>
+			<option value="20">Local4</option>
+			<option value="21">Local5</option>
+			<option value="22">Local6</option>
+			<option value="23">Local7</option>
+		</select></p>
+	</div>
+</div>
+<p class="bl"></p>
+<p class="tail" id="tail"><input type="button" class="button L T T_save" value="Save" onclick="doSave(this);" /><input type="button" class="button L T T_back" value="Back" onclick="$.loadMain('log.htm', $.mainParam)" /></p>
+</div>
+<script language="javascript" type="text/javascript">$.loadHelp();init();</script>

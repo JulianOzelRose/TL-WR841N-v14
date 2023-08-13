@@ -1,0 +1,36 @@
+﻿<script language="javascript" type="text/javascript">function doCollect(){$.qd.l2tp.usr=$.id("usr").value;$.qd.l2tp.pwd=$.id("pwd").value;$.qd.l2tp.addrtype=$.id("ipType_dyn").checked?"DHCP":"Static";$.qd.l2tp.server=$.id("srvAddrName").value;if($.qd.l2tp.addrtype=="Static"){$.qd.l2tp.ip=$.id("isp_ip_stc").value;$.qd.l2tp.mask=$.id("isp_net_mask_stc").value;$.qd.l2tp.gw=$.id("isp_gw_stc").value;$.qd.l2tp.dns=$.id("isp_dns_1_stc").value;$.qd.l2tp.dns2=$.id("isp_dns_2_stc").value}}function goNext(){doCollect();if($.qd.l2tp.usr==""){return $.alert(ERR_USERNAME_INVAD)}if($.qd.l2tp.pwd==""){return $.alert(ERR_USERNAME_INVAD)}if($.qd.l2tp.server==""){return $.alert(ERR_WAN_DA_SERVER_NAME_EMPTY)}if($.qd.l2tp.addrtype=="Static"){if($.ifip($.qd.l2tp.ip,true)){return $.alert(ERR_STAIP_IP_INVAD)}if($.mask($.qd.l2tp.mask,true)){return $.alert(ERR_STAIP_MASK_INVAD)}if($.ipmask($.qd.l2tp.ip,$.qd.l2tp.mask,true)){return $.alert(ERR_STAIP_IP_MASK_CONFLICT)}if($.ifip($.qd.l2tp.gw,true)){return $.alert(ERR_STAIP_GW_INVAD)}if($.ipmask($.qd.l2tp.gw,$.qd.l2tp.mask,true)){return $.alert(ERR_STAIP_GW_MASK_CONFLICT)}if($.ipmaskgw($.qd.l2tp.ip,$.qd.l2tp.mask,$.qd.l2tp.gw,true)){return $.alert(ERR_STAIP_IP_GW_CONFLICT)}if($.ifip($.qd.l2tp.dns,true)){return $.alert(ERR_STAIP_DNS1_INVAD)}if($.qd.l2tp.dns2&&$.ip2num($.qd.l2tp.dns2)!==0&&$.ifip($.qd.l2tp.dns2,true)){return $.alert(ERR_STAIP_DNS2_INVAD)}}if($.qd.sysMode){$.qf.next($.qd.sysMode)}else{$.qf.next()}}function goPrev(){doCollect();$.qf.prev()}function showDyn(){$.removeClass($.id("l2tp_dyn_ip_elem"),"nd");$.addClass($.id("l2tp_stc_ip_elem"),"nd")}function showStc(){$.removeClass($.id("l2tp_stc_ip_elem"),"nd");$.addClass($.id("l2tp_dyn_ip_elem"),"nd")};</script>
+<p class="et T" id="et">Quick Setup - L2TP</p>
+<div class="con1 M">
+<p class="ct"></p>
+<p class="bl"></p>
+<div class="con2">
+<p class="T" id="t_info">Please enter the Username and Password. If you forget them, please consult your ISP.</p>
+<p class="br"></p>
+<p><b class="item T T_username">Username:</b><input type="text" class="text" size="15" maxlength="63" id="usr" /></p>
+<p><b class="item T T_passwd">Password:</b><input type="password" class="text" size="15" maxlength="63" id="pwd" /></p>
+
+	<p><b class="item L T T_addrType" id = "t_addrType">Addressing Type:</b>
+	<input type="radio" name="ipType" id="ipType_dyn" onclick="showDyn()" checked /><span class="T T_dynip">Dynamic IP</span>
+	<input type="radio" name="ipType" id="ipType_stc" onclick="showStc()" /><span class="T T_staip">Static IP</span></p>
+	<p><b class="item L T T_srvIpName">Server IP Address/Name:</b><input type="text" class="text" size="15" id="srvAddrName" maxlength="80" /></p>
+	<div id="l2tp_dyn_ip_elem">
+		<p><b class="item L T T_ipaddr" id="isp_ip_addr">IP Address:</b><b style="padding-left:12px" id="isp_ip_dyn">0.0.0.0</b></p>
+		<p><b class="item L T T_netmask" id="isp_subnet_mask">Subnet Mask:</b><b style="padding-left:12px" id="isp_net_mask_dyn">0.0.0.0</b></p>
+		<p><b class="item L T T_gateway" id="isp_gateway">Gateway:</b><b style="padding-left:12px" id="isp_gw_dyn">0.0.0.0</b></p>
+		<p><b class="item L T T_dns" id="isp_dns">DNS:</b><b style="padding-left:12px" id="isp_dns_1_dyn">0.0.0.0</b>,<b style="padding-left:12px" id="isp_dns_2_dyn">0.0.0.0</b></p>
+	</div>
+	<div id="l2tp_stc_ip_elem" class="nd">
+		<p><b class="item L T T_ipaddr">IP Address:</b><input type="text" class="text" id="isp_ip_stc" value="0.0.0.0" size="15" maxlength="15" /></p>
+		<p><b class="item L T T_netmask">Subnet Mask:</b><input type="text" class="text" id="isp_net_mask_stc" value="0.0.0.0" size="15" maxlength="15" /></p>
+		<p><b class="item L T T_gateway">Gateway:</b><input type="text" class="text" id="isp_gw_stc" value="0.0.0.0" size="15" maxlength="15" /></p>
+		<p><b class="item L T T_dns">DNS Server:</b><input type="text" class="text" id="isp_dns_1_stc" value="0.0.0.0" size="15" maxlength="15" /></p>
+		<p><b class="item L T T_secdns">Secondary DNS Server:</b><input type="text" class="text" id="isp_dns_2_stc" value="0.0.0.0" size="15" maxlength="15" /><span class="T T_optional">(optional)</span></p>
+	</div>
+</div>
+<p class="bl"></p>
+<p class="tail ctr">
+<input type="button" class="button L T T_back" value="Back" onclick="goPrev()" />
+<input type="button" class="button L T T_next" value="Next" onclick="goNext()" />
+</p>
+</div>
+<script language="javascript" type="text/javascript">(function(){$.loadHelpFrame("WzdL2TPHelpRpm.htm");if(!$.mainParam){return $.loadMain("qsStart.htm")}if(!$.qd.l2tp){$.qd.l2tp={}}if($.qd.l2tp.usr!==undefined){$.id("usr").value=$.qd.l2tp.usr}if($.qd.l2tp.pwd!==undefined){$.id("pwd").value=$.qd.l2tp.pwd}if($.qd.l2tp.addrtype=="Static"){$.id("ipType_stc").checked=true;showStc()}if($.qd.l2tp.server!==undefined){$.id("srvAddrName").value=$.qd.l2tp.server}if($.qd.l2tp.ip!==undefined){$.id("isp_ip_stc").value=$.qd.l2tp.ip}if($.qd.l2tp.mask!==undefined){$.id("isp_net_mask_stc").value=$.qd.l2tp.mask}if($.qd.l2tp.gw!==undefined){$.id("isp_gw_stc").value=$.qd.l2tp.gw}if($.qd.l2tp.dns!==undefined){$.id("isp_dns_1_stc").value=$.qd.l2tp.dns}if($.qd.l2tp.dns2!==undefined){$.id("isp_dns_2_stc").value=$.qd.l2tp.dns2}})();</script>

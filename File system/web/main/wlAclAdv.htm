@@ -1,0 +1,33 @@
+﻿<script language="javascript" type="text/javascript">function doSave(obj){var macAddr=$.id("MAC").value.toUpperCase();var desc=$.id("desc").value;if(INCLUDE_LAN_WLAN_MSSID){var hostName=$.id("hostSSID").value}else{var hostName=wlanObj.name}var enable;var desc;var macList;var isConflict=false;if($.id("desc").value==""){desc=" "}if(!$.isname(desc)){$.alert(ERR_WLAN_MAC_FILTER_DESCRIP_INVALID);var element=$.id("desc");if(element){element.focus();element.select()}return false}if($.mac(macAddr)){return}$.addLoading(obj);macList=$.act(ACT_GS,LAN_WLAN_MACTABLEENTRY,null,wlanObj.__stack,["MACAddress","HostName"]);$.exe(function(ret){if(!ret){$.each(macList,function(arg,index){if(this.MACAddress==macAddr&&(INCLUDE_LAN_WLAN_MSSID&&this.hostName==hostName)){if($.mainParam==null||($.mainParam!=null&&$.mainParam.__stack!=this.__stack)){isConflict=true}}});if(isConflict){$.alert(ERR_WLAN_MAC_CONFLICT);$.id("MAC").focus();$.id("MAC").select();$.removeLoading();return}var enable;if($.id("state").value==1){enable=1}else{enable=0}if($.mainParam==null){$.act(ACT_ADD,LAN_WLAN_MACTABLEENTRY,null,wlanObj.__stack,{Enabled:enable,Description:desc,MACAddress:macAddr,HostName:hostName})}else{$.act(ACT_SET,LAN_WLAN_MACTABLEENTRY,($.mainParam).__stack,null,["Enabled="+enable,"MACAddress="+macAddr,"Description="+desc,"HostName="+hostName])}$.exe(function(ret){if(!ret){$.loadMain("wlAcl.htm")}})}})}function goBack(){$.loadMain("wlAcl.htm")};</script>
+<p class="et T" id="et">Add or Modify Wireless MAC Address Filtering entry</p>
+<div class="con1 M">
+<p class="ct"></p>
+<p class="bl"></p>
+<div class="con2">
+<p class="line">
+<span class="T" id="t_info">You can configure the Wireless MAC Filtering to control the wireless access on this page.</span>
+</p>
+<p class="br"></p>
+<p>
+<b class="item T T_macaddr">MAC Address:</b><input type="text" class="text" maxlength="17" size="17" id="MAC" />
+</p>
+<p>
+<b class="item T T_desc">Description:</b><input type="text" class="text" maxlength=30 size=30 id="desc"/>
+</p>
+<p><b class="item T T_status">Status:</b>
+<select id="state" name="state">
+<option  class="T T_enabled" value=1>Enabled</option>
+<option class="T T_disabled" value=2>Disabled</option>
+</select>
+</p>
+<div class="nd" id="host">
+<p><b class="item T" id="t_host">Host:</b>
+<select id="hostSSID" name="hostSSID">
+</select>
+</p>
+</div>
+</div>
+<p class="bl"></p>
+<p class="tail"><input type=button class="button L T T_save" value="Save" onclick="doSave(this)"/>&nbsp;<input type=button class="button L T T_back" value="Back" onclick="goBack()"/></p>
+</div>
+<script language="javascript" type="text/javascript">var wlanObj;var wlanList=$.act(ACT_GL,LAN_WLAN,null,null,["name","SSID","X_TP_Band"]);var vapList=$.act(ACT_GS,LAN_WLAN_MSSIDENTRY,null,wlanObj.__stack,["Enable","Name","SSID"]);if(!$.exe()){$.each(wlanList,function(){if("2.4GHz"==this.X_TP_Band){wlanObj=this}})}if(INCLUDE_LAN_WLAN_MSSID){var host=$.id("hostSSID");var hostLen=0;var opt=$.c("option");opt.value=wlanObj.name;opt.text=wlanObj.SSID;try{host.add(opt,null)}catch(e){host.add(opt)}if($.mainParam!=null&&$.mainParam.hostName==wlanObj.name){host.selectedIndex=hostLen}hostLen++;if(INCLUDE_LAN_WLAN_GUESTNETWORK){var guestNetObj=$.act(ACT_GET,LAN_WLAN_GUESTNET,wlanObj.__stack,null,["Name"])}if(!$.exe()){$.each(vapList,function(arg,index){if(INCLUDE_LAN_WLAN_GUESTNETWORK&&guestNetObj.name==this.name){if(this.enable==1){var opt=$.c("option");opt.value=this.name;opt.text=this.SSID;try{host.add(opt,null)}catch(e){host.add(opt)}if($.mainParam!=null&&$.mainParam.hostName==this.name){host.selectedIndex=hostLen}hostLen++}}else{if(this.enable==1){var opt=$.c("option");opt.value=this.name;opt.text=this.SSID;try{host.add(opt,null)}catch(e){host.add(opt)}if($.mainParam!=null&&$.mainParam.hostName==this.name){host.selectedIndex=hostLen}hostLen++}}})}var mssidObj=$.act(ACT_GET,LAN_WLAN_MULTISSID,wlanObj.__stack,null,["MultiSSIDEnable"]);if(!$.exe()){if(mssidObj.multiSSIDEnable==1){$.removeClass($.id("host"),"nd")}}}if($.mainParam!=null){$.id("MAC").value=($.mainParam).MACAddress;$.id("desc").value=($.mainParam).description;if(($.mainParam).enabled==1){$.id("state").selectedIndex=0}else{$.id("state").selectedIndex=1}if(INCLUDE_LAN_WLAN_MSSID){$.id("host").value=$.mainParam.hostName}};</script>

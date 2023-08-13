@@ -1,0 +1,63 @@
+﻿<script language="javascript" type="text/javascript">var opt=$.mainParam[0];var stk=$.mainParam[1];function selectObj(id){var element=$.id(id);if(element){element.focus();element.select()}}function checkBW(idMin,idMax){if(!INCLUDE_QOS){if($.id(idMin).value==""||$.id(idMax).value==""){$.alert(ERR_TC_NUM_INVAD);selectObj(idMin);return false}}if($.id(idMin).value==""&&$.id(idMax).value==""){return true}if(($.id(idMin).value=="")||(!$.isnum($.id(idMin).value))||(0==parseInt($.id(idMin).value,10))){$.alert(ERR_TC_NUM_INVAD);selectObj(idMin);return false}if(($.id(idMax).value=="")||(!$.isnum($.id(idMax).value))||(0==parseInt($.id(idMax).value,10))){$.alert(ERR_TC_NUM_INVAD);selectObj(idMax);return false}if(parseInt($.id(idMax).value,10)<parseInt($.id(idMin).value,10)){$.alert(ERR_TC_BW_ORDER_INVAD);selectObj(idMax);return false}return true}function init(){var tcObj=$.act(ACT_GET,TC,null,null);if(1==opt){var tcCfg=$.act(ACT_GET,TC_RULE,stk,null)}if(!$.exe()){if(0==(tcObj.enable&1)){$.id("upMinBW").disabled=true;$.id("upMaxBW").disabled=true}if(0==(tcObj.enable&2)){$.id("downMinBW").disabled=true;$.id("downMaxBW").disabled=true}if(1==opt){$.id("tc_en").checked=(tcCfg.enable==1)?1:0;if(tcCfg.startIP==tcCfg.endIP){$.id("ipStart").value=(tcCfg.startIP==0)?"":($.num2ip(parseInt(tcCfg.startIP,10)));$.id("ipEnd").value=""}else{$.id("ipStart").value=(tcCfg.startIP==0)?"":($.num2ip(parseInt(tcCfg.startIP,10)));$.id("ipEnd").value=(tcCfg.endIP==0)?"":($.num2ip(parseInt(tcCfg.endIP,10)))}if(tcCfg.startPort==tcCfg.endPort){$.id("portStart").value=(tcCfg.startPort==0)?"":tcCfg.startPort;$.id("portEnd").value=""}else{$.id("portStart").value=(tcCfg.startPort==0)?"":tcCfg.startPort;$.id("portEnd").value=(tcCfg.endPort==0)?"":tcCfg.endPort}$.id("protocol").value=tcCfg.protocol;$.id("precedence").value=tcCfg.precedence;$.id("upMinBW").value=(0==tcCfg.upMinBW)?"":tcCfg.upMinBW;$.id("upMaxBW").value=(0==tcCfg.upMaxBW)?"":tcCfg.upMaxBW;$.id("downMinBW").value=(0==tcCfg.downMinBW)?"":tcCfg.downMinBW;$.id("downMaxBW").value=(0==tcCfg.downMaxBW)?"":tcCfg.downMaxBW}}}function doSave(){if(($.id("ipStart").value!="")&&($.ifip($.id("ipStart").value,true))){$.alert(ERR_IP_FORMAT);selectObj("ipStart");return false}if(($.id("ipEnd").value!="")&&($.ifip($.id("ipEnd").value,true))){$.alert(ERR_IP_FORMAT);selectObj("ipEnd");return false}if(($.id("ipEnd").value!="")&&($.id("ipStart").value!="")&&(!$.isOrderIp($.id("ipStart").value,$.id("ipEnd").value))){$.alert(ERR_TC_IP_ORDER_INVAD);selectObj("ipEnd");return false}else{if(""==$.id("ipStart").value&&""!=$.id("ipEnd").value){$.alert(ERR_TC_EMPTY_START_IP);selectObj("ipStart");return false}}if(($.id("portStart").value!="")&&(!$.isnum($.id("portStart").value))||(parseInt($.id("portStart").value,10)==0)||(parseInt($.id("portStart").value,10)>65535)){$.alert(ERR_PORT_NUM_INVAD);selectObj("portStart");return false}if(($.id("portEnd").value!="")&&(!$.isnum($.id("portEnd").value))||(parseInt($.id("portEnd").value,10)==0)||(parseInt($.id("portEnd").value,10)>65535)){$.alert(ERR_PORT_NUM_INVAD);selectObj("portEnd");return false}if(($.id("portEnd").value!="")&&($.id("portStart").value!="")&&(parseInt($.id("portEnd").value,10)<parseInt($.id("portStart").value,10))){$.alert(ERR_PORT_ORDER_INVAD);selectObj("portEnd");return false}else{if(""==$.id("portStart").value&&""!=$.id("portEnd").value){$.alert(ERR_EMPTY_START_PORT);selectObj("portStart");return false}}if(($.id("ipStart").value=="")&&($.id("ipEnd").value=="")&&($.id("portStart").value=="")&&($.id("portEnd").value=="")){$.alert(ERR_TC_IP_PORT_INVAD);selectObj("portStart");return false}if(!checkBW("upMinBW","upMaxBW")){return false}if(!checkBW("downMinBW","downMaxBW")){return false}if($.id("upMinBW").value==""&&$.id("downMinBW").value==""){$.alert(ERR_TC_BW_NULL);selectObj("upMinBW");return false}var tmpArg={};tmpArg.enable=($.id("tc_en").checked==1)?1:0;tmpArg.startIP=($.id("ipStart").value=="")?0:($.ip2num($.id("ipStart").value));tmpArg.endIP=($.id("ipEnd").value=="")?0:($.ip2num($.id("ipEnd").value));tmpArg.startPort=($.id("portStart").value=="")?0:parseInt($.id("portStart").value,10);tmpArg.endPort=($.id("portEnd").value=="")?0:parseInt($.id("portEnd").value,10);tmpArg.protocol=$.id("protocol").value;tmpArg.precedence=$.id("precedence").value;tmpArg.upMinBW=($.id("upMinBW").value=="")?0:parseInt($.id("upMinBW").value,10);tmpArg.upMaxBW=($.id("upMaxBW").value=="")?0:parseInt($.id("upMaxBW").value,10);tmpArg.downMinBW=($.id("downMinBW").value=="")?0:parseInt($.id("downMinBW").value,10);tmpArg.downMaxBW=($.id("downMaxBW").value=="")?0:parseInt($.id("downMaxBW").value,10);tmpArg.flag=1;var tmpStack=null;var tmpOp=ACT_ADD;if(1==opt){tmpStack=stk;tmpOp=ACT_SET}$.act(tmpOp,TC_RULE,tmpStack,null,tmpArg);$.addLoading($.id("saveBtn"));$.exe(function(ret){if(!ret){$.loadMain("trafficCtrl.htm")}})};</script>
+<p class="T et" id="et">Bandwidth Control</p>
+<div class="con1 L">
+<p class="ct"></p>
+<p class="bl"></p>
+<div class="con2">
+<p><b class="item L T T_en">Enable</b><input type="checkbox" id="tc_en" checked/>&nbsp;</p>
+<p>
+	<b class="item T" id="t_iprange">IP Range:</b>
+	<input type="text" class="text" id="ipStart" size="17" maxlength="15" />--
+	<input type="text" class="text" id="ipEnd"size="17" maxlength="15"/>
+</p>
+<p>
+	<b class="item T" id="t_portrange">Port Range:</b>
+	<input type="text" class="text L" id="portStart" maxlength="5"/>--
+	<input type="text" class="text L" id="portEnd" maxlength="5"/>
+</p>
+<p><b class="item T T_proto">Protocol:</b>
+	<select id="protocol"class="M">
+		<option class="T T_all" value="0">All</option>
+		<option value="6">TCP</option>
+		<option value="17">UDP</option>
+	</select>
+</p>
+<p class="br"></p>
+<p><b class="item T" id="t_prio">Priority:</b>
+	<select id="precedence"class="M">
+		<option id="prec0" value="1">1</option>
+		<option id="prec1" value="2">2</option>
+		<option id="prec2" value="3">3</option>
+		<option id="prec3" value="4">4</option>
+		<option id="prec4" value="5" selected>5</option>
+		<option id="prec5" value="6">6</option>
+		<option id="prec6" value="7">7</option>
+		<option id="prec7" value="8">8</option>
+	</select><span id="t_prioNote">(1 means highest priority)</span>
+</p>
+<p class="br"></p>
+<p>
+	<b class="item">&nbsp;</b>
+	<b style="padding:10px"><span class="T" id="t_minrate">Min Bandwidth</span>(Kbps)</b>
+	<b style="padding:26px"><span class="T" id="t_maxrate">Max Bandwidth</span>(Kbps)</b>
+</p>
+<p>
+	<b class="item T" id="t_up">Egress Bandwidth:</b>
+	<input type="text" class="text XL" id="upMinBW" maxlength="6"/>
+	<input type="text" class="text XL" id="upMaxBW" maxlength="6"/>
+</p>
+<p>
+	<b class="item T" id="t_down">Ingress Bandwidth:</b>
+	<input type="text" class="text XL" id="downMinBW" maxlength="6"/>
+	<input type="text" class="text XL" id="downMaxBW" maxlength="6"/>
+</p>
+
+</div>
+<p class="bl"></p>
+<p class="tail" id="tail">
+	<input type="button" class="button L T T_save" id="saveBtn" value="Save" onclick="doSave();" />
+	<input type="button" class="button L T T_back" value="Back" onclick="$.loadMain('trafficCtrl.htm');" />
+</p>
+</div>
+
+<script language="javascript" type="text/javascript">$.loadHelpFrame("QoSRuleCfgHelpRpm.htm");init();</script>

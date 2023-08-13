@@ -1,0 +1,36 @@
+﻿<script language="javascript" type="text/javascript">function doCollect(){$.qd.pptp.usr=$.id("usr").value;$.qd.pptp.pwd=$.id("pwd").value;$.qd.pptp.addrtype=$.id("ipType_dyn").checked?"DHCP":"Static";$.qd.pptp.server=$.id("srvAddrName").value;if($.qd.pptp.addrtype=="Static"){$.qd.pptp.ip=$.id("isp_ip_stc").value;$.qd.pptp.mask=$.id("isp_net_mask_stc").value;$.qd.pptp.gw=$.id("isp_gw_stc").value;$.qd.pptp.dns=$.id("isp_dns_1_stc").value;$.qd.pptp.dns2=$.id("isp_dns_2_stc").value}}function goNext(){doCollect();if($.qd.pptp.usr==""){return $.alert(ERR_USERNAME_INVAD)}if($.qd.pptp.pwd==""){return $.alert(ERR_USERNAME_INVAD)}if($.qd.pptp.server==""){return $.alert(ERR_WAN_DA_SERVER_NAME_EMPTY)}if($.qd.pptp.addrtype=="Static"){if($.ifip($.qd.pptp.ip,true)){return $.alert(ERR_STAIP_IP_INVAD)}if($.mask($.qd.pptp.mask,true)){return $.alert(ERR_STAIP_MASK_INVAD)}if($.ipmask($.qd.pptp.ip,$.qd.pptp.mask,true)){return $.alert(ERR_STAIP_IP_MASK_CONFLICT)}if($.ifip($.qd.pptp.gw,true)){return $.alert(ERR_STAIP_GW_INVAD)}if($.ipmask($.qd.pptp.gw,$.qd.pptp.mask,true)){return $.alert(ERR_STAIP_GW_MASK_CONFLICT)}if($.ipmaskgw($.qd.pptp.ip,$.qd.pptp.mask,$.qd.pptp.gw,true)){return $.alert(ERR_STAIP_IP_GW_CONFLICT)}if($.ifip($.qd.pptp.dns,true)){return $.alert(ERR_STAIP_DNS1_INVAD)}if($.qd.pptp.dns2&&$.ip2num($.qd.pptp.dns2)!==0&&$.ifip($.qd.pptp.dns2,true)){return $.alert(ERR_STAIP_DNS2_INVAD)}}if($.qd.sysMode){$.qf.next($.qd.sysMode)}else{$.qf.next()}}function goPrev(){doCollect();$.qf.prev()}function showDyn(){$.removeClass($.id("pptp_dyn_ip_elem"),"nd");$.addClass($.id("pptp_stc_ip_elem"),"nd")}function showStc(){$.removeClass($.id("pptp_stc_ip_elem"),"nd");$.addClass($.id("pptp_dyn_ip_elem"),"nd")};</script>
+<p class="et T" id="et">Quick Setup - pptp</p>
+<div class="con1 M">
+<p class="ct"></p>
+<p class="bl"></p>
+<div class="con2">
+<p class="T" id="t_info">Please enter the Username and Password. If you forget them, please consult your ISP.</p>
+<p class="br"></p>
+<p><b class="item T T_username">Username:</b><input type="text" class="text" size="15" maxlength="63" id="usr" /></p>
+<p><b class="item T T_passwd">Password:</b><input type="password" class="text" size="15" maxlength="63" id="pwd" /></p>
+
+	<p><b class="item L T T_addrType" id = "t_addrType">Addressing Type:</b>
+	<input type="radio" name="ipType" id="ipType_dyn" onclick="showDyn()" checked /><span class="T T_dynip">Dynamic IP</span>
+	<input type="radio" name="ipType" id="ipType_stc" onclick="showStc()" /><span class="T T_staip">Static IP</span></p>
+	<p><b class="item L T T_srvIpName">Server IP Address/Name:</b><input type="text" class="text" size="15" id="srvAddrName" maxlength="80" /></p>
+	<div id="pptp_dyn_ip_elem">
+		<p><b class="item L T T_ipaddr" id="isp_ip_addr">IP Address:</b><b style="padding-left:12px" id="isp_ip_dyn">0.0.0.0</b></p>
+		<p><b class="item L T T_netmask" id="isp_subnet_mask">Subnet Mask:</b><b style="padding-left:12px" id="isp_net_mask_dyn">0.0.0.0</b></p>
+		<p><b class="item L T T_gateway" id="isp_gateway">Gateway:</b><b style="padding-left:12px" id="isp_gw_dyn">0.0.0.0</b></p>
+		<p><b class="item L T T_dns" id="isp_dns">DNS:</b><b style="padding-left:12px" id="isp_dns_1_dyn">0.0.0.0</b>,<b style="padding-left:12px" id="isp_dns_2_dyn">0.0.0.0</b></p>
+	</div>
+	<div id="pptp_stc_ip_elem" class="nd">
+		<p><b class="item L T T_ipaddr">IP Address:</b><input type="text" class="text" id="isp_ip_stc" value="0.0.0.0" size="15" maxlength="15" /></p>
+		<p><b class="item L T T_netmask">Subnet Mask:</b><input type="text" class="text" id="isp_net_mask_stc" value="0.0.0.0" size="15" maxlength="15" /></p>
+		<p><b class="item L T T_gateway">Gateway:</b><input type="text" class="text" id="isp_gw_stc" value="0.0.0.0" size="15" maxlength="15" /></p>
+		<p><b class="item L T T_dns">DNS Server:</b><input type="text" class="text" id="isp_dns_1_stc" value="0.0.0.0" size="15" maxlength="15" /></p>
+		<p><b class="item L T T_secdns">Secondary DNS Server:</b><input type="text" class="text" id="isp_dns_2_stc" value="0.0.0.0" size="15" maxlength="15" /><span class="T T_optional">(optional)</span></p>
+	</div>
+</div>
+<p class="bl"></p>
+<p class="tail ctr">
+<input type="button" class="button L T T_back" value="Back" onclick="goPrev()" />
+<input type="button" class="button L T T_next" value="Next" onclick="goNext()" />
+</p>
+</div>
+<script language="javascript" type="text/javascript">(function(){$.loadHelpFrame("WzdPPTPHelpRpm.htm");if(!$.mainParam){return $.loadMain("qsStart.htm")}if(!$.qd.pptp){$.qd.pptp={}}if($.qd.pptp.usr!==undefined){$.id("usr").value=$.qd.pptp.usr}if($.qd.pptp.pwd!==undefined){$.id("pwd").value=$.qd.pptp.pwd}if($.qd.pptp.addrtype=="Static"){$.id("ipType_stc").checked=true;showStc()}if($.qd.pptp.server!==undefined){$.id("srvAddrName").value=$.qd.pptp.server}if($.qd.pptp.ip!==undefined){$.id("isp_ip_stc").value=$.qd.pptp.ip}if($.qd.pptp.mask!==undefined){$.id("isp_net_mask_stc").value=$.qd.pptp.mask}if($.qd.pptp.gw!==undefined){$.id("isp_gw_stc").value=$.qd.pptp.gw}if($.qd.pptp.dns!==undefined){$.id("isp_dns_1_stc").value=$.qd.pptp.dns}if($.qd.pptp.dns2!==undefined){$.id("isp_dns_2_stc").value=$.qd.pptp.dns2}})();</script>

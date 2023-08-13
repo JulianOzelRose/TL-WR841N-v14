@@ -1,0 +1,57 @@
+<script language="javascript" type="text/javascript">function multiModeInit(){if($.qd.sysMode===undefined){var multiMode=$.act(ACT_GET,MULTIMODE,null,null);if(!$.exe()){if(multiMode.mode=="Router"){$.id("Router").checked=true;$.qd.realMode="Router";$.qd.sysMode="Router"}else{if(multiMode.mode=="AP"){$.id("AP").checked=true;$.qd.realMode="AP";$.qd.sysMode="AP"}else{if(multiMode.mode=="Repeater"){$.id("Repeater").checked=true;$.qd.realMode="Repeater";$.qd.sysMode="Repeater"}else{if(multiMode.mode=="Client"){$.id("Client").checked=true;$.qd.realMode="Client";$.qd.sysMode="Client"}else{if(multiMode.mode=="MSSID"){$.qd.realMode="MSSID";$.qd.sysMode="MSSID"}else{if(multiMode.mode=="Hotspot"){$.qd.realMode="Hotspot";$.qd.sysMode="Hotspot"}}}}}}}}if($.qd.sysMode=="Router"){$.id("Router").checked=true}else{if($.qd.sysMode=="AP"){$.id("AP").checked=true}else{if($.qd.sysMode=="Repeater"){$.id("Repeater").checked=true}else{if($.qd.sysMode=="Client"){$.id("Client").checked=true}else{if($.qd.sysMode=="MSSID"){$.id("MSSID").checked=true}else{if($.qd.sysMode=="Hotspot"){$.id("Hotspot").checked=true}}}}}}changeType($.qd.sysMode)}function changeType(type){var curMode=$.qd.sysMode.toLowerCase();var mode=type.toLowerCase();$.addClass($.id(curMode+"_info"),"nd");$.removeClass($.id(mode+"_info"),"nd");$.qd.sysMode=type}function doCollect(){if(!$.qd.sysMode){$.qd.sysMode="Router"}}function goPrev(){doCollect();$.qf.prev()}function goNext(){doCollect();var nextPage=$.qd.sysMode||"Router";window.parent.$.tmpval.sysMode=nextPage;$.qf.next(nextPage)};</script>
+<p class="et T" id="et2">Quick Setup - Operation Mode</p>
+<div class="con1 M">
+    <p class="ct"></p>
+    <p class="bl"></p>
+    <div class="con2">
+        <p class="T" id="t_mode">Choose Operation Mode:</p>
+		<div id="m_router" class="nd">
+        <p>
+            <input type="radio" name="sysMode" id="Router" value="Router" checked onclick="changeType('Router')" />
+            <b class="T" id="sysmod1">Wireless Router</b>
+        </p>
+        <p id="router_info" class="mode-info nd">Share Internet connection from an Ethernet cable.For example,hotel room,small office...</p>
+		</div>
+		<div id="m_hotspot" class="nd">
+		<p>
+            <input type="radio" name="sysMode" id="Hotspot" value="Hotspot" onclick="changeType('Hotspot')" />
+            <b class="T" id="sysmod6">Hotspot Router</b>
+        </p>
+		<p id="hotspot_info" class="mode-info nd">Share Internet connection anywhere public Wi-Fi exists. For example: hotel room, trade show, ...</p>
+		</div>		
+		<div id="m_ap" class="nd">
+        <p>
+            <input type="radio" name="sysMode" id="AP" value="AP" onclick="changeType('AP')" />
+            <b class="T" id="sysmod2">Access Point</b>
+        </p>
+        <p id="ap_info" class="mode-info nd">Set up Wi-Fi on an existing wired network</p>
+        </div>
+		<div id="m_re" class="nd">
+		<p>
+            <input type="radio" name="sysMode" id="Repeater" value="Repeater" onclick="changeType('Repeater')" />
+            <b class="T" id="sysmod3">Range Extender</b>
+        </p>
+        <p id="repeater_info" class="mode-info nd">Extend the range of an existing Wi-Fi</p>
+		</div>
+		<div id="m_client" class="nd">
+        <p>
+            <input type="radio" name="sysMode" id="Client" value="Client" onclick="changeType('Client')" />
+            <b class="T" id="sysmod4">Client</b>
+        </p>
+        <p id="client_info" class="mode-info nd">Act as a "Wireless Adapter" to connect your wired devices(e.g.Blu-ray player,smart TV) to existing Wi-Fi</p>
+        </div>
+		<div id="m_mssid" class="nd">
+	   <p>
+            <input type="radio" name="sysMode" id="MSSID" value="MSSID" onclick="changeType('MSSID')" />
+            <b class="T" id="sysmod5">MultiSSID</b>
+        </p>
+        <p id="mssid_info" class="mode-info nd">Create multiple wireless networks to provide different security and VLAN groups.</p>
+		</div>
+    </div>
+    <p class="bl"></p>
+    <p class="tail ctr" id="tail">
+        <input type="button" class="button L T T_back" value="Back" onclick="goPrev()" />
+        <input type="button" class="button L T T_next" value="Next" onclick="goNext()" />
+    </p>
+</div>
+<script language="javascript" type="text/javascript">if(INCLUDE_MULTIMODE_ROUTER){$.removeClass($.id("m_router"),"nd")}if(INCLUDE_MULTIMODE_AP){$.removeClass($.id("m_ap"),"nd")}if(INCLUDE_MULTIMODE_RE){$.removeClass($.id("m_re"),"nd")}if(INCLUDE_MULTIMODE_CLIENT){$.removeClass($.id("m_client"),"nd")}if(INCLUDE_MULTIMODE_MSSID){$.removeClass($.id("m_mssid"),"nd")}if(INCLUDE_MULTIMODE_HOTSPOT){$.removeClass($.id("m_hotspot"),"nd")}multiModeInit();$.loadHelpFrame("QsModeHelpRpm.htm");</script>

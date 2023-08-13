@@ -1,0 +1,25 @@
+﻿<script language="javascript" type="text/javascript">var selAll;var index;var param;var allStk;var lan_stack;var lan_stackIndex;function doClick(){if(selAll==1){$.id("selAll").checked=0;selAll=0}}function doAdd(){param[0]=0;param[1]=0;$.loadMain("fwLanEdit.htm",param)}function doEdit(val){param[0]=1;param[1]=0;param[2]=val;$.loadMain("fwLanEdit.htm",param)}function doSelAll(){if(selAll==0){for(var i=1;i<=index;i++){var lanid="lanid"+i;$.id(lanid).checked=1}lan_stack=[];lan_stackIndex=index;for(var j=0;j<lan_stackIndex;j++){lan_stack[j]=allStk[j]}selAll=1}else{if(selAll==1){for(var i=1;i<=index;i++){var lanid="lanid"+i;$.id(lanid).checked=0}lan_stack=[];lan_stackIndex=0;selAll=0}}}function selEntry(){lan_stack=[];lan_stackIndex=0;for(var i=1;i<=index;i++){var tmpEntryId="lanid"+i;if($.id(tmpEntryId).checked==1){lan_stack[lan_stackIndex]=allStk[i-1];lan_stackIndex++}}}function init(){selAll=0;index=0;allStk=[];param=[];lan_stack=[];lan_stackIndex=0;var lanList=$.act(ACT_GL,INTERNAL_HOST,null,null);$.exe(function(err){if(!err){var tbl=$.id("lantbl");$.each(lanList,function(){if(this.isParentCtrl==0){var thisStk="["+this.__stack+"]";var row=tbl.insertRow(-1);index++;var cell=row.insertCell(-1);cell.width="5%";cell.innerHTML="<input type='checkbox' id='lanid"+index+"' onclick='doClick();'/>";cell=row.insertCell(-1);cell.width="31%";cell.innerHTML=this.entryName;cell=row.insertCell(-1);if(this.type==0){var tmpIP;var tmpPort;if((this.IPStart==0)&&(this.IPEnd==0)){tmpIP=""}else{if((this.IPStart!=0)&&(this.IPEnd==0)){tmpIP=$.num2ip(parseInt(this.IPStart,10))}else{if((this.IPStart==0)&&(this.IPEnd!=0)){tmpIP=$.num2ip(parseInt(this.IPEnd,10))}else{if(this.IPStart==this.IPEnd){tmpIP=$.num2ip(parseInt(this.IPStart,10))}else{tmpIP=$.num2ip(parseInt(this.IPStart,10))+"-"+$.num2ip(parseInt(this.IPEnd,10))}}}}if((this.portStart==0)&&(this.portEnd==0)){tmpPort=""}else{if((this.portStart!=0)&&(this.portEnd==0)){tmpPort=this.portStart}else{if((this.portStart==0)&&(this.portEnd!=0)){tmpPort=this.portEnd}else{if(this.portStart==this.portEnd){tmpPort=this.portStart}else{tmpPort=this.portStart+"-"+this.portEnd}}}}if(tmpIP==""){cell.innerHTML=tmpPort}else{if(tmpPort==""){cell.innerHTML=tmpIP}else{cell.innerHTML=tmpIP+" /"+tmpPort}}}else{if(this.type==1){cell.innerHTML=this.mac}}cell=row.insertCell(-1);cell.width="10%";cell.innerHTML="<span class='a T T_edit' onclick='doEdit("+thisStk+");'>"+m_str.edit+"</span>";allStk[index-1]=this.__stack}});$.resize($.id("lantbl"),8)}})}function doDel(obj){selEntry();if(lan_stackIndex==0){$.alert(ERR_SEL_INVAD);return}$.addLoading(obj);for(var i=0;i<lan_stackIndex;i++){$.act(ACT_DEL,INTERNAL_HOST,lan_stack[i],null)}$.exe(function(err){if(!err){$.reload()}})};</script>
+<p class="et T" id="et">Host Settings</p>
+<div class="con1 L">
+<p class="ct"></p>
+<p class="bl"></p>
+<div class="con2">
+<p class="br"></p>
+<div class="XL thead" ><table class="XL bdr tc">
+<tr>
+<th width="5%"><input type="checkbox" id="selAll" onclick="doSelAll();"/></th>
+<th width="31%" class="T T_desc">Description</th>
+<th class="T" id="t_addr">Address Info</th>
+<th width="10%" class="T T_edit">Edit</th>
+</tr>
+</table></div>
+<div class="XL tbody"><table id="lantbl" class="XL bdr tc"></table></div>
+<p class="br"></p>
+<p class="L1">
+<input type="button" class="button XL T T_addnew" value="Add New" onclick="doAdd();"/>
+<input type="button" class="button XL T T_delsel" value="Delete Selected" onclick="doDel(this);"/></p>
+</div>
+<p class="bl"></p>
+<p class="tail" id="tail"></p>
+</div>
+<script language="javascript" type="text/javascript">$.loadHelpFrame("AccessCtrlHostsListsHelpRpm.htm");init();</script>

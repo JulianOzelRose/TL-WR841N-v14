@@ -1,0 +1,728 @@
+<p id="et" class="et T">Quick Setup - Review Setting</p>
+<div class="con1 M">
+    <p class="bl"></p>
+    <p class="ct"></p>
+    <p class="T st" id="t_congraduation">Congratulations! The settings is finish, please click finish button to make it work.For detailed settings, please click other menus if necessary.</p>
+    <p><i id="t_change" class="nd">Changing work mode should be reboot!</i>
+    </p>
+    <p class="bl"></p>
+    <p class="ct"></p>
+    <p id="t_confirm">Confirm the configuration you have set. If anything wrong,please go Back to reset.</p>
+    <p><i id="t_recommend">It's recommented to take a note of these settings that you'll need later for reference.</i>
+    </p>
+    <p class="br"></p>
+    <p class="st" id='t_wl'>Wireless Settings</p>
+    <p>
+        <b class="item" id="t_operamode">Oreartion Mode:</b>
+        <span id="opreationMode"></span>
+    </p>
+    <p>
+        <b class="item" id="t_channel">Wireless Channel:</b>
+        <span id="channel"></span>
+    </p>
+    <div id="common-ctn">
+        <p id="common_ssid">
+            <b class="item" id="t_ssid">Wireless Network Name(SSID):</b>
+            <b class="item nd" id="t_ssid_client">Name(SSID) of Root AP:</b>
+        <span id="ssid"></span>
+    </p>
+        <p id="security-ctn">
+            <b class="item" id="t_secmode">Wireless Security Mode:</b>
+            <span id="security"></span>
+        </p>
+        <p id="pwd-ctn">
+            <b class="item T T_wlpwd">Wireless Password:</b>
+            <span id="password"></span>
+        </p>
+    </div>
+    <div id="multissid-ctn" class="nd">
+        <div id="ssid1-ctn" class="nd">
+    <p>
+                <b class="item T" id="t_ssid1">SSID1:</b>
+                <span id="ssid1"></span>
+    </p>
+			<div id="vlan1-ctn" class="nd">
+			<p>
+                <b class="item T" id="t_vlan1">VLAN ID:</b>
+                <span id="vlan1"></span>
+            </p>
+			</div>
+    <p>
+                <b class="item T T_security"></b>
+                <span id="sec_mode_1"></span>
+            </p>
+            <p id="pwd-1" class="nd">
+                <b class="item T T_passwd">Password1:</b>
+                <span id="pwd1"></span>
+    </p>
+            <p class="br"></p>
+        </div>
+        <div id="ssid2-ctn" class="nd">
+    <p>
+                <b class="item T" id="t_ssid1">SSID2:</b>
+                <span id="ssid2"></span>
+            </p>
+			<div id="vlan2-ctn" class="nd">
+			<p>
+                <b class="item T" id="t_vlan2">VLAN ID:</b>
+                <span id="vlan2"></span>
+            </p>
+			</div>			
+            <p>
+                <b class="item T T_security"></b>
+                <span id="sec_mode_2"></span>
+            </p>
+            <p id="pwd-2" class="nd">
+                <b class="item T T_passwd">Password2:</b>
+                <span id="pwd2"></span>
+            </p>
+            <p class="br"></p>
+        </div>
+        <div id="ssid3-ctn" class="nd">
+            <p>
+                <b class="item T" id="t_ssid1">SSID3:</b>
+                <span id="ssid3"></span>
+            </p>
+			<div id="vlan3-ctn" class="nd">
+			<p>
+                <b class="item T" id="t_vlan3">VLAN ID:</b>
+                <span id="vlan3"></span>
+            </p>
+			</div>			
+            <p>
+                <b class="item T T_security"></b>
+                <span id="sec_mode_3"></span>
+            </p>
+            <p id="pwd-3" class="nd">
+                <b class="item T T_passwd">Password3:</b>
+                <span id="pwd3"></span>
+            </p>
+            <p class="br"></p>
+        </div>
+        <div id="ssid4-ctn" class="nd">
+            <p>
+                <b class="item T" id="t_ssid1">SSID4:</b>
+                <span id="ssid4"></span>
+            </p>
+			<div id="vlan4-ctn" class="nd">
+			<p>
+                <b class="item T" id="t_vlan4">VLAN ID:</b>
+                <span id="vlan4"></span>
+            </p>
+			</div>
+            <p>
+                <b class="item T T_security"></b>
+                <span id="sec_mode_4"></span>
+    </p>
+            <p id="pwd-4" class="nd">
+                <b class="item T T_passwd">Password:</b>
+                <span id="pwd4"></span>
+            </p>
+            <p class="br"></p>
+        </div>
+    </div>
+    <p class="bl"></p>
+    <p class="ct"></p>
+    <p class="st" id="t_lan">LAN Settings</p>
+    <p>
+        <b class="item" id="t_defaultAccess">Default Access:</b>
+        <span id="defaultAccess"></span>
+    </p>	
+    <p>
+        <b class="item" id="t_lantype">LAN Type:</b>
+        <span id="lanType"></span>
+    </p>
+    <p id="lan-addr">
+        <b class="item T T_ipaddr">IP Address:</b>
+        <span id="lanIp"></span>
+    </p>
+    <p class="bl"></p>
+    <p class="tail ctr" id="tail">
+        <input type="button" class="button L T T_back" value="Back" onclick="goPrev()" />
+        <input type="button" class="button L T T_finish" value="Finish" onclick="reboot()" id="finish" />
+    </p>
+</div>
+<script>
+var bReboot;
+$.loadHelpFrame('QsReviewHelpRpm.htm');
+
+function goPrev() {
+    $.qf.prev();
+}
+
+function reboot() {
+	var needRelogin = false;
+    var obj = $.id('finish');
+    $.addLoading(obj);
+	
+	if ($.qd.sysMode == "Hotspot")
+	{
+		saveConnection();
+	}
+	
+    if ($.qd.realMode !== $.qd.sysMode) {
+        var multiModeArg = {};
+        multiModeArg.mode = $.qd.sysMode;
+        $.act(ACT_SET, MULTIMODE, null, null, multiModeArg);
+    }
+    saveWireless();
+    saveLan();
+	saveChangePwd();
+
+    if ($.qd.realMode !== $.qd.sysMode) {
+        bReboot = true;
+    }
+    
+    if( $.qd.sysMode != "Hotspot" && $.qd.sysMode != "Router")
+    {
+       $.act(ACT_OP, ACT_OP_NTP_REQUEST); 
+    }
+
+    $.exe(function(ret) {
+        if (ret) {
+        return;
+    }
+    if (bReboot) {
+            // $.guage(["<span class='T_rebooting'>" + s_str.rebooting + "</span>", "<span class='T T_wait_reboot'>" + s_str.wait_reboot + "</span>"], 100, $.guageInterval, function() {
+            //     $.refreshWindow();
+            // });
+        } else {
+			if (needRelogin){
+				$.deleteCookie("Authorization");
+				window.parent.location.reload();
+			}else{
+				$.loadMain('status.htm', false);
+			}
+        }
+    });
+    if (bReboot) {
+        $.guage(["<span class='T_rebooting'>" + s_str.rebooting + "</span>", "<span class='T T_wait_reboot'>" + s_str.wait_reboot + "</span>"], 100, $.guageInterval, function() {
+            $.refreshWindow();
+        });
+    }
+}
+
+function setDefaultHostname() {
+    var c;
+    var ch = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.";
+    var i = 0;
+    var hostname = "";
+    var hostnameLen = 0;
+
+    for (i = 0; i < $.model.length; i++) {
+        c = $.model.charAt(i);
+        if (ch.indexOf(c) == -1) {
+            if (hostnameLen == 0 || (hostnameLen > 0 && hostname.charAt(hostnameLen - 1) == "_")) {
+                continue;
+            } else {
+                hostname += "_";
+                hostnameLen++;
+            }
+        } else {
+            hostname += c;
+            hostnameLen++;
+        }
+    }
+
+    defaultHostname = (hostnameLen > 0 && hostname.charAt(hostnameLen - 1) == "_") ? hostname.substr(0, hostnameLen - 1) : hostname;
+}
+
+function showParam() {
+    var mode = $.qd.sysMode.toLowerCase();
+    $.h($.id('opreationMode'), s_str[mode]);
+
+    if ($.qd.sysMode == "MSSID") {
+        $.h($.id('channel'), $.qd.multi.chnn == "auto" ? s_str.auto : $.qd.multi.chnn);
+        $.removeClass($.id('multissid-ctn'), "nd");
+        $.addClass($.id('common-ctn'), "nd");
+        for (var i = 1; i < 5; i++) {
+            if ($.qd.multi[("enable" + i)]) {
+                $.removeClass($.id('ssid' + i + '-ctn'), "nd");
+				$.h($.id("ssid" + i), $.qd.multi[("ssid" + i)].replace(/\&/g, "&amp;").replace(/</g, "&lt;").replace(/ /g, "&nbsp;"));
+				if ($.qd.multi[("enVlan" + i)]) {
+                    $.removeClass($.id('vlan' + i + '-ctn'), "nd");
+                    $.h($.id('vlan' + i), $.qd.multi[("vlan" + i)]);
+                }
+                if ($.qd.multi[("en_pwd" + i)] == "1") {
+                    $.removeClass($.id('pwd-' + i), "nd");
+                    $.h($.id('sec_mode_' + i), s_str.wpa2_psk);
+                    $.h($.id('pwd' + i), $.qd.multi[("pwd" + i)]);
+                } else {
+                    $.h($.id('sec_mode_' + i), s_str.noneEnc);
+                }
+            }
+        }
+    } else {
+		$.h($.id('channel'), $.qd.wl.chnn == "auto" ? s_str.auto : $.qd.wl.chnn);
+	if ($.qd.sysMode == "Client")
+	{
+		$.addClass($.id('t_ssid'), "nd");
+		$.removeClass($.id('t_ssid_client'), "nd");	
+		$.h($.id('ssid'), $.qd.wds.ssid);
+	}
+	else
+	{
+        	$.h($.id('ssid'), $.qd.wl.ssid);
+	}
+        if ($.qd.wl.sec) {
+            if ($.qd.wl.encryptMode == "WEPEncryption") {
+                $.h($.id('security'), s_str.wepEnc);
+            } else {
+                $.h($.id('security'), s_str.wpa2_psk);
+            }
+    $.h($.id('password'), $.qd.wl.pwd);
+        } else {
+            $.h($.id('security'), s_str.noneEnc);
+            $.addClass($.id("pwd-ctn"), "nd");
+        }
+        // if ($.qd.sysMode == "Client") {
+        //     $.addClass($.id("security-ctn"), "nd");
+        // }
+        // $.h($.id('security'), $.qd.wl.sec ? 'Psk' : 'None');
+    }
+
+	if (INCLUDE_MULTIMODE_ROUTER) {	
+		$.h($.id('defaultAccess'), 'http://tplinkwifi.net');
+	}else{
+		$.h($.id('defaultAccess'), 'http://tplinkap.net');
+	}
+
+    //$.h($.id('lanType'), $.qd.lan.addressType == 1 ? 'Smart DHCP' : 'Static IP');
+	$.h($.id('lanType'), $.qd.lan.addressType == 1 ? s_str.smartip : s_str.staip);
+    $.h($.id('lanIp'), $.qd.lan.tmpLanIp);
+
+    if ($.qd.lan.addressType == 1) {
+        $.addClass($.id('lan-addr'), 'nd');
+    }
+}
+
+
+function saveWirelessMulti() {
+    var arg2g = {};
+    if ($.qd.multi.chnn == "auto") {
+        arg2g.autoChannelEnable = 1;
+    } else {
+        arg2g.autoChannelEnable = 0;
+        arg2g.channel = $.qd.multi.chnn;
+    }
+    if ($.qd.multi.mode == "n-only") {
+        arg2g.standard = "n-only";
+    } else {
+        arg2g.standard = $.qd.multi.mode;
+    }
+    arg2g.X_TP_Bandwidth = $.qd.multi.bandWidth;
+    $.act(ACT_SET, LAN_WLAN, $.qd.multi.wlanObjStk, null, arg2g);
+
+    var multiObj = {};
+    multiObj.vlanEnabled = $.qd.multi.vlan ? 1 : 0;
+    multiObj.MultiSSIDEnable = 1;
+    $.act(ACT_SET, LAN_WLAN_MULTISSID, $.qd.multi.wlanObjStk, null, multiObj);
+    // $.act(ACT_SET, LAN_WLAN_WPS, $.qd.multi.wlanObjStk, null, ["enable=" + 0]);
+    for (var i = 1; i < 5; i++) {
+        var multissidObj = {};
+        multissidObj.enable = $.qd.multi[("enable" + i)];
+			
+        multissidObj.SSID = $.qd.multi[("ssid" + i)];
+		if($.qd.multi[("vlan" + i)])
+		{
+			multissidObj.vlan = $.qd.multi[("vlan" + i)];
+		}
+        if ($.qd.multi[("en_pwd" + i)] == "1") {
+            multissidObj.beaconType = "11i";
+            multissidObj.IEEE11iEncryptionModes = "AESEncryption";
+            multissidObj.WPAEncryptionModes = "AESEncryption";
+            multissidObj.WPAAuthenticationMode = "PSKAuthentication";
+            multissidObj.IEEE11iAuthenticationMode = "PSKAuthentication";
+            multissidObj.preSharedKey = $.qd.multi[("pwd" + i)];
+        } else {
+            multissidObj.beaconType = "Basic";
+            multissidObj.basicEncryptionModes = "None";
+            multissidObj.BasicAuthenticationMode = "None";
+        }
+        
+        $.act(ACT_SET, LAN_WLAN_MSSIDENTRY, $.qd.multi.ssidStkList[i - 1], null, multissidObj);
+    }
+}
+
+function saveWireless() {
+    if ($.qd.sysMode == 'MSSID') {
+        saveWirelessMulti();
+        return true;
+    }
+    var arg2g = {};
+    if ($.qd.wl.en) {
+        arg2g.enable = 1;
+        arg2g.SSID = $.qd.wl.ssid;
+        if ($.qd.wl.domain != $.qd.dmRegion) {
+            arg2g.regulatoryDomain = $.qd.wl.domain;
+        }
+        if ($.qd.wl.chnn == "auto") {
+            arg2g.autoChannelEnable = 1;
+        } else {
+            arg2g.autoChannelEnable = 0;
+            arg2g.channel = $.qd.wl.chnn;
+        }
+        if ($.qd.wl.mode == "n-only") {
+            arg2g.standard = "n-only";
+        } else if ($.qd.wl.mode == "n") {
+            arg2g.standard = "n";
+        } else {
+            arg2g.standard = $.qd.wl.mode;
+        }
+        arg2g.X_TP_Bandwidth = $.qd.wl.bandwidth;
+        if ($.qd.wl.sec) {
+            if ($.qd.wl.encryptMode == 'WEPEncryption') {
+                arg2g.beaconType = "Basic";
+                arg2g.BasicEncryptionModes = "WEPEncryption";
+                arg2g.BasicAuthenticationMode = ($.qd.wl.authMode == "Open") ? "None" : "SharedAuthentication";
+                arg2g.WEPKeyIndex = $.qd.wds.wepKeyIndex;
+                var stkArr = $.qd.wl.stack.split(',');
+                for (var i = 0; i < stkArr.length; i++) {
+                    if (stkArr[i] == 0) {
+                        stkArr[i] = $.qd.wds.wepKeyIndex;
+                        break;
+                    }
+                }
+                var wepStk = stkArr.join(',');
+                $.act(ACT_SET, LAN_WLAN_WPS, $.qd.wl.stack, null, ["enable=" + 0]);
+                $.act(ACT_SET, LAN_WLAN_WEPKEY, wepStk, null, ["WEPKey=" + $.qd.wl.pwd]);
+            } else {
+                arg2g.beaconType = "11i";
+                if ($.qd.wl.mode == "n-only") {
+                    arg2g.IEEE11iEncryptionModes = "AESEncryption";
+                    arg2g.WPAEncryptionModes = "AESEncryption";
+                    arg2g.WPAAuthenticationMode = "PSKAuthentication";
+                    arg2g.IEEE11iAuthenticationMode = "PSKAuthentication";
+                } else {
+                    arg2g.IEEE11iEncryptionModes = "AESEncryption";
+                    arg2g.WPAEncryptionModes = "AESEncryption";
+                    arg2g.WPAAuthenticationMode = "PSKAuthentication";
+                    arg2g.IEEE11iAuthenticationMode = "PSKAuthentication";
+                }
+                arg2g.X_TP_PreSharedKey = $.qd.wl.pwd;
+            }
+
+        } else {
+            arg2g.beaconType = "Basic";
+            arg2g.basicEncryptionModes = "None";
+            arg2g.BasicAuthenticationMode = "None";
+        }
+    } else {
+        arg2g.enable = 0;
+        if ($.qd.wl.domain != $.qd.dmRegion) {
+            arg2g.regulatoryDomain = $.qd.wl.domain;
+            arg2g.autoChannelEnable = 1;
+        }
+    }
+
+    if ($.qd.sysMode == 'Client' || $.qd.sysMode == 'Repeater' || $.qd.sysMode == 'Hotspot') {
+        if ($.qd.sysMode == 'Client') {
+            arg2g.SSIDAdvertisementEnabled = $.qd.wl.ssidAdver;
+        }
+        var arg2gwds = {};
+        arg2gwds.bridgeEnable = $.qd.wds.enable;
+        if (INCLUDE_LAN_WLAN_WDS_DETECT) {
+            arg2gwds.bridgeAddrMode = $.qd.wds.addrMode;
+        }
+        arg2gwds.bridgeBSSID = $.qd.wds.bssid;
+        arg2gwds.bridgeSSID = $.qd.wds.ssid;
+        arg2gwds.bridgeAuthMode = $.qd.wds.authMode;
+        arg2gwds.bridgeEncryptMode = $.qd.wds.encryptMode;
+        arg2gwds.bridgeKey = $.qd.wds.key;
+        arg2gwds.bridgeWepKeyIndex = $.qd.wds.wepKeyIndex;
+
+        $.act(ACT_SET, LAN_WLAN_WDSBRIDGE, $.qd.wl.stack, null, arg2gwds);
+    }
+    $.act(ACT_SET, LAN_WLAN, $.qd.wl.stack, null, arg2g);
+    return true;
+}
+
+function saveLan() {
+    var ipv4Settings = {};
+    if (($.ip2num($.qd.lan.oldLanIp) != $.ip2num($.qd.lan.tmpLanIp) || $.ip2num($.qd.lan.oldLanMask) != $.ip2num($.qd.lan.tmpLanMask))) {
+        bReboot = true;
+    }
+    if (INCLUDE_SMART_DHCP && $.qd.sysMode != "Hotspot") {
+        if ($.qd.lan.addressType == 1) {
+            bReboot = false;
+            if ($.qd.lan.oldDhcpAuto == 0){
+                bReboot = true;
+            }
+            ipv4Settings.IPInterfaceAddressingType = 'Static';
+            $.act(ACT_SET, LAN_HOST_CFG, $.qd.lan.stackHost, null, ["DHCPServerEnable=" + $.qd.lan.dhcpEnable, "X_TP_DHCPAuto=" + $.qd.lan.addressType, "DNSServers=" + $.ip2ip($.qd.lan.tmpLanIp) + ",0.0.0.0"]);
+        } else {
+            ipv4Settings.IPInterfaceAddressingType = 'Static';
+            ipv4Settings.IPInterfaceIPAddress = $.qd.lan.tmpLanIp;
+            ipv4Settings.IPInterfaceSubnetMask = $.qd.lan.tmpLanMask;
+			$.act(ACT_SET, LAN_HOST_CFG, $.qd.lan.stackHost, null, ["DHCPServerEnable=" + $.qd.lan.dhcpEnable, "X_TP_DHCPAuto=0", "DNSServers=" + $.ip2ip($.qd.lan.tmpLanIp) + ",0.0.0.0"]);
+        }
+        $.act(ACT_SET, LAN_IP_INTF, $.qd.lan.stackIP, null, ipv4Settings);
+    } else {
+        ipv4Settings.IPInterfaceAddressingType = 'Static';
+        ipv4Settings.IPInterfaceIPAddress = $.qd.lan.tmpLanIp;
+        ipv4Settings.IPInterfaceSubnetMask = $.qd.lan.tmpLanMask;
+        $.act(ACT_SET, LAN_IP_INTF, $.qd.lan.stackIP, null, ipv4Settings);
+    }
+    return true;
+}
+
+function saveConnection() {
+    if ($.qd.type) {
+        var pStk;
+        var staticStk;
+        var dynStk;
+        var PPPoEStk;
+        var L2tpStk;
+        var PptpStk;
+        var bpaStk;
+        var wanIPList = $.act(ACT_GL, WAN_IP_CONN, null, null, ["enable", "addressingType", "X_TP_IPv4Enabled", "X_TP_BpaEnable"]);
+        var wanPPPList = $.act(ACT_GL, WAN_PPP_CONN, null, null, ["enable", "transportType", "X_TP_IPv4Enabled"]);
+        var wanL2tpList = $.act(ACT_GL, WAN_L2TP_CONN, null, null, ["enable", "addressingType", "transportType"]);
+        var wanPptpList = $.act(ACT_GL, WAN_PPTP_CONN, null, null, ["enable", "addressingType", "transportType"]);
+        var wanTypes = $.act(ACT_GL, WAN_COMMON_INTF_CFG, null, null, ["WANAccessType"]);
+        if ($.qd.type == "dhcp") {
+            var devInfo = $.act(ACT_GET, IGD_DEV_INFO, null, null, ["modelName"]);
+        }
+        $.act(ACT_CGI, "/cgi/info");
+
+        if (!$.exe()) {
+            /*save MultiMode Here!*/
+
+
+            $.each(wanTypes, function() {
+                if (this.WANAccessType == "Ethernet")
+                    pStk = this.__stack;
+            });
+
+            $.each(wanIPList, function() {
+                var tmpStk = $.stkPop(this.__stack, 2);
+                if (pStk == tmpStk && this.X_TP_IPv4Enabled == 1) {
+                    if (this.addressingType == "Static") {
+                        staticStk = this.__stack;
+                    }
+                    if (this.addressingType == "DHCP") {
+                        if (this.X_TP_BpaEnable == 1)
+                            bpaStk = this.__stack;
+                        else
+                            dynStk = this.__stack;
+                    }
+                }
+            });
+            $.each(wanPPPList, function() {
+                var tmpStk = $.stkPop(this.__stack, 2);
+                if (pStk == tmpStk && this.X_TP_IPv4Enabled == 1) {
+                    if (this.transportType == "PPPoE") {
+                        PPPoEStk = this.__stack;
+                    }
+                }
+            });
+            $.each(wanL2tpList, function() {
+                var tmpStk = $.stkPop(this.__stack, 1);
+                if (pStk == tmpStk) {
+                    l2tpStk = this.__stack;
+                }
+            });
+            $.each(wanPptpList, function() {
+                var tmpStk = $.stkPop(this.__stack, 1);
+                if (pStk == tmpStk) {
+                    pptpStk = this.__stack;
+                }
+            });
+            if ($.qd.type == "ppp") {
+                $.act(ACT_SET, WAN_ETH_INTF, pStk, null, ["X_TP_lastUsedIntf=pppoe_eth3_d"]);
+                $.act(ACT_SET, WAN_L2TP_CONN, l2tpStk, null, {
+                    enable: 0
+                });
+                $.act(ACT_SET, WAN_PPTP_CONN, pptpStk, null, {
+                    enable: 0
+                });
+                $.act(ACT_SET, WAN_PPP_CONN, PPPoEStk, null, {
+                    enable: 1,
+                    username: $.qd.ppp.usr,
+                    password: $.qd.ppp.pwd,
+                    secondConnection: $.qd.ppp.secondConnection
+                });
+                if (INCLUDE_DUAL_ACCESS) {
+                    if ($.qd.ppp.secondConnection == "sec_conn_dynip") {
+                        var wan_iplistarg_dyn = {};
+                        wan_iplistarg_dyn.enable = 1;
+                        $.act(ACT_SET, WAN_IP_CONN, dynStk, null, wan_iplistarg_dyn);
+                        $.act(ACT_SET, WAN_IP_CONN, staticStk, null, {
+                            enable: 0
+                        });
+                    } else if ($.qd.ppp.secondConnection == "sec_conn_staip") {
+                        var wan_iplistarg_sta = {};
+                        wan_iplistarg_sta.externalIPAddress = $.qd.ppp.externalIPAddress;
+                        wan_iplistarg_sta.subnetMask = $.qd.ppp.subnetMask;
+                        wan_iplistarg_sta.enable = 1;
+                        /* fix bug, yuanshang, 2015-5-27 */
+                        wan_iplistarg_sta.defaultGateway = "0.0.0.0";
+                        wan_iplistarg_sta.DNSServers = "0.0.0.0,0.0.0.0";
+
+                        $.act(ACT_SET, WAN_IP_CONN, staticStk, null, wan_iplistarg_sta);
+                        $.act(ACT_SET, WAN_IP_CONN, dynStk, null, {
+                            enable: 0
+                        });
+                    } else {
+                        $.act(ACT_SET, WAN_IP_CONN, dynStk, null, {
+                            enable: 0
+                        });
+                        $.act(ACT_SET, WAN_IP_CONN, staticStk, null, {
+                            enable: 0
+                        });
+                    }
+                } else {
+                    $.act(ACT_SET, WAN_IP_CONN, dynStk, null, {
+                        enable: 0
+                    });
+                    $.act(ACT_SET, WAN_IP_CONN, staticStk, null, {
+                        enable: 0
+                    });
+                }
+                instance = $.act(ACT_GET, WAN_PPP_CONN, PPPoEStk, null, ["name", "X_TP_IfName"]);
+            } else if ($.qd.type == "dhcph") {
+                setDefaultHostname();
+                $.act(ACT_SET, WAN_ETH_INTF, pStk, null, ["X_TP_lastUsedIntf=ipoe_eth3_d"]);
+                $.act(ACT_SET, WAN_PPP_CONN, PPPoEStk, null, {
+                    enable: 0
+                });
+                $.act(ACT_SET, WAN_IP_CONN, staticStk, null, {
+                    enable: 0
+                });
+                $.act(ACT_SET, WAN_L2TP_CONN, l2tpStk, null, {
+                    enable: 0
+                });
+                $.act(ACT_SET, WAN_PPTP_CONN, pptpStk, null, {
+                    enable: 0
+                });
+                $.act(ACT_SET, WAN_IP_CONN, dynStk, null, {
+                    enable: 1,
+                    NATEnabled: 1,
+                    X_TP_Hostname: defaultHostname
+                });
+                instance = $.act(ACT_GET, WAN_IP_CONN, dynStk, null, ["name", "X_TP_IfName"]);
+
+            } else if ($.qd.type == "staip") {
+                $.act(ACT_SET, WAN_ETH_INTF, pStk, null, ["X_TP_lastUsedIntf=ipoe_eth3_s"]);
+                $.act(ACT_SET, WAN_PPP_CONN, PPPoEStk, null, {
+                    enable: 0
+                });
+                $.act(ACT_SET, WAN_IP_CONN, dynStk, null, {
+                    enable: 0
+                });
+                $.act(ACT_SET, WAN_L2TP_CONN, l2tpStk, null, {
+                    enable: 0
+                });
+                $.act(ACT_SET, WAN_PPTP_CONN, pptpStk, null, {
+                    enable: 0
+                });
+                $.act(ACT_SET, WAN_IP_CONN, staticStk, null, {
+                    enable: 1,
+                    NATEnabled: 1,
+                    externalIPAddress: $.qd.staip.ip,
+                    subnetMask: $.qd.staip.mask,
+                    defaultGateway: $.qd.staip.gw,
+                    DNSOverrideAllowed: 1,
+                    DNSServers: $.qd.staip.dns + "," + $.qd.staip.dns2
+                });
+                instance = $.act(ACT_GET, WAN_IP_CONN, staticStk, null, ["name", "X_TP_IfName"]);
+            } else if ($.qd.type == "l2tp") {
+                $.act(ACT_SET, WAN_ETH_INTF, pStk, null, ["X_TP_lastUsedIntf=l2tp_eth3_d"]);
+                $.act(ACT_SET, WAN_PPP_CONN, PPPoEStk, null, {
+                    enable: 0
+                });
+                $.act(ACT_SET, WAN_IP_CONN, staticStk, null, {
+                    enable: 0
+                });
+                $.act(ACT_SET, WAN_IP_CONN, dynStk, null, {
+                    enable: 0
+                });
+                $.act(ACT_SET, WAN_PPTP_CONN, pptpStk, null, {
+                    enable: 0
+                });
+                $.act(ACT_SET, WAN_L2TP_CONN, l2tpStk, null, {
+                    enable: 1,
+                    username: $.qd.l2tp.usr,
+                    password: $.qd.l2tp.pwd,
+                    serverIpOrName: $.qd.l2tp.server,
+                    addressingType: $.qd.l2tp.addrtype
+                });
+                if ($.qd.l2tp.addrtype == "Static") {
+                    $.act(ACT_SET, WAN_L2TP_CONN, l2tpStk, null, {
+                        externalIPAddressIP: $.qd.l2tp.ip,
+                        subnetMaskIP: $.qd.l2tp.mask,
+                        defaultGatewayIP: $.qd.l2tp.gw,
+                        DNSServersIP: $.qd.l2tp.dns + "," + $.qd.l2tp.dns2
+                    });
+                }
+                instance = $.act(ACT_GET, WAN_L2TP_CONN, l2tpStk, null, ["name", "ifName"]);
+            } else if ($.qd.type == "pptp") {
+                $.act(ACT_SET, WAN_ETH_INTF, pStk, null, ["X_TP_lastUsedIntf=pptp_eth3_d"]);
+                $.act(ACT_SET, WAN_PPP_CONN, PPPoEStk, null, {
+                    enable: 0
+                });
+                $.act(ACT_SET, WAN_IP_CONN, staticStk, null, {
+                    enable: 0
+                });
+                $.act(ACT_SET, WAN_IP_CONN, dynStk, null, {
+                    enable: 0
+                });
+                $.act(ACT_SET, WAN_L2TP_CONN, l2tpStk, null, {
+                    enable: 0
+                });
+                $.act(ACT_SET, WAN_PPTP_CONN, pptpStk, null, {
+                    enable: 1,
+                    username: $.qd.pptp.usr,
+                    password: $.qd.pptp.pwd,
+                    serverIpOrName: $.qd.pptp.server,
+                    addressingType: $.qd.pptp.addrtype
+                });
+                if ($.qd.pptp.addrtype == "Static") {
+                    $.act(ACT_SET, WAN_PPTP_CONN, l2tpStk, null, {
+                        externalIPAddressIP: $.qd.pptp.ip,
+                        subnetMaskIP: $.qd.pptp.mask,
+                        defaultGatewayIP: $.qd.pptp.gw,
+                        DNSServersIP: $.qd.pptp.dns + "," + $.qd.pptp.dns2
+                    });
+                }
+                instance = $.act(ACT_GET, WAN_PPTP_CONN, pptpStk, null, ["name", "ifName"]);
+            }
+
+            $.act(ACT_SET, WAN_IP_CONN, bpaStk, null, {
+                enable: 0
+            });
+			if (!$.exe()){
+				newname = instance.name;
+				//console.log(newname);
+				$.act(ACT_SET, L3_FORWARDING, null, null, { __ifAliasName: newname, __ifName: "", defaultConnectionService: ""});
+				return true;
+			}else{
+				doErr(ret);
+				return false;
+			}			
+            return true;
+          } else {
+			doErr(ret);
+			return false;
+          }
+    }
+}
+
+function saveChangePwd() {
+	if (WEB_QS_CHANGEPASSWORD){
+		if ($.qd.changPwd == 1){
+			var tmpAccout = {};
+			tmpAccout.oldPwd = $.qd.newaccout.oldPwd;
+			tmpAccout.name = $.qd.newaccout.name;
+			tmpAccout.pwd = $.qd.newaccout.pwd;
+			$.act(ACT_CGI, "/cgi/auth", null, null, tmpAccout);
+			needRelogin = true;
+		}
+	}
+}
+showParam();
+
+if ($.qd.sysMode != $.qd.realMode) {
+    $.removeClass($.id("t_change"), "nd");
+}
+</script>

@@ -1,0 +1,562 @@
+﻿
+
+
+<!--[if lte IE 8]>
+<style>
+	.eye-show .eye-icon {
+		display: none;
+	}
+	
+</style>
+<![endif]-->
+
+<style>
+
+/* -------------------------------------------------------------------------- */
+/*                              Password relevant                             */
+/* -------------------------------------------------------------------------- */
+
+.eye-show #t_tip {
+	display: none;
+}
+
+.eye-show .item {
+	padding-right: 0;
+	margin-top: 7px;
+}
+
+input.text {
+	width: 121px;
+}
+
+.eye-show input.text {
+	border: 0px;
+	height: 26px;
+	line-height: 32px;
+	width: 175px;
+	padding: 0px;
+	font-size: 14px;
+	background-color: transparent;
+	vertical-align: top;
+}
+
+.eye-show input.text:focus {
+	outline: 0;
+}
+
+.eye-show .pwLi {
+	width: 205px;
+	margin-left: 39%;
+	border: 1px solid #cbcbcb;
+}
+
+.eye-show .eye-icon {
+	display: inline-block;
+	margin-top: 3px;
+	width: 20px;
+	height: 20px;
+	background: url("../img/login/unview.png") no-repeat;
+}
+
+.eye-show .eye-icon.show {
+	background: url("../img/login/view.png") no-repeat;
+}
+
+.eye-show #pwd-tips {
+	margin-left: 39%;
+	width: 214px;
+	white-space: normal;
+}
+
+.eye-show .pwd-tip {
+	height: auto;
+	padding-left: 24px;
+	margin-bottom: 2px;
+	font-size: 14px;
+	color: #999;
+	list-style-type: none;
+}
+
+.eye-show .pwd-tip .icon {
+	margin-left: -28px;
+	margin-right: 4px;
+	display: inline-block;
+	width: 24px;
+	height: 24px;
+	background-image: url("../img/login/icons.png");
+	background-position: -26px -2px;
+	vertical-align: middle;
+}
+
+.eye-show .pwd-tip.active .icon {
+	background-position: -51px -2px;
+}
+
+.eye-show .pwd-tip.error .icon {
+	background-position: 0 -2px;
+}
+</style>
+<script language="javascript" type="text/javascript">
+var oldPort;
+var aclStk;
+var tipArr = document.querySelectorAll(".pwd-tip");
+
+	function toggleEye (event) {
+		var eyeIcon = event.target || event.srcElement;
+		var ele = eyeIcon.previousSibling;
+		var type = ele.getAttribute("type");
+		if (type === "text") {
+			ele.setAttribute("type", "password");
+			$.removeClass(eyeIcon, "show");
+		} else {
+			ele.setAttribute("type", "text");
+			$.addClass(eyeIcon, "show");
+		}
+	}
+
+	function onFocusPwd(event) {
+		if (!INCLUDE_FORBIDDEN_OLD_PWD) return;
+		$.removeClass($.id("pwd-tips"), "nd");
+		for (var i = 0, len = tipArr.length; i < len; i++) {
+			var tip = tipArr[i];
+			$.removeClass(tip, "nd");
+			$.removeClass(tip, "error");
+		}
+		$.addClass((event.target || event.srcElement).parentNode, "focus");
+		onKeyUpPwd(event);
+	}
+
+	function onKeyUpPwd(event) {
+		if (!INCLUDE_FORBIDDEN_OLD_PWD) return;
+
+		var value = (event.target || event.srcElement).value,
+				spaceTip = tipArr[0],
+				lengthTip = tipArr[1],
+				charTip = tipArr[2];
+
+		checkSpace(value) ? $.addClass(spaceTip, "active") : $.removeClass(spaceTip, "active");
+		checkLength(value) ? $.addClass(lengthTip, "active") : $.removeClass(lengthTip, "active");
+		checkChar(value) ? $.addClass(charTip, "active") : $.removeClass(charTip, "active");
+	}
+
+	function onBlurPwd(event) {
+		if (!INCLUDE_FORBIDDEN_OLD_PWD) return;
+		
+		var tips = tipArr;
+		var showBtn = true;
+		var btn = $.id("createBtn")
+
+		$.removeClass((event.target || event.srcElement).parentNode, "focus");
+		for (var i = 0, len = tips.length; i < len; i++) {
+			var tip = tips[i];
+			if($.hasClass(tip, "active")) {
+				$.addClass(tip, "nd");
+			} else {
+				showBtn = false;
+				$.addClass(tip, "error");
+			}
+		}
+		showBtn ? $.removeClass(btn, "disabled") : $.addClass(btn, "disabled");
+	}
+
+	function checkSpace(value) {
+		var re = /[^\x00-\x19\x21-\xff]/;
+		if (re.test(value)) return false;
+		return true;
+	}
+
+	function checkLength(value) {
+		if (value.length > 5 && value.length < 33) return true;
+		return false;
+	}
+
+	function checkChar(value) {
+		var patternNum = /[0-9]/g;
+		var patternLetter = /[A-Za-z]/g;
+		var patternSign = /[\`\~\!\@\#\$\%\^\&\*\(\)\-\=\_\+\[\]\{\}\;\:\'\"\\\|\/\?\.\,\<\>\x20]/g;
+		var level = 0;
+
+		if (patternNum.test(value)) level++;
+		if (patternLetter.test(value)) level++;
+		if (patternSign.test(value)) level++;
+
+		return level > 1;
+	}
+
+function doSave(obj)
+{
+	var arg;
+	
+	var userCfg = {};
+	
+		if ($.id("curPwd").value || $.id("newPwd").value || $.id("cfmPwd").value || (INCLUDE_FORBIDDEN_OLD_PWD && $.id("newName").value)) {
+			arg = $.id("curPwd").value;
+			if (arg === "")
+				return $.alert(ERR_USER_OLD_PWD_EMPTY);
+			if ($.asc(arg, true))
+				return $.alert(ERR_USER_OLD_PWD_ASCII);
+			userCfg.oldPwd = arg;
+
+			if (INCLUDE_FORBIDDEN_OLD_PWD) {
+				userCfg.name = "admin";
+			} else {
+				arg = $.id("newName").value;
+				if (arg === "")
+				return $.alert(ERR_USER_NAME_EMPTY);
+				if ($.asc(arg, true))
+				return $.alert(ERR_USER_NAME_ASCII);
+				userCfg.name = arg;
+			}
+		
+		arg = $.id("newPwd").value;
+		if (arg === "")
+			return $.alert(ERR_USER_PWD_EMPTY);
+		//if ($.asc(arg, true))
+		if($.checkAscii(arg, true))
+			return $.alert(ERR_USER_PWD_ASCII);
+		userCfg.pwd = arg;
+		
+		if (arg !== $.id("cfmPwd").value)
+			return $.alert(ERR_USER_NAME_PWD_CONFLICT);
+		if (INCLUDE_FORBIDDEN_OLD_PWD) {
+			if (!(checkSpace(arg) && checkLength(arg) && checkChar(arg))) return;
+		}
+	}
+
+	var httpCfg = {};	
+	arg = $.id("l_http_port").value;
+	if ($.num(arg, 80, [1024, 65535], true))
+		return $.alert(ERR_HTTP_LOCAL_PORT);
+	httpCfg.httpLocalPort = parseInt(arg, 10);
+	
+	arg = $.id("l_https_en").checked;
+	httpCfg.httpsLocalEnabled = arg ? 1 : 0;
+	if (arg) {
+		arg = $.id("l_https_port").value;
+		if ($.num(arg, 443, [1024, 65535], true))
+			return $.alert(ERR_HTTPS_LOCAL_PORT);
+		arg = parseInt(arg, 10);
+		if (arg == httpCfg.httpLocalPort)
+			return $.alert(ERR_HTTP_HTTPS_LOCAL_CONFILICT);
+		httpCfg.httpsLocalPort = arg;
+	}
+	
+	arg = $.id("r_http_en").checked;
+	httpCfg.httpRemoteEnabled = arg ? 1 : 0;
+	if (arg) {
+		arg = $.id("r_http_port").value;
+		if ($.num(arg, 80, [1024, 65535], true))
+			return $.alert(ERR_HTTP_REMOTE_PORT);
+		arg = parseInt(arg, 10);	
+		if (arg == httpCfg.httpsLocalPort)
+			return $.alert(ERR_HTTP_REMOTE_HTTPS_LOCAL_CONFILICT);
+		httpCfg.httpRemotePort = arg;
+	}
+	
+	arg = $.id("r_https_en").checked;
+	httpCfg.httpsRemoteEnabled = arg ? 1 : 0;
+	if (arg) {
+		arg = $.id("r_https_port").value;
+		if ($.num(arg, 443, [1024, 65535], true))
+			return $.alert(ERR_HTTPS_REMOTE_PORT);
+		arg = parseInt(arg, 10);
+		if (arg == httpCfg.httpLocalPort)
+			return $.alert(ERR_HTTP_LOCAL_HTTPS_REMOTE_CONFILICT);
+		if (arg == httpCfg.httpRemotePort)
+			return $.alert(ERR_HTTP_HTTPS_REMOTE_CONFILICT);
+		httpCfg.httpsRemotePort = arg;
+	}
+	
+	var appCfg = {};
+	arg = $.id("l_host").value;
+	if (arg !== "" && $.ifip(arg, true) && $.mac(arg, true))
+		return $.alert(ERR_APP_LOCAL_HOST);
+	if (!$.ifip(arg, true)) appCfg.localHost = $.num2ip($.ip2num(arg));
+	else appCfg.localHost = arg.toUpperCase();
+
+	arg = $.id("r_host").value;
+	if (arg !== "" && $.ifip(arg, true) && $.mac(arg, true))
+		return $.alert(ERR_APP_REMOTE_HOST);
+	if (!$.ifip(arg, true)) appCfg.remoteHost = $.num2ip($.ip2num(arg));
+	else appCfg.remoteHost = arg.toUpperCase();
+	
+	var refresh;
+	var outflag = false;
+	//var newPort = bSecured ? (clientLocal ? httpCfg.httpsLocalPort : httpCfg.httpsRemotePort) : (clientLocal ? httpCfg.httpLocalPort : httpCfg.httpRemotePort);
+	var newPort = (clientLocal?((httpCfg.httpsLocalEnabled == 1)?httpCfg.httpsLocalPort:httpCfg.httpLocalPort):((httpCfg.httpsRemoteEnabled == 1)?httpCfg.httpsRemotePort:((httpCfg.httpRemoteEnabled == 1)?httpCfg.httpRemotePort:0)));
+
+	if (clientLocal && appCfg.localHost && appCfg.localHost != clientIp && appCfg.localHost != clientMac
+		|| !clientLocal && appCfg.remoteHost && appCfg.remoteHost != clientIp && appCfg.remoteHost != clientMac)
+	{
+		if (!confirm(c_str.refresh_dis)) return;
+		refresh = true;
+		outflag = true;
+	}
+	else if (newPort != oldPort)
+	{
+		if (!confirm(c_str.refresh)) return;
+		refresh = true;
+	}
+	$.addLoading(obj);
+	
+	if (INCLUDE_ACL)
+	{
+		var arg = {};	
+		arg.IPStart = "0.0.0.0";
+		arg.IPEnd = "0.0.0.0";
+		arg.service = "Ping";
+		if ($.id("pingRemote").checked == true || $.id("pingLocal").checked == true)
+		{
+			arg.enable = 1;
+			if ($.id("pingRemote").checked == true && $.id("pingLocal").checked == true)
+			{
+				arg.location = "Both";
+			}
+			else if ($.id("pingRemote").checked == true)
+			{
+				arg.location = "Remote";
+			}
+			else
+			{
+				arg.location = "Local";
+			}
+		}
+		else
+		{
+			arg.enable = 0;
+		}	
+		$.act(aclStk ? ACT_SET : ACT_ADD, ACL_CFG, aclStk ? aclStk : null, null, arg);
+	}
+	
+	if (userCfg.oldPwd)
+		$.act(ACT_CGI, "/cgi/auth", null, null, userCfg);
+	$.act(ACT_SET, HTTP_CFG, null, null, httpCfg);
+	$.act(ACT_SET, APP_CFG, null, null, appCfg);
+	if(outflag)
+	{
+		$.act(ACT_CGI, "/cgi/logout");
+	}
+	$.exe(function(ret){
+		if (!ret) {
+			if (refresh)
+			{
+				if(outflag)
+				{
+					$.deleteCookie("Authorization");
+					//window.parent.$.refresh();
+				}
+				//$.refresh(null, newPort);
+				var ret = location.href.match(/(https?):\/\/([^:\/]+)(:\d+)?\/?([^?]*)/);
+				var pre = (clientLocal?((httpCfg.httpsLocalEnabled == 1)?"https://":"http://"):((httpCfg.httpsRemoteEnabled == 1)?"https://":((httpCfg.httpRemoteEnabled == 1)?"http://":"")));
+				window.parent.location.href = pre + ret[2] + ":" + newPort;
+			}
+			else
+			{
+				if(userCfg.oldPwd)
+				{
+					$.deleteCookie("Authorization");
+					window.parent.$.refresh();
+				}
+					$.reload();
+			}
+		}
+		else
+		{
+			$.errBack(ret,"manageCtrl.htm");
+		}
+	});
+
+}
+function doSync(obj) {
+	$.each(obj.parentNode.childNodes, function(){
+		if (this.nodeName && this.nodeName.toLowerCase() === "input" && this.type === "text")
+			this.disabled = !obj.checked;
+	});
+}
+function init()
+{
+	$.act(ACT_CGI, "/cgi/info");
+	$.act(ACT_CGI, "/cgi/auth");
+	var httpCfg = $.act(ACT_GET, HTTP_CFG);
+	var appCfg = $.act(ACT_GET, APP_CFG);
+		if (INCLUDE_FORBIDDEN_OLD_PWD) {
+			$.addClass($.id("new-user-name"), "nd");
+			$.addClass($.id("username-show"), "nd");
+			$.addClass($.id("password-container"), "eye-show");
+		} else {
+			$.removeClass($.id("new-user-name"), "nd");
+			$.removeClass($.id("username-show"), "nd");
+			$.removeClass($.id("password-container"), "eye-show");
+		}
+	if(($.sysMode == "AP") || ($.sysMode == "Repeater"))
+		$.addClass($.id("t_remote").parentNode, "nd");
+	if (INCLUDE_ACL)
+	{
+		$.removeClass($.id("icmp_div"), "nd");
+		var aclList = $.act(ACT_GL, ACL_CFG, null, null);	
+		$.id("pingRemote").checked = false;
+		$.id("pingLocal").checked = false;
+	}
+	if ($.exe()) return;
+	
+	$.h($.id("userType"), userType);
+	$.h($.id("clientIp"), clientIp);
+	$.h($.id("clientMac"), clientMac);
+	$.h($.id("curName"), curName.replace(/\&/g, "&amp;").replace(/</g, "&lt;"));
+	
+	//oldPort = bSecured ? (clientLocal ? httpCfg.httpsLocalPort : httpCfg.httpsRemotePort) : (clientLocal ? httpCfg.httpLocalPort : httpCfg.httpRemotePort);
+	oldPort = (clientLocal?((httpCfg.httpsLocalEnabled == 1)?httpCfg.httpsLocalPort:httpCfg.httpLocalPort):((httpCfg.httpsRemoteEnabled == 1)?httpCfg.httpsRemotePort:((httpCfg.httpRemoteEnabled == 1)?httpCfg.httpRemotePort:0)));
+
+	$.id("l_http_port").value = httpCfg.httpLocalPort;
+	var obj;	
+	obj = $.id("l_https_en");
+	obj.checked = httpCfg.httpsLocalEnabled == 1 ? true : false;
+	doSync(obj);
+	$.id("l_https_port").value = httpCfg.httpsLocalPort;
+
+	obj = $.id("r_http_en");
+	obj.checked = httpCfg.httpRemoteEnabled == 1 ? true : false;
+	doSync(obj);
+	$.id("r_http_port").value = httpCfg.httpRemotePort;
+	
+	obj = $.id("r_https_en");
+	obj.checked = httpCfg.httpsRemoteEnabled == 1 ? true : false;
+	doSync(obj);
+	$.id("r_https_port").value = httpCfg.httpsRemotePort;
+	
+	$.id("l_host").value = appCfg.localHost;
+	$.id("r_host").value = appCfg.remoteHost;
+	
+	if (INCLUDE_ACL)
+	{
+		$.each(aclList, function()
+		{
+			if (this.service == "Ping")
+			{
+				if (this.enable == "1")
+				{
+					if (this.location == "Both")
+					{
+						$.id("pingRemote").checked = true;
+						$.id("pingLocal").checked = true;
+					}
+					else if(this.location == "Local")
+					{
+						$.id("pingLocal").checked = true;
+					}
+					else if(this.location == "Remote")
+					{
+						$.id("pingRemote").checked = true;
+					}
+				}
+				aclStk = this.__stack;
+			}
+		});
+	}
+	
+		
+	if ((httpCfg.httpsLocalEnabled == 0) && (httpCfg.httpsRemoteEnabled == 0))
+	{
+		$.id("downloadCert").disabled=true;
+		$.removeClass($.id("t_cert_tips"), "nd");
+	}
+	/* 多语言机型 */
+	if ((typeof INCLUDE_MULTI_LANGUAGE_Q != "undefined" && INCLUDE_MULTI_LANGUAGE_Q == 1) || 
+			(typeof INCLUDE_MULTILANGUAGE != "undefined" && INCLUDE_MULTILANGUAGE == 1))
+	{
+		var langObj = $.act(ACT_GET, IGD_DEV_INFO, null, null, ["X_TP_SupportedLanguages", "X_TP_CurrentLanguage", "X_TP_LanguageSetByUser"]);
+		if (!$.exe())
+		{
+			var currentLanguage = langObj.X_TP_CurrentLanguage;
+			if (localString) {
+				document.getElementById("pwd-tip-space").innerHTML = localString[currentLanguage].PWD_TIP_SPACE;
+				document.getElementById("pwd-tip-long").innerHTML = localString[currentLanguage].PWD_TIP_LONG;
+				document.getElementById("pwd-tip-char").innerHTML = localString[currentLanguage].PWD_TIP_CHAR;
+			}
+		}
+	}
+	else /* 本地化机型 */
+	{
+		var currentLang = "en_US";
+		if (window.parent.$.country)
+		{
+			currentLang = window.parent.$.country;
+			if (window.parent.localString) {
+				document.getElementById("pwd-tip-space").innerHTML = window.parent.localString[currentLang].PWD_TIP_SPACE;
+				document.getElementById("pwd-tip-long").innerHTML = window.parent.localString[currentLang].PWD_TIP_LONG;
+				document.getElementById("pwd-tip-char").innerHTML = window.parent.localString[currentLang].PWD_TIP_CHAR;
+			}
+		}
+	}
+}
+
+function downloadCertHandler()
+{
+	location.href = '/cgi/https?downCACert';	
+}
+</script>
+<p class="et T" id="et">Manage Control</p>
+<span class="preload nd eye-icon show"></span>
+<div id="include-forbidden-old-pwd" class="con1 L">
+<p class="ct"></p>
+<p class="bl"></p>
+<div class="con2">
+<p class="L1"><b class="T" id="t_stat">Current User Status</b></p>
+<div class="bdr L">
+<p><b class="item L T" id="t_type">User Type:</b><span id="userType"></span></p>
+			<p class="nd" id="username-show"><b class="item L T T_username">Username:</b><span id="curName"></span></p>
+<p><b class="item L T" id="t_ip">Host IP Address:</b><span id="clientIp"></span></p>
+<p><b class="item L T" id="t_mac">Host MAC Address:</b><span id="clientMac"></span></p>
+</div>
+<p class="br"></p>
+<p class="bl"></p>
+<p class="L1"><b class="T" id="t_account">Account Management</b></p>
+<div id="password-container" class="bdr L">
+<p><i class="T" id="t_tip">The username and password must not exceed 32 characters in length!</i></p>
+<p><b class="item L T" id="t_oldpwd">Old Password:</b><div class="pwLi"><input type="password" class="text" size="15" maxlength="32" id="curPwd" style="width:175px" /><span class="eye-icon" onclick="toggleEye(event)"></span></div></p>
+<p id="new-user-name"><b class="item L T" id="t_newname">New User Name:</b><input type="text" class="text" size="15" maxlength="32" id="newName" style="width:175px" /></p>
+<p><b class="item L T" id="t_newpwd">New Password:</b><div class="pwLi"><input type="password" class="text" size="15" maxlength="32" id="newPwd" style="width:175px"  onfocus="onFocusPwd(event)" onkeyup="onKeyUpPwd(event)" onblur="onBlurPwd(event)"/><span class="eye-icon" onclick="toggleEye(event)"></span></div></p>
+<div id="pwd-tips" class="nd">
+	<li class="pwd-tip"><span class="icon"></span><span id="pwd-tip-space">Must contain no space(s).</span></li>
+	<li class="pwd-tip"><span class="icon"></span><span id="pwd-tip-long">Must be 6-32 characters long.</span></li>
+	<li class="pwd-tip"><span class="icon"></span><span id="pwd-tip-char">Must contain at least two types of the following characters: letters, numbers and symbols.</span></li>
+</div>
+<p><b class="item L T T_cfmpwd">Confirm Password:</b><div class="pwLi"><input type="password" class="text" size="15" maxlength="32" id="cfmPwd" style="width:175px" /><span class="eye-icon" onclick="toggleEye(event)"></span></div></p>
+</div>
+<p class="br"></p>
+<p class="bl"></p>
+<p class="L1"><b class="T" id="t_service">Service Configuration</b></p>
+<table class="L bdr">
+	<tr><th>&nbsp;</th><th class="T" id="t_http">HTTP Service</th><th class="T" id="t_https">HTTPS Service</th><th><span class="T" id="t_avail">Available Host</span> (IP/MAC)</th></tr>
+	<tr>
+		<th class="T" id="t_local">Local Management</th>
+		<td><span class="T T_port">Port</span><input type="text" class="text" size="5" maxlength="5" id="l_http_port" /></td>
+		<!-- <td class="nd"><span class="T T_en">Enable</span><input type="checkbox" onclick="doSync(this)" id="l_https_en" /><br /><span class="T T_port">Port</span><input type="text" class="text" size="5" maxlength="5" id="l_https_port" disabled /></td> -->
+		<td><span class="T T_en">Enable</span><input type="checkbox" onclick="doSync(this)" id="l_https_en" /><span class="T T_port">Port</span><input type="text" class="text" size="5" maxlength="5" id="l_https_port" disabled /></td>
+		<td class="tc"><input type="text" class="text" size="17" maxlength="17" id="l_host" /></td>
+	</tr>
+	<tr>
+		<th class="T" id="t_remote">Remote Management</th>
+		<td><span class="T T_en">Enable</span><input type="checkbox" onclick="doSync(this)" id="r_http_en" /><span class="T T_port">Port</span><input type="text" class="text" size="5" maxlength="5" id="r_http_port" disabled /></td>
+		<!-- <td class="nd"><span class="T T_en">Enable</span><input type="checkbox" onclick="doSync(this)" id="r_https_en" /><br /><span class="T T_port">Port</span><input type="text" class="text" size="5" maxlength="5" id="r_https_port" disabled /></td> -->
+		<td><span class="T T_en">Enable</span><input type="checkbox" onclick="doSync(this)" id="r_https_en" /><span class="T T_port">Port</span><input type="text" class="text" size="5" maxlength="5" id="r_https_port" disabled /></td>
+		<td class="tc"><input type="text" class="text" size="17" maxlength="17" id="r_host" /></td>
+	</tr>
+</table>
+<p class="br"></p>
+<p class="bl"></p>
+<p class="L1"><b class="T" id="t_certdown">Certificate Download</b></p>
+<p><i class="T nd" id="t_cert_tips">Local Management via HTTPS and Remote Management via HTTPS are disabled.</i></p>
+<input type="button" class="button XL T T_downloadCert" id="downloadCert" value="Download Certificate"  onclick="downloadCertHandler();" />
+<p class="br"></p>
+<div class="nd" id="icmp_div">
+<p><b class="item L T" id="t_ping_title">ICMP(ping):</b><input type="checkbox" id="pingRemote" />&nbsp;<span class="T" id="t_ping_remote">Remote</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" id="pingLocal" />&nbsp;<span class="T" id="t_ping_local">Local</span></p>
+</div>
+</div>
+<p class="bl"></p>
+<p class="tail" id="tail"><input type="button" class="button L T T_save" value="Save" onclick="doSave(this)" /></p>
+</div>
+<script language="javascript" type="text/javascript">
+$.loadHelpFrame("ManageCtrl_h.htm");
+init();
+</script>

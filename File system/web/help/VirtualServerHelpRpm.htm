@@ -1,0 +1,40 @@
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+<HTML>
+<HEAD><TITLE>Archer C7</TITLE>
+<META http-equiv=Pragma content=no-cache>
+<META http-equiv=Expires content="wed, 26 Feb 1997 08:21:57 GMT">
+<LINK href="../css/css_help.css" rel=stylesheet type="text/css">
+<SCRIPT language="javascript" type="text/javascript"></SCRIPT>
+
+<HTML><HEAD><TITLE></TITLE>
+<META http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+</head>
+
+
+<h1 class="header">Virtual Server Help</H1>
+<p class="brief">Virtual server can be used for setting up public services on your LAN. A virtual server is defined as a service port, and all requests from Internet to this service port will be redirected to the computer specified by the server IP. Any PC that was used for a virtual server must have a static or reserved IP address because its IP address may change when using the DHCP function.</P>
+
+<ul>
+<li class="serv_port"><B>Service Port</B> - The numbers of External Service Ports. You can enter a service port or a range of service ports (the format is XXX - YYY, XXX is Start port, YYY is End port). </lI>
+<li class="ip_addr"><B>IP Address</B> - The IP address of the PC running the service application.</lI>
+<li class="inte_port"><B>Internal Port</B> - The Internal Service Port number of the PC running the service application. You can leave it blank if the <B>Internal Port</B> is the same as the <B>Service Port</B>, or enter a specific port number when <B>Service Port</B> is a single one. </lI>
+<li class="protocol"><B>Protocol</B> - The protocol used for this application, either <B>TCP, </B><B>UDP</B>, or <B>All </B>(all protocols supported by the Router).</lI>
+
+<li class="status"><B>Status</B> - The status of this entry, "Enabled" means the virtual server entry is enabled.</lI>
+<li class="edit"><b>Edit</b> - To edit an existing entry.</li>
+</ul>
+<p class="virtual"><B>To setup a virtual server entry</B>: </P>
+<ol type=1>
+<li class="add_new">Click the <B>Add New</B> button. </lI>
+<li class="service">Select the service you want to use from the <B>Common Service Port</B> list. If the <B>Common Service Port </B> menu does not list the service that you want to use, enter the number of the service port or service port range in the <B>Service Port</B> box.</lI>
+<li class="ip_addr_0">Enter the IP address of the computer running the service application in the <B>IP Address</B> box. </lI>
+<li class="tcp">Select the protocol used for this application from the pull-down list, either <B>TCP, </B><B>UDP</B>, or <B>All</B>.</lI>
+<li class="enabled">Select the <B>Enabled</B> option in the <B>Status</B> pull-down list.</lI>
+<li class="save">Click the <B>Save</B> button. </lI>
+</ol>
+<p class="note"><B>Note</B>: It is possible that you have a computer or server that has more than one type of available service. If so, select another service, and type the same IP address for that computer or server.</p>
+<p class="enable_sele">Click the <B>Enable Selected</B> button to make selected entries enabled.</P>
+
+<p class="disable_sele">Click the <B>Disable Selected</B> button to make selected entries disabled.</P>
+<p class="delete_sele">Click the <B>Delete Selected</B> button to delete selected entries.</P>
+<script language="javascript" type="text/javascript">window.parent.$.transHelp(document.URL);</script>

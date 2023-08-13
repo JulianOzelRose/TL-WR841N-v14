@@ -1,0 +1,18 @@
+﻿<script language="javascript" type="text/javascript">function changeStatus(status){if(status==1){$.id("act_all").checked=1;$.id("act_cet").checked=0;$.id("mac1").disabled=true;$.id("setMac").disabled=true}else{$.id("act_all").checked=0;$.id("act_cet").checked=1;$.id("mac1").disabled=false;$.id("setMac").disabled=false}}function doSetMac(){$.id("mac1").value=clientMac}function doSave(obj){var appCfg={};var arg;arg=$.id("mac1").value;if($.id("act_all").checked==1){appCfg.localHost=""}else{if($.mac(arg,true)){return $.alert(ERR_APP_LOCAL_MAC)}else{appCfg.localHost=arg.toUpperCase()}}var refresh;if(clientLocal&&appCfg.localHost&&appCfg.localHost!=clientMac){if(!confirm(c_str.refresh_dis)){return}refresh=true}$.addLoading(obj);$.act(ACT_SET,APP_CFG,null,null,appCfg);$.exe(function(ret){if(!ret){if(refresh){$.refresh()}else{$.reload()}}else{$.errBack(ret,"manageCtrl.htm")}})}function init(){var appCfg={};$.act(ACT_CGI,"/cgi/info");var appCfg=$.act(ACT_GET,APP_CFG);if($.exe()){return}if(appCfg.localHost==""){changeStatus(1)}else{$.id("mac1").value=appCfg.localHost;changeStatus(0)}$.id("curMac").value=clientMac};</script>
+<p class="et T" id="et">Local Management</p>
+<div class="con1 L">
+<p class="ct"></p>
+<p class="bl"></p>
+<div class="con2">
+<p><b class="T" id="t_defrule">Management Rules:</b></p>
+<p><input name="action" id="act_all" type="radio" onclick="changeStatus(1)"/><b class="T" id="t_all" style="color:#C11C66">All </b> <span class="T" id="t_rule1">the PCs on the LAN are allowed to access the Router's Web-Based Utility</span></p>
+		<p><input name="action" id="act_cet" type="radio" onclick="changeStatus(0)" /><b class="T" id="t_cet" style="color:#C11C66">Only </b> <span class="T" id="t_rule2">the PCs listed can browse the built-in web pages to perform Administrator tasks</span></p>
+	</div>
+<p><b class="item L T" id="t_mac1">MAC:</b><input type="text" class="text" size="17" maxlength="17" id="mac1" /></p>
+<p><b class="item L T" id="t_curmac">Your PC's MAC Address:</b><input disabled="disabled" type="text" class="text" size="17" maxlength="17" id="curMac" />
+<input id="setMac" type="button" class="button M T T_set" value="Set" onclick="doSetMac()" />
+</p>
+<p class="bl"></p>
+<p class="tail" id="tail"><input type="button" class="button L T T_save" value="Save" onclick="doSave(this)" /></p>
+</div>
+<script language="javascript" type="text/javascript">$.loadHelpFrame("LocalManageControlHelpRpm.htm");init();</script>

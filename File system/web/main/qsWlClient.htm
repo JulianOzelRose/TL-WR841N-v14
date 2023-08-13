@@ -1,0 +1,93 @@
+<script language="javascript" type="text/javascript">var curChannel;function isHex(str){str=str.toLowerCase();for(var i=0;i<str.length;i++){if((str.charAt(i)>="0"&&str.charAt(i)<="9")||(str.charAt(i)>="a"&&str.charAt(i)<="f")){continue}else{$.alert(ERR_WLAN_WDS_HEX_KEY_INVALID);return false}}if(parseInt(str,16)==0){$.alert(ERR_WLAN_WDS_HEX_KEY_OUTRANGE);return false}return true}if(INCLUDE_LAN_WLAN_WDS_DETECT){function changeAddrMode(){wlanObj.bridgeAddrMode=$.id("addrMode").value}}function hide_wep(){$.addClass($.id("authType-ctn"),"nd");$.addClass($.id("wepKeyIndex-ctn"),"nd");$.addClass($.id("keyText-ctn"),"nd");$.id("wepKeyIndex").disabled=true;$.id("keyText").disabled=true;$.id("authType").disabled=true}function show_wep(){$.removeClass($.id("authType-ctn"),"nd");$.removeClass($.id("wepKeyIndex-ctn"),"nd");$.removeClass($.id("keyText-ctn"),"nd");$.id("wepKeyIndex").disabled=false;$.id("keyText").disabled=false;$.id("authType").disabled=false}function hide_psk(){$.addClass($.id("keyText-ctn"),"nd");$.addClass($.id("secType-ctn"),"nd");$.id("secType").disabled=true;$.id("keyText").disabled=true}function show_psk(){$.removeClass($.id("keyText-ctn"),"nd");$.removeClass($.id("secType-ctn"),"nd");$.id("secType").disabled=false;$.id("keyText").disabled=false}function changeWDSKeyType(){var keyType=$.id("keyType").value;if("None"==keyType){hide_wep();hide_psk()}else{if("WEP-HEX"==keyType||"WEP-ASCII"==keyType){hide_psk();show_wep()}else{hide_wep();show_psk()}}}function checkWDS(){var briSSID=$.id("bridgeSSID");var ssidLen=$.realLen(briSSID.value);if(ssidLen<=0){$.alert(ERR_WLAN_WDS_SSID_IS_EMPTY);briSSID.focus();briSSID.select();return false}else{if(ssidLen>32){$.alert(ERR_WLAN_WDS_SSID_LEN_OUTRANGE);briSSID.focus();briSSID.select();return false}}var bss=$.id("bridgeBSSID");if(bss.value.length==0){$.alert(ERR_WLAN_WDS_BSSID_IS_EMPTY);bss.focus();bss.select();return false}else{if($.mac(bss.value,true)){$.alert(ERR_WLAN_WDS_BSSID_INVALID);bss.focus();bss.select();return false}}var key=$.id("keyText");if($.id("keyType").value=="None"){}else{if($.id("keyType").value=="WEP-ASCII"){if(key.value.length!=5&&key.value.length!=13&&key.value.length!=16){$.alert(ERR_WLAN_WDS_ASCII_KEY_OUTRANGE);key.focus();key.select();return false}else{if($.asc(key.value,true)){$.alert(ERR_WLAN_WDS_ASCII_KEY_INVALID);key.focus();key.select();return false}}}else{if($.id("keyType").value=="WEP-HEX"){if(key.value.length!=10&&key.value.length!=26&&key.value.length!=32){$.alert(ERR_WLAN_WDS_HEX_KEY_OUTRANGE);key.focus();key.select();return false}else{if(!isHex(key.value)){key.focus();key.select();return false}}}else{if(key.value.length>64||key.value.length<8){$.alert(ERR_WLAN_WDS_PSK_OUTRANGE);key.focus();key.select();return false}else{if(key.value.length==64){if(!isHex(key.value)){key.focus();key.select();return false}}else{if($.asc(key.value,true)){$.alert(ERR_WLAN_WDS_ASCII_KEY_INVALID);key.focus();key.select();return false}}}}}}return true}function initWDS(){if(!INCLUDE_LAN_WLAN_WDS_DETECT){$.addClass($.id("wdsdetect"),"nd")}else{if(1==wdsObj.bridgeEnable){$.id("addrMode").value=wdsObj.bridgeAddrMode}}if($.mainParam&&$.mainParam.wdsExist==1){$.id("bridgeSSID").value=$.mainParam.SSID;$.id("bridgeBSSID").value=$.mainParam.BSSID;curChannel=$.mainParam.channel;if($.mainParam.authMode==0&&$.mainParam.wepStatus==1){$.id("keyType").selectedIndex=0}else{if($.mainParam.wepStatus==0){$.id("keyType").selectedIndex=1;if($.mainParam.authMode==1){$.id("authType").selectedIndex=1}else{if($.mainParam.authMode=0){$.id("authType").selectedIndex=0}}}else{if($.mainParam.authMode==4){$.id("keyType").selectedIndex=3}else{$.id("keyType").selectedIndex=4}if($.mainParam.wepStatus==4){$.id("secType").selectedIndex=0}else{$.id("secType").selectedIndex=1}}}}else{if(1==$.qd.wds.enable){$.id("bridgeSSID").value=$.qd.wds.ssid;$.id("bridgeBSSID").value=$.qd.wds.bssid;if($.qd.wds.authMode=="Open"&&$.qd.wds.encryptMode=="None"){$.id("keyType").selectedIndex=0}else{if($.qd.wds.encryptMode=="WEPEncryption"){if($.qd.wds.authMode=="SharedAuthentication"){$.id("authType").selectedIndex=1}else{if($.qd.wds.authMode="Open"){$.id("authType").selectedIndex=0}}$.id("keyText").value=$.qd.wds.key;if($.qd.wds.key.length==5||$.qd.wds.key.length==13||$.qd.wds.key.length==16){$.id("keyType").selectedIndex=1}else{if($.qd.wds.key.length==10||$.qd.wds.key.length==26||$.qd.wds.key.length==32){$.id("keyType").selectedIndex=2}}$.id("wepKeyIndex").selectedIndex=$.qd.wds.wepKeyIndex-1}else{if($.qd.wds.authMode=="PSKAuthentication"){$.id("keyType").selectedIndex=3}else{$.id("keyType").selectedIndex=4}if($.qd.wds.encryptMode=="TKIPEncryption"){$.id("secType").selectedIndex=0}else{$.id("secType").selectedIndex=1}$.id("keyText").value=$.qd.wds.key}}}}changeWDSKeyType()}function initParam(){if(!$.mainParam){return}wlanObj.SSID=$.mainParam.ssid;wlanObj.standard=$.mainParam.standard;wlanObj.channel=$.mainParam.channel;wlanObj.autoChannelEnable=$.mainParam.autoChannel;wlanObj.X_TP_Bandwidth=$.mainParam.bandWidth;if(!INCLUDE_LAN_WLAN_HWSWITCH){wlanObj.enable=1}wlanObj.SSIDAdvertisementEnabled=$.mainParam.SSIDAdvertisementEnabled}function apScan(obj){$.act(ACT_OP,ACT_OP_WLAN_SCAN,wlanObj.__stack);$.addLoading(obj);param=new Object();param.ssid=wlanObj.SSID;param.standard=wlanObj.standard;param.channel=wlanObj.channel;param.autoChannel=wlanObj.AutoChannelEnable;param.bandWidth=wlanObj.X_TP_Bandwidth;if(!INCLUDE_LAN_WLAN_HWSWITCH){param.apEn=1}param.SSIDAdvertisementEnabled=1;$.exe(function(ret){if(!ret){$.loadMain("qsWlScanClient.htm",param)}})}function doCollect(){if(true!=checkWDS()){return}var authMode,encryptMode,addrMode;if(INCLUDE_LAN_WLAN_WDS_DETECT){if($.id("addrMode").value=="detect"){addrMode="detect"}else{if($.id("addrMode").value=="addr4"){addrMode="addr4"}else{addrMode="addr3"}}}if($.id("keyType").value=="None"){authMode="Open";encryptMode="None"}else{if($.id("keyType").value=="WEP-ASCII"||$.id("keyType").value=="WEP-HEX"){encryptMode="WEPEncryption";if($.id("authType").value=="open"){authMode="Open"}else{authMode="SharedAuthentication"}}else{if($.id("keyType").value=="WPA-PSK"){authMode="PSKAuthentication"}else{authMode="PSK2Authentication"}if($.id("secType").value=="tkip"){encryptMode="TKIPEncryption"}else{encryptMode="AESEncryption"}}}if(INCLUDE_LAN_WLAN_WDS_DETECT){$.qd.wds.addrMode=addrMode}$.qd.wds.ssid=$.id("bridgeSSID").value;$.qd.wds.bssid=$.id("bridgeBSSID").value;$.qd.wds.key=$.id("keyType").value;$.qd.wds.wepKeyIndex=$.id("wepKeyIndex").value;$.qd.wds.authMode=authMode;$.qd.wds.encryptMode=encryptMode;$.qd.wds.key=$.id("keyText").value;$.qd.wl.chnn=curChannel;if($.qd.sysMode=="Client"){$.qd.wl.ssidAdver=0}if(encryptMode!="None"){$.qd.wl.authMode=authMode;$.qd.wl.encryptMode=encryptMode;$.qd.wl.pwd=$.qd.wds.key;$.qd.wl.sec=true}if($.qd.sysMode=="Repeater"){if($.id("copy").checked==true){$.qd.wl.ssid=$.id("copySSID").value}else{$.qd.wl.customize=true;$.qd.wl.ssid=$.id("customSSID").value}}return true}function changeSsid(type){if(type==0){$.id("copySSID").disabled=false;$.id("customSSID").disabled=true}else{$.id("copySSID").disabled=true;$.id("customSSID").disabled=false}}function goNext(){if(!doCollect()){return}$.qf.next()}function goPrev(){$.qf.prev()};</script>
+<p class="et T" id="et">Quick Setup - Wireless</p>
+<div class="con1 M">
+    <p class="ct"></p>
+    <p class="bl"></p>
+    <div class="con2">
+        <p class="br"></p>
+        <p>
+            <b class="item T" id="t_brssid">SSID(to be bridged):</b>
+            <input type="text" class="text" size="32" maxlength="32" id="bridgeSSID" />
+        </p>
+        <p>
+            <b class="item T" id="t_brbssid">MAC Address(to be bridged):</b>
+            <input type="text" class="text" maxlength="17" size="17" id="bridgeBSSID" />&nbsp;
+            <span class="T" id="t_eg">e.g. 00:1D:0F:11:22:33</span>
+        </p>
+        <p>
+            <b class="item">&nbsp;</b>
+            <input type="button" class="button L T" id="t_scan" value="Scan" onclick="apScan(this);" />
+        </p>
+        <div id="wdsdetect">
+            <p><b class="item T" id="t_wdsdetect">AddrMode:</b>
+                <select id="addrMode" name="addrMode" style="width:150px" onchange="changeAddrMode();">
+                    <option value="detect">Auto Detect</option>
+                    <option value="addr3">Three Addr</option>
+                    <option value="addr4">Four Addr</option>
+                </select>
+            </p>
+        </div>
+        <p><b class="item T T_keytype">Key Type:</b>
+            <select id="keyType" name="keyType" style="width:150px" onchange="changeWDSKeyType();">
+                <option class="T T_noneEnc" value="None">None</option>
+                <option value="WEP-ASCII">WEP(ASCII)</option>
+                <option value="WEP-HEX" class="T T_wephex">WEP(HEX)</option>
+                <option value="WPA-PSK">WPA-PSK</option>
+                <option value="WPA2-PSK">WPA2-PSK</option>
+            </select>
+        </p>
+        <p id="wepKeyIndex-ctn"><b class="item T" id="t_wepidx">WEP Index:</b>
+            <select id="wepKeyIndex" name="wepKeyIndex" style="width:150px">
+                <option value=1>1</option>
+                <option value=2>2</option>
+                <option value=3>3</option>
+                <option value=4>4</option>
+            </select>
+        </p>
+        <p id="authType-ctn"><b class="item T T_authtype">Authentication Type:</b>
+            <select id="authType" name="authType" style="width:150px">
+                <option class="T T_opensys" value="open">Open System</option>
+                <option class="T T_sharekey" value="shared">Shared Key</option>
+            </select>
+        </p>
+        <p id="secType-ctn"><b class="item T T_encryption">Encryption:</b>
+            <select id="secType" name="authType" style="width:150px">
+                <option value="tkip">TKIP</option>
+                <option value="aes">AES</option>
+            </select>
+        </p>
+        <p id="keyText-ctn"><b class="item T T_passwd">Password:</b>
+            <input type=text class="text" id="keyText" size="32" />
+        </p>
+
+        <div id="rangeExtend" class="nd">
+            <p>
+                <b class="item" id="repeater_wlname">Wireless Name of Range Extender</b>
+                <input type="radio" name="wlNameMode" value="copy" checked id="copy" onclick="changeSsid(0)">
+                <span id="t_copy">Copy from Root AP</span>
+            </p>
+            <p>
+                <b class="item">&nbsp;</b>
+                <input type="text" id="copySSID" readonly>
+            </p>
+            <p>
+                <b class="item">&nbsp;</b>
+                <input type="radio" name="wlNameMode" value="custom" id="custom" onclick="changeSsid(1)">
+                <span id="t_custom">Customize</span>
+            </p>
+            <p>
+                <b class="item">&nbsp;</b>
+                <input type="text" id="customSSID" maxlength="32" disabled>
+            </p>
+        </div>
+    </div>
+
+</div>
+</div>
+<p class="bl"></p>
+<p class="tail ctr">
+    <input type="button" class="button L T T_back" value="Back" onclick="goPrev()" />
+    <input type="button" class="button L T T_next" value="Next" onclick="goNext()" />
+</p>
+</div>
+<script language="javascript" type="text/javascript">var wlanObj,wdsObj;(function(){$.loadHelpFrame("QsWlClientHelpRpm.htm");if(!$.mainParam){return $.loadMain("qsStart.htm")}if(!$.qm[$.curPage].__v){$.qd.wl={};var wls=$.act(ACT_GL,LAN_WLAN,null,null,["name","X_TP_Band","enable","standard","SSID","regulatoryDomain","possibleChannels","autoChannelEnable","channel","X_TP_PreSharedKey","X_TP_Bandwidth","SSIDAdvertisementEnabled"]);if($.exe()){return}if($.local){wls=[{name:"wlan0",enable:"1",standard:"n",SSID:"TPLINK_332265",regulatoryDomain:"CN ",possibleChannels:"1-13",autoChannelEnable:"1",channel:"11",X_TP_PreSharedKey:"12345678"}]}if(INCLUDE_LAN_WLAN_DUALBAND){$.each(wls,function(arg,index){if($.mainParam.band==this.X_TP_Band){wlanObj=this;return}})}else{wlanObj=wls[0]}$.qd.wl.stack=wlanObj.__stack;$.qd.wl.en=1;$.qd.wl.ssid=wlanObj.SSID;$.qd.wl.domain=wlanObj.regulatoryDomain;$.qd.wl.chnns=wlanObj.possibleChannels;$.qd.wl.autoChan=wlanObj.autoChannelEnable;$.qd.wl.chnn=wlanObj.channel;$.qd.wl.mode=wlanObj.standard;$.qd.wl.bandwidth=wlanObj.X_TP_Bandwidth;$.qd.wl.ssidAdver=wlanObj.SSIDAdvertisementEnabled;curChannel=wlanObj.channel;$.qd.wds={};wdsObj=$.act(ACT_GET,LAN_WLAN_WDSBRIDGE,wlanObj.__stack,null,["BridgeEnable","BridgeAddrMode","BridgeBSSID","BridgeSSID","BridgeAuthMode","BridgeEncryptMode","BridgeKey","BridgeWepKeyIndex"]);if($.exe()){return}$.qd.wds.enable=1;if(INCLUDE_LAN_WLAN_WDS_DETECT){$.qd.wds.addrMode=wdsObj.bridgeAddrMode}$.qd.wds.bssid=wdsObj.bridgeBSSID;$.qd.wds.ssid=wdsObj.bridgeSSID;$.qd.wds.authMode=wdsObj.bridgeAuthMode;$.qd.wds.encryptMode=wdsObj.bridgeEncryptMode;$.qd.wds.key=wdsObj.bridgeKey;$.qd.wds.wepKeyIndex=wdsObj.bridgeWepKeyIndex}initParam();initWDS();if($.qd.sysMode=="Repeater"){$.removeClass($.id("rangeExtend"),"nd");$.id("copySSID").value=($.mainParam.SSID||$.qd.wds.ssid);$.id("customSSID").value=$.mainParam.SSID?($.mainParam.SSID+"_Ext"):$.qd.wl.ssid;if($.qd.wl&&$.qd.wl.customize){changeSsid(1);$.id("custom").checked=true;$.id("customSSID").value=$.qd.wl.ssid}}})();</script>

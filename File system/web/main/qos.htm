@@ -1,0 +1,44 @@
+﻿<script language="javascript" type="text/javascript">var upQosEntry;var downQosEntry;function init(){var qosEntryList=$.act(ACT_GL,QOS_INTF,null,null);if(!$.exe()){upQosEntry=qosEntryList[0];downQosEntry=qosEntryList[1];$.id("qos_up_en").checked=(upQosEntry.interfaceEnable==1)?1:0;$.id("up_bandwidth").value=(upQosEntry.totalBandwidth==0)?"":upQosEntry.totalBandwidth;if(1==upQosEntry.schedulerAlgorithm){$.id("up_sp").checked=0;$.id("up_wrr").checked=0;$.id("up_car").checked=1;$.id("up_dscp_en").checked=0;$.id("up_8021p_en").checked=0;$.addClass($.id("up_mark"),"nd")}else{if(2==upQosEntry.schedulerAlgorithm){$.id("up_sp").checked=1;$.id("up_wrr").checked=0;$.id("up_car").checked=0;$.id("up_dscp_en").checked=(upQosEntry.dscpMarkEnable==1)?1:0;$.id("up_8021p_en").checked=(upQosEntry.ethernetPriorityMarkEnable==1)?1:0;$.removeClass($.id("up_mark"),"nd")}else{if(3==upQosEntry.schedulerAlgorithm){$.id("up_sp").checked=0;$.id("up_wrr").checked=1;$.id("up_car").checked=0;$.id("up_dscp_en").checked=(upQosEntry.dscpMarkEnable==1)?1:0;$.id("up_8021p_en").checked=(upQosEntry.ethernetPriorityMarkEnable==1)?1:0;$.removeClass($.id("up_mark"),"nd")}}}$.id("qos_down_en").checked=(downQosEntry.interfaceEnable==1)?1:0;$.id("down_bandwidth").value=(downQosEntry.totalBandwidth==0)?"":downQosEntry.totalBandwidth;if(1==downQosEntry.schedulerAlgorithm){$.id("down_sp").checked=0;$.id("down_wrr").checked=0;$.id("down_car").checked=1;$.id("down_dscp_en").checked=0;$.id("down_8021p_en").checked=0;$.addClass($.id("down_mark"),"nd")}else{if(2==downQosEntry.schedulerAlgorithm){$.id("down_sp").checked=1;$.id("down_wrr").checked=0;$.id("down_car").checked=0;$.id("down_dscp_en").checked=(downQosEntry.dscpMarkEnable==1)?1:0;$.id("down_8021p_en").checked=(downQosEntry.ethernetPriorityMarkEnable==1)?1:0;$.removeClass($.id("down_mark"),"nd")}else{if(3==downQosEntry.schedulerAlgorithm){$.id("down_sp").checked=0;$.id("down_wrr").checked=1;$.id("down_car").checked=0;$.id("down_dscp_en").checked=(downQosEntry.dscpMarkEnable==1)?1:0;$.id("down_8021p_en").checked=(downQosEntry.ethernetPriorityMarkEnable==1)?1:0;$.removeClass($.id("down_mark"),"nd")}}}}}function selectObj(id){var element=$.id(id);if(element){element.focus();element.select()}}function doSave(){if(($.id("up_bandwidth").value=="")||(!$.isnum($.id("up_bandwidth").value))||(0==parseInt($.id("up_bandwidth").value,10))){$.alert(ERR_QOS_TOTALBW_INVAD);selectObj("up_bandwidth");return false}if(($.id("down_bandwidth").value=="")||(!$.isnum($.id("down_bandwidth").value))||(0==parseInt($.id("down_bandwidth").value,10))){$.alert(ERR_QOS_TOTALBW_INVAD);selectObj("down_bandwidth");return false}$.addLoading($.id("saveBtn"));var schAlgm;if(1==$.id("up_sp").checked){schAlgm=2}else{if(1==$.id("up_wrr").checked){schAlgm=3}else{if(1==$.id("up_car").checked){schAlgm=1}}}var schAlgm1;if(1==$.id("down_sp").checked){schAlgm1=2}else{if(1==$.id("down_wrr").checked){schAlgm1=3}else{if(1==$.id("down_car").checked){schAlgm1=1}}}if(upQosEntry.schedulerAlgorithm!=schAlgm||downQosEntry.schedulerAlgorithm!=schAlgm1){if(!confirm("Once change scheduler algorithm, all the queues, classifications and traffic control rules related to the old scheduler algorithm will be delete. Be sure to change?")){return}}var qosEnable=$.id("qos_up_en").checked==1?1:0;var linkType=0;var bw=(""==$.id("up_bandwidth").value)?0:parseInt($.id("up_bandwidth").value,10);var dscpMarkEnable=$.id("up_dscp_en").checked==1?1:0;var cosMarkEnable=$.id("up_8021p_en").checked==1?1:0;$.act(ACT_SET,QOS_INTF,upQosEntry.__stack,null,["interfaceEnable="+qosEnable,"schedulerAlgorithm="+schAlgm,"linkType="+linkType,"totalBandwidth="+bw,"dscpMarkEnable="+dscpMarkEnable,"ethernetPriorityMarkEnable="+cosMarkEnable]);qosEnable=$.id("qos_down_en").checked==1?1:0;bw=(""==$.id("down_bandwidth").value)?0:parseInt($.id("down_bandwidth").value,10);dscpMarkEnable=$.id("down_dscp_en").checked==1?1:0;cosMarkEnable=$.id("down_8021p_en").checked==1?1:0;$.act(ACT_SET,QOS_INTF,downQosEntry.__stack,null,["interfaceEnable="+qosEnable,"schedulerAlgorithm="+schAlgm1,"linkType="+linkType,"totalBandwidth="+bw,"dscpMarkEnable="+dscpMarkEnable,"ethernetPriorityMarkEnable="+cosMarkEnable]);$.exe(function(err){if(!err){$.removeLoading()}})}function doClick(val){if(val==1||val==2){$.removeClass($.id("up_mark"),"nd")}else{if(val==3){$.addClass($.id("up_mark"),"nd")}else{if(val==4||val==5){$.removeClass($.id("down_mark"),"nd")}else{if(val==6){$.addClass($.id("down_mark"),"nd")}}}}};</script>
+<p class="et"><b>Quality of Service</b></p>
+<div class="con1 M">
+	<p class="ct"></p>
+	<p class="bl"></p>
+<div class="con2">
+<p class="L1">This page allows you to enable or disable Quality of Service for upstream or downstream, set the Scheduler Algorithm and Total Bandwidth. </p>
+
+   <p class="L1"><b class="item">Enable QoS of Upstream:</b><input type="checkbox" id="qos_up_en" />&nbsp;</p>
+		<p class="L1"><b class="item T T_up_algorithm">Scheduler Algorithm:</b>
+		<input type="radio" name="up_alg" id="up_sp"  onclick="doClick(1);" /><span class="T T_up_sp M">SP</span>
+		<input type="radio" name="up_alg" id="up_wrr" onclick="doClick(2);" /><span class="T T_up_wrr M">WRR</span>
+		<input type="radio" name="up_alg" id="up_car" onclick="doClick(3);" /><span class="T T_up_car M">Traffic Control</span>
+	</p>
+	<p class="L1"><b class="item T" >Total Bandwidth:</b><input type="text" class="text L" id="up_bandwidth"  maxlength="6"/>Kbps</p>
+
+<div id="up_mark" class="nd">
+	<p><b class="item T">Enable DSCP Mark</b><input type="checkbox" id="up_dscp_en" /></p>
+	<div id="up_8021p_mark" class = "nd">
+	<p><b class="item T">Enable 802.1P Mark</b><input type="checkbox" id="up_8021p_en" /></p></div>
+</div>
+
+	<p class="br"></p>
+	<p class="br"></p>
+	<p class="L1"><b class="item">Enable QoS of Downstream:</b><input type="checkbox" id="qos_down_en" />&nbsp;</p>
+	<p class="L1"><b class="item T T_down_algorithm">Scheduler Algorithm:</b>
+		<input type="radio" name="down_alg" id="down_sp"  onclick="doClick(4);" /><span class="T T_down_sp M">SP</span>
+		<input type="radio" name="down_alg" id="down_wrr" onclick="doClick(5);" /><span class="T T_down_wrr M">WRR</span>
+		<input type="radio" name="down_alg" id="down_car" onclick="doClick(6);" /><span class="T T_down_car M">Traffic Control</span>
+	</p>
+	<p class="L1"><b class="item T" >Total Bandwidth:</b><input type="text" class="text L" id="down_bandwidth"  maxlength="6"/>Kbps</p>
+	
+<div id="down_mark" class = "nd">
+	<p><b class="item T">Enable DSCP Mark</b><input type="checkbox" id="down_dscp_en" /></p>
+	<div id="down_8021p_mark" class = "nd">
+	<p><b class="item T">Enable 802.1P Mark</b><input type="checkbox" id="down_8021p_en" /></p></div>
+</div>
+
+</div>
+	<p class="bl"></p>
+	<p class="tail" id="tail"><input type="button" class="button L T T_save" id="saveBtn" value="Save" onclick="doSave();" /></p>
+</div>
+
+<script language="javascript" type="text/javascript">$.loadHelp();init();</script>

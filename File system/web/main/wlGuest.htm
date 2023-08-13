@@ -1,0 +1,263 @@
+﻿<script language="javascript" type="text/javascript">var stk;var taskSche={};var tmpTaskSche={};var idIndex;var tmpWeek;var t1;var t2;var sysMode;function isHex(str,arg){str=str.toLowerCase();for(var i=0;i<str.length;i++){if((str.charAt(i)>="0"&&str.charAt(i)<="9")||(str.charAt(i)>="a"&&str.charAt(i)<="f")){continue}else{if(arg!=0){$.alert(ERR_WLAN_WEP_KEY_HEX_INVALID)}return false}}if(parseInt(str,16)==0){if(arg!=0){$.alert(ERR_WLAN_WEP_KEY_HEX_INVALID)}return false}return true}function selTime(){var dayList=[];for(var i=0;i<14;i++){dayList[i]="00000000";for(var j=23;j>=0;j--){var tmpTimeId=24*i+j;if(idIndex[tmpTimeId]==1){dayList[i]+="1"}else{dayList[i]+="0"}}if(i==0){taskSche.sunAm=parseInt(dayList[0],2)}else{if(i==1){taskSche.sunPm=parseInt(dayList[1],2)}else{if(i==2){taskSche.monAm=parseInt(dayList[2],2)}else{if(i==3){taskSche.monPm=parseInt(dayList[3],2)}else{if(i==4){taskSche.tueAm=parseInt(dayList[4],2)}else{if(i==5){taskSche.tuePm=parseInt(dayList[5],2)}else{if(i==6){taskSche.wedAm=parseInt(dayList[6],2)}else{if(i==7){taskSche.wedPm=parseInt(dayList[7],2)}else{if(i==8){taskSche.thuAm=parseInt(dayList[8],2)}else{if(i==9){taskSche.thuPm=parseInt(dayList[9],2)}else{if(i==10){taskSche.friAm=parseInt(dayList[10],2)}else{if(i==11){taskSche.friPm=parseInt(dayList[11],2)}else{if(i==12){taskSche.satAm=parseInt(dayList[12],2)}else{if(i==13){taskSche.satPm=parseInt(dayList[13],2)}}}}}}}}}}}}}}}}function doClick(val){var tmpTimeId="timeid"+val;if(idIndex[val]==0){$.addClass($.id(tmpTimeId),"sel");idIndex[val]=1}else{if(idIndex[val]==1){$.removeClass($.id(tmpTimeId),"sel");idIndex[val]=0}}}function cleanTbl(){for(var i=0;i<336;i++){var tmpTimeId="timeid"+i;$.removeClass($.id(tmpTimeId),"sel");idIndex[i]=0}tmpWeek=[];for(var i=0;i<14;i++){tmpWeek[i]=""}}function initTbl(){for(var i=0;i<14;i++){for(var j=23;j>=0;j--){var tmpid=24*i+j;var tmpTimeId="timeid"+tmpid;if(tmpWeek[i].charAt(j)==1){$.addClass($.id(tmpTimeId),"sel");idIndex[tmpid]=1}else{if(tmpWeek[i].charAt(j)==0){$.removeClass($.id(tmpTimeId),"sel");idIndex[tmpid]=0}}}}}function addTbl(){for(var i=0;i<14;i++){for(var j=23;j>=0;j--){var tmpid=24*i+j;var tmpTimeId="timeid"+tmpid;if(tmpWeek[i].charAt(j)==1){$.addClass($.id(tmpTimeId),"sel");idIndex[tmpid]=1}}}}function initSchedule(){if(INCLUDE_LAN_WLAN_HWSWITCH){$.act(ACT_CGI,"/cgi/wlanButton");if($.exe()){return}}idIndex=[];var wlanList=$.act(ACT_GL,LAN_WLAN,null,null,["X_TP_Band"]);var wlanObj;if(!$.exe()){if(bandIdx==0){$.each(wlanList,function(){if("2.4GHz"==this.X_TP_Band){wlanObj=this}})}else{$.each(wlanList,function(){if("5GHz"==this.X_TP_Band){wlanObj=this}})}}var scheduleList=$.act(ACT_GS,LAN_WLAN_TASK_SCHEDULE,null,wlanObj.__stack,["enable","timeDot","monAm","monPm","tueAm","tuePm","wedAm","wedPm","thuAm","thuPm","friAm","friPm","satAm","satPm","sunAm","sunPm"]);if(!$.exe()){var scheCfg=scheduleList[0];stk=scheCfg.__stack;if(1==scheCfg.enable){$.id("apen").checked=true}else{$.id("apdis").checked=true}if(scheTblInited==0){var tbl=$.id("timeTbl");for(var i=0;i<7;i++){var row=tbl.insertRow(-1);for(var j=0;j<24;j++){var cell=row.insertCell(-1);var id1=i*48+2*j;var id2=i*48+2*j+1;cell.innerHTML='<span id="timeid'+id1+"\" onclick='doClick("+id1+");'></span><span id=\"timeid"+id2+"\" onclick='doClick("+id2+");'></span>"}}scheTblInited=1}for(var i=0;i<336;i++){idIndex[i]=0}tmpWeek=[];for(var i=0;i<14;i++){tmpWeek[i]=""}while(scheCfg.sunAm>0){if(scheCfg.sunAm%2==1){tmpWeek[0]+="1"}else{if(scheCfg.sunAm%2==0){tmpWeek[0]+="0"}}scheCfg.sunAm=Math.floor(scheCfg.sunAm/2)}while(scheCfg.sunPm>0){if(scheCfg.sunPm%2==1){tmpWeek[1]+="1"}else{if(scheCfg.sunPm%2==0){tmpWeek[1]+="0"}}scheCfg.sunPm=Math.floor(scheCfg.sunPm/2)}while(scheCfg.monAm>0){if(scheCfg.monAm%2==1){tmpWeek[2]+="1"}else{if(scheCfg.monAm%2==0){tmpWeek[2]+="0"}}scheCfg.monAm=Math.floor(scheCfg.monAm/2)}while(scheCfg.monPm>0){if(scheCfg.monPm%2==1){tmpWeek[3]+="1"}else{if(scheCfg.monPm%2==0){tmpWeek[3]+="0"}}scheCfg.monPm=Math.floor(scheCfg.monPm/2)}while(scheCfg.tueAm>0){if(scheCfg.tueAm%2==1){tmpWeek[4]+="1"}else{if(scheCfg.tueAm%2==0){tmpWeek[4]+="0"}}scheCfg.tueAm=Math.floor(scheCfg.tueAm/2)}while(scheCfg.tuePm>0){if(scheCfg.tuePm%2==1){tmpWeek[5]+="1"}else{if(scheCfg.tuePm%2==0){tmpWeek[5]+="0"}}scheCfg.tuePm=Math.floor(scheCfg.tuePm/2)}while(scheCfg.wedAm>0){if(scheCfg.wedAm%2==1){tmpWeek[6]+="1"}else{if(scheCfg.wedAm%2==0){tmpWeek[6]+="0"}}scheCfg.wedAm=Math.floor(scheCfg.wedAm/2)}while(scheCfg.wedPm>0){if(scheCfg.wedPm%2==1){tmpWeek[7]+="1"}else{if(scheCfg.wedPm%2==0){tmpWeek[7]+="0"}}scheCfg.wedPm=Math.floor(scheCfg.wedPm/2)}while(scheCfg.thuAm>0){if(scheCfg.thuAm%2==1){tmpWeek[8]+="1"}else{if(scheCfg.thuAm%2==0){tmpWeek[8]+="0"}}scheCfg.thuAm=Math.floor(scheCfg.thuAm/2)}while(scheCfg.thuPm>0){if(scheCfg.thuPm%2==1){tmpWeek[9]+="1"}else{if(scheCfg.thuPm%2==0){tmpWeek[9]+="0"}}scheCfg.thuPm=Math.floor(scheCfg.thuPm/2)}while(scheCfg.friAm>0){if(scheCfg.friAm%2==1){tmpWeek[10]+="1"}else{if(scheCfg.friAm%2==0){tmpWeek[10]+="0"}}scheCfg.friAm=Math.floor(scheCfg.friAm/2)}while(scheCfg.friPm>0){if(scheCfg.friPm%2==1){tmpWeek[11]+="1"}else{if(scheCfg.friPm%2==0){tmpWeek[11]+="0"}}scheCfg.friPm=Math.floor(scheCfg.friPm/2)}while(scheCfg.satAm>0){if(scheCfg.satAm%2==1){tmpWeek[12]+="1"}else{if(scheCfg.satAm%2==0){tmpWeek[12]+="0"}}scheCfg.satAm=Math.floor(scheCfg.satAm/2)}while(scheCfg.satPm>0){if(scheCfg.satPm%2==1){tmpWeek[13]+="1"}else{if(scheCfg.satPm%2==0){tmpWeek[13]+="0"}}scheCfg.satPm=Math.floor(scheCfg.satPm/2)}initTbl()}}function initTimeout(){if(INCLUDE_LAN_WLAN_HWSWITCH){$.act(ACT_CGI,"/cgi/wlanButton");if($.exe()){return}}var devInfo=$.act(ACT_GET,IGD_DEV_INFO,null,null,["upTime"]);var wlanList=$.act(ACT_GL,LAN_WLAN,null,null,["X_TP_Band"]);var wlanObj;if(!$.exe()){if(bandIdx==0){$.each(wlanList,function(){if("2.4GHz"==this.X_TP_Band){wlanObj=this}})}else{$.each(wlanList,function(){if("5GHz"==this.X_TP_Band){wlanObj=this}})}}var scheduleList=$.act(ACT_GS,LAN_WLAN_TASK_SCHEDULE,null,wlanObj.__stack,["enableTimeout","seconds","timeToClose"]);if(!$.exe()){var scheCfg=scheduleList[0];stk=scheCfg.__stack;$.id("timeouthour_id").value=Math.floor((scheCfg.seconds)/(60*60),10);$.id("timeoutmin_id").value=Math.floor(((scheCfg.seconds)/60),10)%60;if(scheCfg.enableTimeout==1){$.id("guestScheduleEn").value=0;showSchedule()}else{$.id("guestScheduleEn").value=1;showSchedule()}}if(wlanObj.X_TP_Band=="2.4GHz"){if(t1==undefined){clearTimeout(t1);clearTimeout(t2);showRemainingTime2g((scheCfg.timeToClose-devInfo.upTime))}else{clearTimeout(t1);clearTimeout(t2);showRemainingTime2g((scheCfg.timeToClose-devInfo.upTime))}}else{if(wlanObj.X_TP_Band=="5GHz"){if(t2==undefined){clearTimeout(t1);clearTimeout(t2);showRemainingTime5g((scheCfg.timeToClose-devInfo.upTime))}else{clearTimeout(t1);clearTimeout(t2);showRemainingTime5g((scheCfg.timeToClose-devInfo.upTime))}}}}function doSaveSchedule(){selTime();taskSche.enable=(($.id("apen").checked)&&($.id("guestScheduleEn").value==1)?1:0);if(manualSwitchWl==true){taskSche.enable=0}taskSche.isUsrCtrl=0;$.act(ACT_SET,LAN_WLAN_TASK_SCHEDULE,stk,null,taskSche);$.exe(function(err){if(!err){$.removeLoading();bandChange()}})}function doSaveTimeout(){var timeToClose;var seconds=($.id("timeouthour_id").value*3600)+($.id("timeoutmin_id").value*60);var devInfo=$.act(ACT_GET,IGD_DEV_INFO,null,null,["upTime"]);$.exe(function(){if($.id("guestBand").value==0){clearTimeout(t1);clearTimeout(t2);showRemainingTime2g(seconds)}else{clearTimeout(t1);clearTimeout(t2);showRemainingTime5g(seconds)}timeToClose=Math.floor((devInfo.upTime),10)+Math.floor((seconds),10);taskSche.enableTimeout=$.id("guestScheduleEn").value==0?1:0;taskSche.seconds=seconds;taskSche.timeToClose=Math.floor((timeToClose),10);doSaveSchedule()})}function showWeek(){if($.id("weekDay").value=="day"){$.addClass($.id("week"),"nd")}else{if($.id("weekDay").value=="week"){$.id("mon").checked=0;$.id("tue").checked=0;$.id("wed").checked=0;$.id("thu").checked=0;$.id("fri").checked=0;$.id("sat").checked=0;$.id("sun").checked=0;$.removeClass($.id("week"),"nd")}}}function addTime(){tmpWeek=[];for(var i=0;i<14;i++){tmpWeek[i]=""}var timeS=parseInt($.id("timeS").value,10);var timeE=parseInt($.id("timeE").value,10);if(timeS<timeE+1){if($.id("weekDay").value=="day"){if((timeS<24)&&(timeE<24)){for(var i=0;i<timeS;i++){tmpWeek[0]+="0";tmpWeek[2]+="0";tmpWeek[4]+="0";tmpWeek[6]+="0";tmpWeek[8]+="0";tmpWeek[10]+="0";tmpWeek[12]+="0"}for(var i=timeS;i<=timeE;i++){tmpWeek[0]+="1";tmpWeek[2]+="1";tmpWeek[4]+="1";tmpWeek[6]+="1";tmpWeek[8]+="1";tmpWeek[10]+="1";tmpWeek[12]+="1"}for(var i=(timeE+1);i<24;i++){tmpWeek[0]+="0";tmpWeek[2]+="0";tmpWeek[4]+="0";tmpWeek[6]+="0";tmpWeek[8]+="0";tmpWeek[10]+="0";tmpWeek[12]+="0"}}else{if((timeS>23)&&(timeE>23)){for(var i=24;i<timeS;i++){tmpWeek[1]+="0";tmpWeek[3]+="0";tmpWeek[5]+="0";tmpWeek[7]+="0";tmpWeek[9]+="0";tmpWeek[11]+="0";tmpWeek[13]+="0"}for(var i=timeS;i<=timeE;i++){tmpWeek[1]+="1";tmpWeek[3]+="1";tmpWeek[5]+="1";tmpWeek[7]+="1";tmpWeek[9]+="1";tmpWeek[11]+="1";tmpWeek[13]+="1"}for(var i=(timeE+1);i<48;i++){tmpWeek[1]+="0";tmpWeek[3]+="0";tmpWeek[5]+="0";tmpWeek[7]+="0";tmpWeek[9]+="0";tmpWeek[11]+="0";tmpWeek[13]+="0"}}else{if((timeS<24)&&(timeE>23)){for(var i=0;i<timeS;i++){tmpWeek[0]+="0";tmpWeek[2]+="0";tmpWeek[4]+="0";tmpWeek[6]+="0";tmpWeek[8]+="0";tmpWeek[10]+="0";tmpWeek[12]+="0"}for(var i=timeS;i<24;i++){tmpWeek[0]+="1";tmpWeek[2]+="1";tmpWeek[4]+="1";tmpWeek[6]+="1";tmpWeek[8]+="1";tmpWeek[10]+="1";tmpWeek[12]+="1"}for(var i=24;i<=timeE;i++){tmpWeek[1]+="1";tmpWeek[3]+="1";tmpWeek[5]+="1";tmpWeek[7]+="1";tmpWeek[9]+="1";tmpWeek[11]+="1";tmpWeek[13]+="1"}for(var i=(timeE+1);i<48;i++){tmpWeek[1]+="0";tmpWeek[3]+="0";tmpWeek[5]+="0";tmpWeek[7]+="0";tmpWeek[9]+="0";tmpWeek[11]+="0";tmpWeek[13]+="0"}}}}}else{if($.id("weekDay").value=="week"){if((timeS<24)&&(timeE<24)){for(var i=0;i<timeS;i++){if($.id("sun").checked==1){tmpWeek[0]+="0"}if($.id("mon").checked==1){tmpWeek[2]+="0"}if($.id("tue").checked==1){tmpWeek[4]+="0"}if($.id("wed").checked==1){tmpWeek[6]+="0"}if($.id("thu").checked==1){tmpWeek[8]+="0"}if($.id("fri").checked==1){tmpWeek[10]+="0"}if($.id("sat").checked==1){tmpWeek[12]+="0"}}for(var i=timeS;i<=timeE;i++){if($.id("sun").checked==1){tmpWeek[0]+="1"}if($.id("mon").checked==1){tmpWeek[2]+="1"}if($.id("tue").checked==1){tmpWeek[4]+="1"}if($.id("wed").checked==1){tmpWeek[6]+="1"}if($.id("thu").checked==1){tmpWeek[8]+="1"}if($.id("fri").checked==1){tmpWeek[10]+="1"}if($.id("sat").checked==1){tmpWeek[12]+="1"}}for(var i=(timeE+1);i<24;i++){if($.id("sun").checked==1){tmpWeek[0]+="0"}if($.id("mon").checked==1){tmpWeek[2]+="0"}if($.id("tue").checked==1){tmpWeek[4]+="0"}if($.id("wed").checked==1){tmpWeek[6]+="0"}if($.id("thu").checked==1){tmpWeek[8]+="0"}if($.id("fri").checked==1){tmpWeek[10]+="0"}if($.id("sat").checked==1){tmpWeek[12]+="0"}}}else{if((timeS>23)&&(timeE>23)){for(var i=24;i<timeS;i++){if($.id("sun").checked==1){tmpWeek[1]+="0"}if($.id("mon").checked==1){tmpWeek[3]+="0"}if($.id("tue").checked==1){tmpWeek[5]+="0"}if($.id("wed").checked==1){tmpWeek[7]+="0"}if($.id("thu").checked==1){tmpWeek[9]+="0"}if($.id("fri").checked==1){tmpWeek[11]+="0"}if($.id("sat").checked==1){tmpWeek[13]+="0"}}for(var i=timeS;i<=timeE;i++){if($.id("sun").checked==1){tmpWeek[1]+="1"}if($.id("mon").checked==1){tmpWeek[3]+="1"}if($.id("tue").checked==1){tmpWeek[5]+="1"}if($.id("wed").checked==1){tmpWeek[7]+="1"}if($.id("thu").checked==1){tmpWeek[9]+="1"}if($.id("fri").checked==1){tmpWeek[11]+="1"}if($.id("sat").checked==1){tmpWeek[13]+="1"}}for(var i=(timeE+1);i<24;i++){if($.id("sun").checked==1){tmpWeek[1]+="0"}if($.id("mon").checked==1){tmpWeek[3]+="0"}if($.id("tue").checked==1){tmpWeek[5]+="0"}if($.id("wed").checked==1){tmpWeek[7]+="0"}if($.id("thu").checked==1){tmpWeek[9]+="0"}if($.id("fri").checked==1){tmpWeek[11]+="0"}if($.id("sat").checked==1){tmpWeek[13]+="0"}}}else{if((timeS<24)&&(timeE>23)){for(var i=0;i<timeS;i++){if($.id("sun").checked==1){tmpWeek[0]+="0"}if($.id("mon").checked==1){tmpWeek[2]+="0"}if($.id("tue").checked==1){tmpWeek[4]+="0"}if($.id("wed").checked==1){tmpWeek[6]+="0"}if($.id("thu").checked==1){tmpWeek[8]+="0"}if($.id("fri").checked==1){tmpWeek[10]+="0"}if($.id("sat").checked==1){tmpWeek[12]+="0"}}for(var i=timeS;i<24;i++){if($.id("sun").checked==1){tmpWeek[0]+="1"}if($.id("mon").checked==1){tmpWeek[2]+="1"}if($.id("tue").checked==1){tmpWeek[4]+="1"}if($.id("wed").checked==1){tmpWeek[6]+="1"}if($.id("thu").checked==1){tmpWeek[8]+="1"}if($.id("fri").checked==1){tmpWeek[10]+="1"}if($.id("sat").checked==1){tmpWeek[12]+="1"}}for(var i=24;i<=timeE;i++){if($.id("sun").checked==1){tmpWeek[1]+="1"}if($.id("mon").checked==1){tmpWeek[3]+="1"}if($.id("tue").checked==1){tmpWeek[5]+="1"}if($.id("wed").checked==1){tmpWeek[7]+="1"}if($.id("thu").checked==1){tmpWeek[9]+="1"}if($.id("fri").checked==1){tmpWeek[11]+="1"}if($.id("sat").checked==1){tmpWeek[13]+="1"}}for(var i=(timeE+1);i<24;i++){if($.id("sun").checked==1){tmpWeek[1]+="0"}if($.id("mon").checked==1){tmpWeek[3]+="0"}if($.id("tue").checked==1){tmpWeek[5]+="0"}if($.id("wed").checked==1){tmpWeek[7]+="0"}if($.id("thu").checked==1){tmpWeek[9]+="0"}if($.id("fri").checked==1){tmpWeek[11]+="0"}if($.id("sat").checked==1){tmpWeek[13]+="0"}}}}}}}}else{if($.id("weekDay").value=="day"){if((timeS<24)&&(timeE+1<24)){for(var i=0;i<timeE+1;i++){tmpWeek[0]+="1";tmpWeek[2]+="1";tmpWeek[4]+="1";tmpWeek[6]+="1";tmpWeek[8]+="1";tmpWeek[10]+="1";tmpWeek[12]+="1"}for(var i=timeE+1;i<timeS;i++){tmpWeek[0]+="0";tmpWeek[2]+="0";tmpWeek[4]+="0";tmpWeek[6]+="0";tmpWeek[8]+="0";tmpWeek[10]+="0";tmpWeek[12]+="0"}for(var i=timeS;i<24;i++){tmpWeek[0]+="1";tmpWeek[2]+="1";tmpWeek[4]+="1";tmpWeek[6]+="1";tmpWeek[8]+="1";tmpWeek[10]+="1";tmpWeek[12]+="1"}for(var i=0;i<24;i++){tmpWeek[1]+="1";tmpWeek[3]+="1";tmpWeek[5]+="1";tmpWeek[7]+="1";tmpWeek[9]+="1";tmpWeek[11]+="1";tmpWeek[13]+="1"}}else{if((timeS>23)&&(timeE+1>23)){for(var i=24;i<timeE+1;i++){tmpWeek[1]+="1";tmpWeek[3]+="1";tmpWeek[5]+="1";tmpWeek[7]+="1";tmpWeek[9]+="1";tmpWeek[11]+="1";tmpWeek[13]+="1"}for(var i=timeE+1;i<timeS;i++){tmpWeek[1]+="0";tmpWeek[3]+="0";tmpWeek[5]+="0";tmpWeek[7]+="0";tmpWeek[9]+="0";tmpWeek[11]+="0";tmpWeek[13]+="0"}for(var i=timeS;i<48;i++){tmpWeek[1]+="1";tmpWeek[3]+="1";tmpWeek[5]+="1";tmpWeek[7]+="1";tmpWeek[9]+="1";tmpWeek[11]+="1";tmpWeek[13]+="1"}for(var i=0;i<24;i++){tmpWeek[0]+="1";tmpWeek[2]+="1";tmpWeek[4]+="1";tmpWeek[6]+="1";tmpWeek[8]+="1";tmpWeek[10]+="1";tmpWeek[12]+="1"}}else{if((timeE+1<24)&&(timeS>23)){for(var i=0;i<timeE+1;i++){tmpWeek[0]+="1";tmpWeek[2]+="1";tmpWeek[4]+="1";tmpWeek[6]+="1";tmpWeek[8]+="1";tmpWeek[10]+="1";tmpWeek[12]+="1"}for(var i=timeE+1;i<24;i++){tmpWeek[0]+="0";tmpWeek[2]+="0";tmpWeek[4]+="0";tmpWeek[6]+="0";tmpWeek[8]+="0";tmpWeek[10]+="0";tmpWeek[12]+="0"}for(var i=24;i<timeS;i++){tmpWeek[1]+="0";tmpWeek[3]+="0";tmpWeek[5]+="0";tmpWeek[7]+="0";tmpWeek[9]+="0";tmpWeek[11]+="0";tmpWeek[13]+="0"}for(var i=timeS;i<48;i++){tmpWeek[1]+="1";tmpWeek[3]+="1";tmpWeek[5]+="1";tmpWeek[7]+="1";tmpWeek[9]+="1";tmpWeek[11]+="1";tmpWeek[13]+="1"}}}}}else{if($.id("weekDay").value=="week"){if((timeS<24)&&(timeE+1<24)){for(var i=0;i<timeE+1;i++){tmpWeek[2]+=($.id("sun").checked==1)?"1":"0";tmpWeek[4]+=($.id("mon").checked==1)?"1":"0";tmpWeek[6]+=($.id("tue").checked==1)?"1":"0";tmpWeek[8]+=($.id("wed").checked==1)?"1":"0";tmpWeek[10]+=($.id("thu").checked==1)?"1":"0";tmpWeek[12]+=($.id("fri").checked==1)?"1":"0";tmpWeek[0]+=($.id("sat").checked==1)?"1":"0"}for(var i=timeE+1;i<timeS;i++){if($.id("sun").checked==1){tmpWeek[0]+="0"}if($.id("mon").checked==1){tmpWeek[2]+="0"}if($.id("tue").checked==1){tmpWeek[4]+="0"}if($.id("wed").checked==1){tmpWeek[6]+="0"}if($.id("thu").checked==1){tmpWeek[8]+="0"}if($.id("fri").checked==1){tmpWeek[10]+="0"}if($.id("sat").checked==1){tmpWeek[12]+="0"}}for(var i=timeS;i<24;i++){if($.id("sun").checked==1){tmpWeek[0]+="1"}if($.id("mon").checked==1){tmpWeek[2]+="1"}if($.id("tue").checked==1){tmpWeek[4]+="1"}if($.id("wed").checked==1){tmpWeek[6]+="1"}if($.id("thu").checked==1){tmpWeek[8]+="1"}if($.id("fri").checked==1){tmpWeek[10]+="1"}if($.id("sat").checked==1){tmpWeek[12]+="1"}}for(var i=0;i<24;i++){if($.id("sun").checked==1){tmpWeek[1]+="1"}if($.id("mon").checked==1){tmpWeek[3]+="1"}if($.id("tue").checked==1){tmpWeek[5]+="1"}if($.id("wed").checked==1){tmpWeek[7]+="1"}if($.id("thu").checked==1){tmpWeek[9]+="1"}if($.id("fri").checked==1){tmpWeek[11]+="1"}if($.id("sat").checked==1){tmpWeek[13]+="1"}}}else{if((timeS>23)&&(timeE+1>23)){for(var i=24;i<timeE+1;i++){tmpWeek[3]+=($.id("sun").checked==1)?"1":"0";tmpWeek[5]+=($.id("mon").checked==1)?"1":"0";tmpWeek[7]+=($.id("tue").checked==1)?"1":"0";tmpWeek[9]+=($.id("wed").checked==1)?"1":"0";tmpWeek[11]+=($.id("thu").checked==1)?"1":"0";tmpWeek[13]+=($.id("fri").checked==1)?"1":"0";tmpWeek[1]+=($.id("sat").checked==1)?"1":"0"}for(var i=timeE+1;i<timeS;i++){if($.id("sun").checked==1){tmpWeek[1]+="0"}if($.id("mon").checked==1){tmpWeek[3]+="0"}if($.id("tue").checked==1){tmpWeek[5]+="0"}if($.id("wed").checked==1){tmpWeek[7]+="0"}if($.id("thu").checked==1){tmpWeek[9]+="0"}if($.id("fri").checked==1){tmpWeek[11]+="0"}if($.id("sat").checked==1){tmpWeek[13]+="0"}}for(var i=timeS;i<48;i++){if($.id("sun").checked==1){tmpWeek[1]+="1"}if($.id("mon").checked==1){tmpWeek[3]+="1"}if($.id("tue").checked==1){tmpWeek[5]+="1"}if($.id("wed").checked==1){tmpWeek[7]+="1"}if($.id("thu").checked==1){tmpWeek[9]+="1"}if($.id("fri").checked==1){tmpWeek[11]+="1"}if($.id("sat").checked==1){tmpWeek[13]+="1"}}for(var i=0;i<24;i++){tmpWeek[2]+=($.id("sun").checked==1)?"1":"0";tmpWeek[4]+=($.id("mon").checked==1)?"1":"0";tmpWeek[6]+=($.id("tue").checked==1)?"1":"0";tmpWeek[8]+=($.id("wed").checked==1)?"1":"0";tmpWeek[10]+=($.id("thu").checked==1)?"1":"0";tmpWeek[12]+=($.id("fri").checked==1)?"1":"0";tmpWeek[0]+=($.id("sat").checked==1)?"1":"0"}}else{if((timeE+1<24)&&(timeS>23)){for(var i=0;i<timeE+1;i++){tmpWeek[2]+=($.id("sun").checked==1)?"1":"0";tmpWeek[4]+=($.id("mon").checked==1)?"1":"0";tmpWeek[6]+=($.id("tue").checked==1)?"1":"0";tmpWeek[8]+=($.id("wed").checked==1)?"1":"0";tmpWeek[10]+=($.id("thu").checked==1)?"1":"0";tmpWeek[12]+=($.id("fri").checked==1)?"1":"0";tmpWeek[0]+=($.id("sat").checked==1)?"1":"0"}for(var i=timeE+1;i<24;i++){if($.id("sun").checked==1){tmpWeek[0]+="0"}if($.id("mon").checked==1){tmpWeek[2]+="0"}if($.id("tue").checked==1){tmpWeek[4]+="0"}if($.id("wed").checked==1){tmpWeek[6]+="0"}if($.id("thu").checked==1){tmpWeek[8]+="0"}if($.id("fri").checked==1){tmpWeek[10]+="0"}if($.id("sat").checked==1){tmpWeek[12]+="0"}}for(var i=24;i<timeS;i++){if($.id("sun").checked==1){tmpWeek[1]+="0"}if($.id("mon").checked==1){tmpWeek[3]+="0"}if($.id("tue").checked==1){tmpWeek[5]+="0"}if($.id("wed").checked==1){tmpWeek[7]+="0"}if($.id("thu").checked==1){tmpWeek[9]+="0"}if($.id("fri").checked==1){tmpWeek[11]+="0"}if($.id("sat").checked==1){tmpWeek[13]+="0"}}for(var i=timeS;i<48;i++){if($.id("sun").checked==1){tmpWeek[1]+="1"}if($.id("mon").checked==1){tmpWeek[3]+="1"}if($.id("tue").checked==1){tmpWeek[5]+="1"}if($.id("wed").checked==1){tmpWeek[7]+="1"}if($.id("thu").checked==1){tmpWeek[9]+="1"}if($.id("fri").checked==1){tmpWeek[11]+="1"}if($.id("sat").checked==1){tmpWeek[13]+="1"}}}}}}}}addTbl()}function showSchedule(){if($.id("guestScheduleEn").value==1){$.addClass($.id("timeout_div"),"nd");$.removeClass($.id("at_div"),"nd")}else{$.addClass($.id("at_div"),"nd");$.removeClass($.id("timeout_div"),"nd")}}function selectObj(id){var element=$.id(id);if(element){element.focus();element.select()}}function checkSSID(){var s=$.id("guestSSID");var ssidLen=$.realLen(s.value);var i;if(ssidLen<=0){$.alert(ERR_WLAN_SSID_IS_EMPTY);s.focus();s.select();return false}if(ssidLen>32){$.alert(ERR_WLAN_SSID_LEN_OUTRANGE);s.focus();s.select();return false}if(s.value==wlanObj.SSID){$.alert(CMM_WLAN_SSID_CONFLICTE);s.focus();s.select();return false}$.each(vapList,function(arg,index){if(vapObj.name!=this.name&&s.value==this.SSID){$.alert(CMM_WLAN_SSID_CONFLICTE)}});return true}function checkBW(idMin,idMax){if($.id(idMin).value==""&&$.id(idMax).value==""){return true}if(($.id(idMin).value=="")||(!$.isnum($.id(idMin).value))||(0==parseInt($.id(idMin).value,10))){$.alert(ERR_TC_NUM_INVAD);selectObj(idMin);return false}if(($.id(idMax).value=="")||(!$.isnum($.id(idMax).value))||(0==parseInt($.id(idMax).value,10))){$.alert(ERR_TC_NUM_INVAD);selectObj(idMax);return false}if(parseInt($.id(idMax).value,10)<parseInt($.id(idMin).value,10)){$.alert(ERR_TC_BW_ORDER_INVAD);selectObj(idMax);return false}return true}function checkPSK(){var psk=$.id("pskSecret").value;if(psk.length==0){$.alert(ERR_WLAN_WPA_PSK_EMPTY);$.id("pskSecret").focus();$.id("pskSecret").select();return false}else{if(psk.length<8){$.alert(ERR_WLAN_WPA_PSK_LENGTH_INVALID);$.id("pskSecret").focus();$.id("pskSecret").select();return false}else{if(psk.length>=64){if(!isHex(psk,0)){$.alert(ERR_WLAN_WPA_PSK_HEX_INVALID);$.id("pskSecret").focus();$.id("pskSecret").select();return false}if(INCLUDE_LAN_WLAN_SAE&&$.id("SecurityType").value==2){$.alert(ERR_WLAN_WPA3_PSK_LENGTH_INVALID);$.id("pskSecret").focus();$.id("pskSecret").select();return false}$.id("pskSecret").value=$.id("pskSecret").value.substr(0,64)}else{if($.asc(psk,true)){$.alert(ERR_WLAN_WPA_PSK_ASCII_INVALID);$.id("pskSecret").focus();$.id("pskSecret").select();return false}}}}if($.num($.id("interval").value,0,[30,999999999],true)){$.alert(ERR_WLAN_WPA_INTERVAL_INVALID);return false}return true}function showTCAccess(){if($.id("guestTcEn").value==1){if(3==tcEntry.enable){$.removeClass($.id("gn_tc_div"),"nd");$.addClass($.id("tcTip"),"nd")}else{$.addClass($.id("gn_tc_div"),"nd");$.removeClass($.id("tcTip"),"nd");$.id("guestTcEn").selectedIndex=0}}else{$.addClass($.id("gn_tc_div"),"nd")}}function showPSK(){if($.id("SecurityType").value==0){$.addClass($.id("wpaSecurityDiv"),"nd")}else{if($.id("SecurityType").value==1){$.removeClass($.id("wpaSecurityDiv"),"nd");$.addClass($.id("psk3AuthTypeDiv"),"nd");$.removeClass($.id("pskAuthTypeDiv"),"nd");$.removeClass($.id("encryptionDiv"),"nd")}else{if(INCLUDE_LAN_WLAN_SAE&&$.id("SecurityType").value==2){$.removeClass($.id("wpaSecurityDiv"),"nd");$.addClass($.id("pskAuthTypeDiv"),"nd");$.addClass($.id("encryptionDiv"),"nd");$.removeClass($.id("psk3AuthTypeDiv"),"nd")}}}}function showGuestEnable(){if($.id("guestEn").checked==1){$.removeClass($.id("frameMain2"),"nd");$.id("guestSSID").disabled=false;$.id("SecurityType").disabled=false;$.id("guestMaxstanum").disabled=false}else{$.addClass($.id("frameMain2"),"nd");$.id("guestSSID").disabled=true;$.id("SecurityType").disabled=true;$.id("guestMaxstanum").disabled=true}}function initShow(loadAdv){sysMode=$.act(ACT_GET,SYS_MODE,null,null,["mode"]);if($.sysMode=="AP"){$.addClass($.id("div_accessLocal"),"nd");$.addClass($.id("div_bandwidthControl"),"nd")}if(wlanObj.enable==false){$.addClass($.id("frameMain"),"nd");$.removeClass($.id("apTip"),"nd")}else{$.removeClass($.id("frameMain"),"nd");$.addClass($.id("apTip"),"nd")}if($.mainParam==undefined){if(1==vapObj.enable){$.id("guestEn").checked=true}else{$.id("guestDis").checked=true}oldVapEn=vapObj.enable;$.id("guestSSID").value=vapObj.SSID;$.id("guestMaxstanum").value=vapObj.maxStaNum;initSecurityParam();initSecType();initPSKShow();if(loadAdv==1){initAdvancedShow()}showGuestEnable();showPSK();showTCAccess()}else{$.id("guestEn").checked=$.mainParam[1][0]==1?1:0;$.id("guestDis").checked=$.mainParam[1][0]==1?0:1;$.id("guestSSID").value=$.mainParam[1][1];showGuestEnable();$.id("SecurityType").selectedIndex=$.mainParam[2][0];if($.mainParam[2][0]==1){$.id("pskAuthType").selectedIndex=$.mainParam[2][1];$.id("pskCipher").selectedIndex=$.mainParam[2][2];$.id("pskSecret").value=$.mainParam[2][3];$.id("interval").value=$.mainParam[2][4];showPSK()}$.id("lan_access").selectedIndex=$.mainParam[3][0];$.id("usb_access").selectedIndex=$.mainParam[3][1];$.id("wlan_iso").selectedIndex=$.mainParam[3][2];$.id("guestTcEn").selectedIndex=1;$.id("guestTcMinUpBW").value=$.mainParam[4][1];$.id("guestTcMaxUpBW").value=$.mainParam[4][2];$.id("guestTcMinDownBW").value=$.mainParam[4][3];$.id("guestTcMaxDownBW").value=$.mainParam[4][4];$.id("guestMaxstanum").value=$.mainParam[5][0];showTCAccess();$.mainParam=undefined}if(wlanObj.standard=="n-only"){$.id("pskCipher").selectedIndex=2;$.id("pskCipher").disabled=true}}function initAdvancedShow(){$.id("lan_access").selectedIndex=guestnetObj.LANAccessEnable;$.id("usb_access").selectedIndex=guestnetObj.USBAccessEnable;$.id("wlan_iso").selectedIndex=vapObj.isolateClients;$.id("guestTcEn").selectedIndex=guestnetObj.TCEnable;$.id("guestTcMinUpBW").value=(0==guestnetObj.TCMinUpBW)?"":guestnetObj.TCMinUpBW;$.id("guestTcMaxUpBW").value=(0==guestnetObj.TCMaxUpBW)?"":guestnetObj.TCMaxUpBW;$.id("guestTcMinDownBW").value=(0==guestnetObj.TCMinDownBW)?"":guestnetObj.TCMinDownBW;$.id("guestTcMaxDownBW").value=(0==guestnetObj.TCMaxDownBW)?"":guestnetObj.TCMaxDownBW}function initSecurityParam(vapParam){var i;beaconType=vapObj.beaconType;basicAuthenticationMode=vapObj.basicAuthenticationMode;basicEncryptionModes=vapObj.basicEncryptionModes;WPAAuthenticationMode=vapObj.WPAAuthenticationMode;WPAEncryptionModes=vapObj.WPAEncryptionModes;IEEE11iEncryptionModes=vapObj.IEEE11iEncryptionModes;IEEE11iAuthenticationMode=vapObj.IEEE11iAuthenticationMode;if(INCLUDE_LAN_WLAN_SAE){WPA3AuthenticationMode=vapObj.WPA3AuthenticationMode;WPA3EncryptionModes=vapObj.WPA3EncryptionModes}X_TP_PreSharedKey=vapObj.preSharedKey;X_TP_GroupKeyUpdateInterval=vapObj.groupKeyUpdateInterval}function initSecType(){if(beaconType=="Basic"&&basicEncryptionModes=="None"){$.id("SecurityType").selectedIndex=0}else{if(beaconType=="WPA"){if(WPAAuthenticationMode=="PSKAuthentication"){$.id("SecurityType").selectedIndex=1}}else{if(beaconType=="11i"||beaconType=="WPAand11i"){if(IEEE11iAuthenticationMode=="PSKAuthentication"){$.id("SecurityType").selectedIndex=1}}else{if(INCLUDE_LAN_WLAN_SAE&&(beaconType=="WPA3"||beaconType=="WPA3and11i")){if(WPA3AuthenticationMode=="SAEAuthentication"){$.id("SecurityType").selectedIndex=2}}else{}}}}}function initPSKShow(){if(beaconType=="WPAand11i"&&WPAAuthenticationMode=="PSKAuthentication"){$.id("pskAuthType").selectedIndex=0;if(IEEE11iEncryptionModes=="TKIPEncryption"){$.id("pskCipher").selectedIndex=1}else{if(IEEE11iEncryptionModes=="AESEncryption"){$.id("pskCipher").selectedIndex=2}else{$.id("pskCipher").selectedIndex=0}}}else{if(beaconType=="WPA"&&WPAAuthenticationMode=="PSKAuthentication"){$.id("pskAuthType").selectedIndex=1;if(WPAEncryptionModes=="TKIPEncryption"){$.id("pskCipher").selectedIndex=1}else{if(WPAEncryptionModes=="AESEncryption"){$.id("pskCipher").selectedIndex=2}else{$.id("pskCipher").selectedIndex=0}}}else{if(beaconType=="11i"&&IEEE11iAuthenticationMode=="PSKAuthentication"){$.id("pskAuthType").selectedIndex=2;if(IEEE11iEncryptionModes=="TKIPEncryption"){$.id("pskCipher").selectedIndex=1}else{if(IEEE11iEncryptionModes=="AESEncryption"){$.id("pskCipher").selectedIndex=2}else{$.id("pskCipher").selectedIndex=0}}}else{if(INCLUDE_LAN_WLAN_SAE&&beaconType=="WPA3and11i"&&WPA3AuthenticationMode=="SAEAuthentication"){$.id("psk3AuthType").selectedIndex=0}else{if(INCLUDE_LAN_WLAN_SAE&&beaconType=="WPA3"&&WPA3AuthenticationMode=="SAEAuthentication"){$.id("psk3AuthType").selectedIndex=1}else{$.id("pskAuthType").selectedIndex=0;$.id("pskCipher").selectedIndex=0}}}}}if(X_TP_PreSharedKey==undefined){$.id("pskSecret").value=""}else{$.id("pskSecret").value=X_TP_PreSharedKey}if(X_TP_GroupKeyUpdateInterval==undefined){$.id("interval").value=""}else{$.id("interval").value=X_TP_GroupKeyUpdateInterval}}function doSave(obj){$.addLoading(obj);doSubmit();doSaveTimeout()}function doSubmit(){var guestEn=$.id("guestEn").checked?1:0;if(guestEn==oldVapEn){manualSwitchWl=false}else{manualSwitchWl=true}var guestLanAccessEn=$.id("lan_access").value;var guestUsbAccessEn=$.id("usb_access").value;var guestIsolation=$.id("wlan_iso").value;var guestTcEn=$.id("guestTcEn").value;if(("Basic"==wlanObj.beaconType)&&("WEPEncryption"==wlanObj.basicEncryptionModes)&&(1==guestEn)){$.alert(ERR_WLAN_GUESTNETWORK_WEP_CONFLICT);$.id("guestDis").checked=1;showGuestEnable();return false}if(0==checkSSID()){return false}var guestSSID=$.id("guestSSID").value;var guestMaxstanum=$.id("guestMaxstanum").value;if(guestMaxstanum>32||guestMaxstanum<=0){$.alert(ERR_WLAN_GUESTNETWORK_MAXSTANUM_INVALID);$.id("guestMaxstanum").focus();$.id("guestMaxstanum").select();return false}if(1==guestTcEn){if(0==checkBW("guestTcMinUpBW","guestTcMaxUpBW")||0==checkBW("guestTcMinDownBW","guestTcMaxDownBW")){return false}}var guestTcMinUpBW=(""==$.id("guestTcMinUpBW").value)?0:parseInt($.id("guestTcMinUpBW").value,10);var guestTcMaxUpBW=(""==$.id("guestTcMaxUpBW").value)?0:parseInt($.id("guestTcMaxUpBW").value,10);var guestTcMinDownBW=(""==$.id("guestTcMinDownBW").value)?0:parseInt($.id("guestTcMinDownBW").value,10);var guestTcMaxDownBW=(""==$.id("guestTcMaxDownBW").value)?0:parseInt($.id("guestTcMaxDownBW").value,10);$.act(ACT_SET,LAN_WLAN_MULTISSID,wlanObj.__stack,null,["multiSSIDEnable=1"]);if($.id("SecurityType").value==1){if(0==checkPSK()){return false}var groupInterval=parseInt($.id("interval").value,10);var encryType;if($.id("pskCipher").value==0){encryType="TKIPandAESEncryption"}else{if($.id("pskCipher").value==1){encryType="TKIPEncryption"}else{encryType="AESEncryption"}}if($.id("pskAuthType").value==0){$.act(ACT_SET,LAN_WLAN_MSSIDENTRY,vapObj.__stack,null,["IsolateClients="+guestIsolation,"Enable="+guestEn,"SSID="+guestSSID,"BeaconType=WPAand11i","WPAAuthenticationMode=PSKAuthentication","WPAEncryptionModes="+encryType,"IEEE11iAuthenticationMode=PSKAuthentication","IEEE11iEncryptionModes="+encryType,"PreSharedKey="+$.id("pskSecret").value,"GroupKeyUpdateInterval="+groupInterval,"MaxStaNum="+guestMaxstanum])}else{if($.id("pskAuthType").value==1){$.act(ACT_SET,LAN_WLAN_MSSIDENTRY,vapObj.__stack,null,["IsolateClients="+guestIsolation,"Enable="+guestEn,"SSID="+guestSSID,"BeaconType=WPA","WPAAuthenticationMode=PSKAuthentication","WPAEncryptionModes="+encryType,"PreSharedKey="+$.id("pskSecret").value,"GroupKeyUpdateInterval="+groupInterval,"MaxStaNum="+guestMaxstanum])}else{$.act(ACT_SET,LAN_WLAN_MSSIDENTRY,vapObj.__stack,null,["IsolateClients="+guestIsolation,"Enable="+guestEn,"SSID="+guestSSID,"BeaconType=11i","IEEE11iAuthenticationMode=PSKAuthentication","IEEE11iEncryptionModes="+encryType,"PreSharedKey="+$.id("pskSecret").value,"GroupKeyUpdateInterval="+groupInterval,"MaxStaNum="+guestMaxstanum])}}}else{if(INCLUDE_LAN_WLAN_SAE&&$.id("SecurityType").value==2){if(0==checkPSK()){return false}var groupInterval=parseInt($.id("interval").value,10);encryType="AESEncryption";if($.id("psk3AuthType").value==0){$.act(ACT_SET,LAN_WLAN_MSSIDENTRY,vapObj.__stack,null,["IsolateClients="+guestIsolation,"Enable="+guestEn,"SSID="+guestSSID,"BeaconType=WPA3and11i","WPA3AuthenticationMode=SAEAuthentication","WPA3EncryptionModes="+encryType,"IEEE11iAuthenticationMode=PSKAuthentication","IEEE11iEncryptionModes="+encryType,"PreSharedKey="+$.id("pskSecret").value,"GroupKeyUpdateInterval="+groupInterval,"MaxStaNum="+guestMaxstanum])}else{$.act(ACT_SET,LAN_WLAN_MSSIDENTRY,vapObj.__stack,null,["IsolateClients="+guestIsolation,"Enable="+guestEn,"SSID="+guestSSID,"BeaconType=WPA3","WPA3AuthenticationMode=SAEAuthentication","WPA3EncryptionModes="+encryType,"PreSharedKey="+$.id("pskSecret").value,"GroupKeyUpdateInterval="+groupInterval,"MaxStaNum="+guestMaxstanum])}}else{$.act(ACT_SET,LAN_WLAN_MSSIDENTRY,vapObj.__stack,null,["IsolateClients="+guestIsolation,"Enable="+guestEn,"SSID="+guestSSID,"BeaconType=Basic","BasicEncryptionModes=None","BasicAuthenticationMode=None","MaxStaNum="+guestMaxstanum])}}$.act(ACT_SET,LAN_WLAN_MSSIDENTRY,vapObjSec.__stack,null,["IsolateClients="+guestIsolation]);$.act(ACT_SET,LAN_WLAN_GUESTNET,wlanObj.__stack,null,["LANAccessEnable="+guestLanAccessEn,"USBAccessEnable="+guestUsbAccessEn,"TCEnable="+guestTcEn,"TCMinUpBW="+guestTcMinUpBW,"TCMaxUpBW="+guestTcMaxUpBW,"TCMinDownBW="+guestTcMinDownBW,"TCMaxDownBW="+guestTcMaxDownBW,"lastModified=1"]);$.act(ACT_SET,LAN_WLAN_GUESTNET,wlanObjSec.__stack,null,["LANAccessEnable="+guestLanAccessEn,"USBAccessEnable="+guestUsbAccessEn,"TCEnable="+guestTcEn,"TCMinUpBW="+guestTcMinUpBW,"TCMaxUpBW="+guestTcMaxUpBW,"TCMinDownBW="+guestTcMinDownBW,"TCMaxDownBW="+guestTcMaxDownBW,"lastModified=0"]);$.exe(function(ret){})}function openWl(obj){$.act(ACT_SET,LAN_WLAN,wlanObj.__stack,null,["Enable=1"]);$.addLoading(obj);$.exe(function(ret){if(!ret){$.reload()}})}function openTC(){if($.id("guestBand").value=="0"){$.loadMain("trafficCtrl.htm",["wlGuest.htm",[$.id("guestEn").checked?1:0,$.id("guestSSID").value],[$.id("SecurityType").value,$.id("pskAuthType").value,$.id("pskCipher").value,$.id("pskSecret").value,$.id("interval").value],[$.id("lan_access").value,$.id("usb_access").value,$.id("wlan_iso").value],[$.id("guestTcEn").value,$.id("guestTcMinUpBW").value,$.id("guestTcMaxUpBW").value,$.id("guestTcMinDownBW").value,$.id("guestTcMaxDownBW").value],[$.id("guestMaxstanum").value],[$.id("guestBand").value]])}else{$.loadMain("trafficCtrl.htm",["wlGuest.htm",[$.id("guestEn").checked?1:0,$.id("guestSSID").value],[$.id("SecurityType").value,$.id("pskAuthType").value,$.id("pskCipher").value,$.id("pskSecret").value,$.id("interval").value],[$.id("lan_access").value,$.id("usb_access").value,$.id("wlan_iso").value],[$.id("guestTcEn").value,$.id("guestTcMinUpBW").value,$.id("guestTcMaxUpBW").value,$.id("guestTcMinDownBW").value,$.id("guestTcMaxDownBW").value],[$.id("guestMaxstanum").value],[$.id("guestBand").value]])}}function bandChange(loadAdv){if($.mainParam==undefined){bandIdx=$.id("guestBand").value}else{bandIdx=$.mainParam[6][0];$.id("guestBand").value=bandIdx}basicList=$.act(ACT_GL,LAN_WLAN,null,null,["Enable","SSID","BeaconType","BasicEncryptionModes","standard"]);if(!$.exe()){wlanObj=basicList[bandIdx];wlanObjSec=basicList[bandIdx==1?0:1];mssidObj=$.act(ACT_GET,LAN_WLAN_MULTISSID,wlanObj.__stack,null,["MultiSSIDEnable"]);if(INCLUDE_LAN_WLAN_SAE){vapList=$.act(ACT_GL,LAN_WLAN_MSSIDENTRY,null,null,["Name","Enable","SSID","SSIDAdvertisementEnable","isolateClients","BeaconType","BasicAuthenticationMode","WEPKeyIndex","BasicEncryptionModes","WPAEncryptionModes","WPAAuthenticationMode","IEEE11iEncryptionModes","IEEE11iAuthenticationMode","WPA3EncryptionModes","WPA3AuthenticationMode","PreSharedKey","GroupKeyUpdateInterval","RadiusServerIP","RadiusServerPort","RadiusServerPassword","MaxStaNum"])}else{vapList=$.act(ACT_GL,LAN_WLAN_MSSIDENTRY,null,null,["Name","Enable","SSID","SSIDAdvertisementEnable","isolateClients","BeaconType","BasicAuthenticationMode","WEPKeyIndex","BasicEncryptionModes","WPAEncryptionModes","WPAAuthenticationMode","IEEE11iEncryptionModes","IEEE11iAuthenticationMode","PreSharedKey","GroupKeyUpdateInterval","RadiusServerIP","RadiusServerPort","RadiusServerPassword","MaxStaNum"])}guestnetObj=$.act(ACT_GET,LAN_WLAN_GUESTNET,wlanObj.__stack,null,["Enable","Name","IsModified","LANAccessEnable","USBAccessEnable","TCEnable","TCMaxUpBW","TCMinUpBW","TCMaxDownBW","TCMinDownBW","TCRuleID"]);guestnetObjSec=$.act(ACT_GET,LAN_WLAN_GUESTNET,wlanObjSec.__stack,null,["Name"]);tcEntry=$.act(ACT_GET,TC,null,null);if(!$.exe()){$.each(vapList,function(arg,index){if(this.name==guestnetObj.name){vapObj=this}if(this.name==guestnetObjSec.name){vapObjSec=this}});initShow(loadAdv)}}initSchedule();showSchedule();initTimeout()}function getTimeStr(t){var min=Math.floor(t/60);var sec=t-60*min;var hour=Math.floor(min/60);min=min-60*hour;var timeStr="";if(hour<10){timeStr=timeStr+"0"}timeStr=timeStr+hour+":";if(min<10){timeStr=timeStr+"0"}timeStr=timeStr+min+":";if(sec<10){timeStr=timeStr+"0"}timeStr=timeStr+sec;return timeStr}function showRemainingTime2g(remainingTime2g){if(remainingTime2g<=0||$.id("guestDis").checked==true){$.addClass($.id("t_uptime1"),"nd");$.addClass($.id("countDown2g"),"nd");$.addClass($.id("countDown5g"),"nd");return}var showStr=getTimeStr(remainingTime2g);$.removeClass($.id("t_uptime1"),"nd");$.removeClass($.id("countDown2g"),"nd");$.addClass($.id("countDown5g"),"nd");left=remainingTime2g-1;$.h($.id("countDown2g"),showStr);t1=setTimeout("showRemainingTime2g(left)",1000)}function showRemainingTime5g(remainingTime5g){if(remainingTime5g<=0){$.addClass($.id("t_uptime1"),"nd");$.addClass($.id("countDown2g"),"nd");$.addClass($.id("countDown5g"),"nd");return}var showStr=getTimeStr(remainingTime5g);$.removeClass($.id("t_uptime1"),"nd");$.removeClass($.id("countDown5g"),"nd");$.addClass($.id("countDown2g"),"nd");left=remainingTime5g-1;$.h($.id("countDown5g"),showStr);t2=setTimeout("showRemainingTime5g(left)",1000)};</script>
+<p class="et T" id="gn">Guest Network</p>
+<div class="con1 M">
+	<p class="ct"></p>
+	<p class="bl"></p>
+	<div id="guest_elem_adv">
+		<div id="div_accessLocal">
+		<p class="L2" ><b class="item L T" id="t_lAccess">Allow Guests To Access My Local Network:</b><select id="lan_access" class="M">
+			<option class="T T_dis" value="0">Disable</option>
+			<option class="T T_en" value="1">Enable</option>
+		</select></p>
+		</div>
+		<p class="nd"><b class="item L T" id="t_uAccess">Allow Guests To Access My USB Storage Sharing:</b><select id="usb_access" class="M">
+			<option class="T T_dis" value="0">Disable</option>
+			<option class="T T_en" value="1">Enable</option>
+		</select></p>
+		<p class="L2"><b class="item L T" id="t_wIso">Guest Network Isolation:</b><select id="wlan_iso" class="M">
+			<option class="T T_dis" value="0">Disable</option>
+			<option class="T T_en" value="1">Enable</option>
+		</select></p>
+		
+		<div id="div_bandwidthControl">
+		<p class="L2"><b class="item L T" id="t_gNtc">Guest Network Bandwidth Control:</b>
+		<select id="guestTcEn" class="M" onchange="showTCAccess()">
+			<option class="T T_dis" value="0">Disable</option>
+			<option class="T T_en" value="1">Enable</option>
+		</select>
+		<i id="tcTip" class="nd"><span class="T" id="t_gnTc_warn">Device's Bandwidth Control Function is disabled, Click</span><span class="a T" onclick="openTC(this)" id="t_wlGuest_t2_1"> here</span><span class="T" id="t_wlGuest_t3_1"> to enable it.</span></i>
+		</p>
+		</div>
+		<div id="gn_tc_div" class="nd">
+			<p class="L2">
+				<b class="item">&nbsp;</b>
+				<b style="padding:10px"><span class="T" id="t_minrate">Egress Rate</span>(Kbps)</b>
+				<b><span class="T" id="t_maxrate">&nbsp;&nbsp;&nbsp;&nbsp;Ingress Rate</span>(Kbps)</b>
+			</p>
+			<p class="L2">
+				<b class="item T" id="t_up">Upstream:</b>
+				<input type="text" class="text XL" id="guestTcMinUpBW" maxlength="6"/>
+				<input type="text" class="text XL" id="guestTcMaxUpBW" maxlength="6"/>
+			</p>
+			<p class="L2">
+				<b class="item T" id="t_down">Downstream:</b>
+				<input type="text" class="text XL" id="guestTcMinDownBW" maxlength="6"/>
+				<input type="text" class="text XL" id="guestTcMaxDownBW" maxlength="6"/>
+			</p>
+		</div>
+	</div>
+
+	<p class="bl"></p>
+	<p class="br"></p>
+	<p class="nd"><b class="item L T" id="t_bandSel">Band Select:</b>
+		<select class="M" id="guestBand" onchange="bandChange(0)">
+			<option value="0">2.4GHz</option>
+			<option value="1">5GHz</option>
+		</select>
+	</p>
+	<div id="apTip" class="nd"><p align="left" class = "L5"><i><span class="T" id="t_wlGuest_t1">Wireless Function is disabled, Click</span><span class="a T" id="t_wlGuest_t2_2" onclick="openWl(this)"> here</span><span class="T" id="t_wlGuest_t3_2"> to enable it.</span></i></p></div>
+	<div class="con2" id="frameMain">	
+		<p class="L2"><b class="item L T" id="t_gNet">Guest Network:</b>
+			<input name="guestNet" name="guestEnable" id="guestEn" type="radio" onclick="showGuestEnable()"/><span class="T T_en">Enable</span>
+			<input name="guestNet" name="guestEnable" id="guestDis" type="radio" onclick="showGuestEnable()"/><span class="T T_dis">Disable</span>
+		</p>
+
+		<p class="L2"><b class="item L T" id="t_ssid">Network Name:</b><input type="text" class="text" size="20"  maxlength="32" id="guestSSID"/></p>
+		<p class="L2"><b class="item L T" id="t_stanum">Max Guests number:</b><input type="text" class="text" size="20"  maxlength="2" id="guestMaxstanum"/></p>
+		<p class="L2"><b class="item L T" id="t_sec">Security:</b>
+			<select id="SecurityType" style="width:200px" onchange="showPSK()">
+				<option id="t_disWlSec" value="0">Disable Wireless Security</option>
+				<option class="T T_wpaPersonal" value="1">WPA/WPA2 - Personal</option>
+				<option id="op_wpa2wpa3auto" class="T T_wpa3Personal" value="2">WPA2/WPA3 - Personal</option>s
+			</select>
+		</p>
+	<div id="frameMain2">
+	<div class="nd" id="wpaSecurityDiv">
+		<p class="L2"><b class="item L T T_authtype">Authentication Type:</b>
+		<div id="pskAuthTypeDiv">
+			<select id="pskAuthType" name="pskAuthType" class="M">
+				<option value="0" class="T T_auto">Auto</option>
+				<option value="1">WPA-PSK</option>
+				<option value="2">WPA2-PSK</option>
+			</select>
+		</div>
+		<div id="psk3AuthTypeDiv" class="nd">
+			<select id="psk3AuthType" name="psk3AuthType" class="M">
+				<option value="0" class="T T_auto">Auto</option>
+				<option value="1">WPA3-SAE</option>
+			</select>
+		</div>
+		</p>
+		<div id="encryptionDiv">
+		<p class="L2"><b class="item L T T_encryption">Encryption:</b>
+		<select id="pskCipher" name="pskCipher" class="M">
+			<option value="0" id="tag_auto" class="T T_auto">Auto</option>
+			<option value="1">TKIP</option>
+			<option value="2">AES</option>
+		</select>
+		</p>
+		</div>
+		<p class="L2"><b class="item L T T_wlpwd">Password:</b> <input type=text id=pskSecret  class=text value="" size="40" maxlength="64" /></p>
+		<p class="L2"><b class="item L">&nbsp;</b>&nbsp; <span class="T T_pskpwdwarn">(Enter ASCII characters between 8 and 63 or Hexadecimal characters between 8 and 64.)</span></p>
+		<p class="L2"><b class="item L T" id="t_time">Group Key Update Period:</b> <input id=interval type=text class=text value="" size="9" maxlength="9" /> (<span class="T T_seconds">seconds</span>, <span class="T" id="t_timeval">minimum is 30, 0 means no update</span>)</p>
+	</div>
+	</div>
+	<p class="br"></p>
+	<p class="L2"><b class="item L T" id="t_accTime">Access Time:</b>
+		<select id="guestScheduleEn" class="M" onchange="showSchedule()">
+			<option value="0" id="t_timeout">Timeout</option>
+			<option value="1" id="t_schedule">Schedule</option>
+		</select>
+	</p>
+	<div id="timeout_div" class="nd">
+		<p class="L2"><b class="item L">&nbsp;</b>
+		<tr name="TIMEOUT" id="TIMEOUT_id">
+			<td colspan=2>
+				<INPUT name="timeouthour" id="timeouthour_id" type=text class=text value="" size="9" maxlength="4">
+					&nbsp;<span class="T T_hours">Hours</span>&nbsp;
+				<INPUT name="timeoutmin" id="timeoutmin_id" type=text class=text value="" size="9" maxlength="4">
+					&nbsp;<span class="T T_minutes_full">Minutes</span>
+			</td>
+			<td>&nbsp;</td>
+		</tr>
+		<p class="L2"><b class="item L">&nbsp;</b>
+		<tr>
+			<td colspan=2>
+				<span style="color:#C11C66;" id="t_uptime1">Remaining Time:</span>
+				<span class="nd" style="color:#929292; font-size:22px; font-weight:bold;" id="countDown2g"></span>
+				<span class="nd" style="color:#929292; font-size:22px; font-weight:bold;" id="countDown5g"></span>
+			</td>
+			<td>&nbsp;</td>
+		</tr>
+	</div>
+
+	<div id="at_div" class="nd">
+		<div class="con1 L">
+		<p class="ct"></p>
+		<div class="con2">
+		<div class="nd" id="hwtip"><p align="left"><i class="T" id="t_notice">Notice: WiFi schedule was disabled beacause of WiFi On/Off button has been set to Off position.</i></p></div>
+		<p><i class="T" id="t_wlSecduleTip">Click the schedule table or use the 'Add' button to choose the period on which you need the wireless off automatically!</i></p>
+		<p class="L1"><span class="T T_scheduleTip">The Schedule is based on the time of the Router. The time can be set in "System Tools -></span><span class="a T T_timeSet" style="color:#C11C66" onclick="$.loadMain('time.htm');"> Time Settings</span>".</p>
+		<p class="br"></p>
+		<p>
+		<b class="item T" id="t_wlSched">Wireless Schedule:</b>
+		<input type="radio" name="scheap" id="apen" /><span class="T T_en">Enable</span>
+		<b class="S">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
+		<input type="radio" name="scheap" id="apdis" /><span class="T T_dis">Disable</span>
+		</p>
+		<p class="br"></p>
+		<p><b class="fl L ml T" id="t_setto">Apply To:</b><b class="fl L T" id="t_start">Start Time:</b><b class="fl L T" id="t_end">End Time:</b></p>
+		<p><b class="fl L"><select id="weekDay" class="M" onchange="showWeek();">
+		<option class="T" id="t_day" value="day">Each Day</option>
+		<option class="T" id="t_week" value="week">Each Week</option>
+		</select></b>
+		<b class="fl L">
+		<select id="timeS" class="M" >
+		<option value=0>00:00</option><option value=1>00:30</option>
+		<option value=2>01:00</option><option value=3>01:30</option>
+		<option value=4>02:00</option><option value=5>02:30</option>
+		<option value=6>03:00</option><option value=7>03:30</option>
+		<option value=8>04:00</option><option value=9>04:30</option>
+		<option value=10>05:00</option><option value=11>05:30</option>
+		<option value=12>06:00</option><option value=13>06:30</option>
+		<option value=14>07:00</option><option value=15>07:30</option>
+		<option value=16>08:00</option><option value=17>08:30</option>
+		<option value=18>09:00</option><option value=19>09:30</option>
+		<option value=20>10:00</option><option value=21>10:30</option>
+		<option value=22>11:00</option><option value=23>11:30</option>
+		<option value=24>12:00</option><option value=25>12:30</option>
+		<option value=26>13:00</option><option value=27>13:30</option>
+		<option value=28>14:00</option><option value=29>14:30</option>
+		<option value=30>15:00</option><option value=31>15:30</option>
+		<option value=32>16:00</option><option value=33>16:30</option>
+		<option value=34>17:00</option><option value=35>17:30</option>
+		<option value=36>18:00</option><option value=37>18:30</option>
+		<option value=38>19:00</option><option value=39>19:30</option>
+		<option value=40>20:00</option><option value=41>20:30</option>
+		<option value=42>21:00</option><option value=43>21:30</option>
+		<option value=44>22:00</option><option value=45>22:30</option>
+		<option value=46>23:00</option><option value=47>23:30</option>
+		</select></b>
+		<b class="fl L">
+		<select id="timeE" class="M">
+		<option value=0>00:30</option>
+		<option value=1>01:00</option><option value=2>01:30</option>
+		<option value=3>02:00</option><option value=4>02:30</option>
+		<option value=5>03:00</option><option value=6>03:30</option>
+		<option value=7>04:00</option><option value=8>04:30</option>
+		<option value=9>05:00</option><option value=10>05:30</option>
+		<option value=11>06:00</option><option value=12>06:30</option>
+		<option value=13>07:00</option><option value=14>07:30</option>
+		<option value=15>08:00</option><option value=16>08:30</option>
+		<option value=17>09:00</option><option value=18>09:30</option>
+		<option value=19>10:00</option><option value=20>10:30</option>
+		<option value=21>11:00</option><option value=22>11:30</option>
+		<option value=23>12:00</option><option value=24>12:30</option>
+		<option value=25>13:00</option><option value=26>13:30</option>
+		<option value=27>14:00</option><option value=28>14:30</option>
+		<option value=29>15:00</option><option value=30>15:30</option>
+		<option value=31>16:00</option><option value=32>16:30</option>
+		<option value=33>17:00</option><option value=34>17:30</option>
+		<option value=35>18:00</option><option value=36>18:30</option>
+		<option value=37>19:00</option><option value=38>19:30</option>
+		<option value=39>20:00</option><option value=40>20:30</option>
+		<option value=41>21:00</option><option value=42>21:30</option>
+		<option value=43>22:00</option><option value=44>22:30</option>
+		<option value=45>23:00</option><option value=46>23:30</option>
+		<option value=47 selected>24:00</option>
+		</select></b>
+		<input type="button" class="button L T T_add" value="Add" id="scheAdd" onclick="addTime();"/>
+		</p>
+		<div id="week" class="nd">
+		<p class="br"></p>
+		<p>
+		<input type="checkbox" id="mon"/><span class="T T_mon">Mon.</span>&nbsp;&nbsp;
+		<input type="checkbox" id="tue"/><span class="T T_tues">Tues.</span>&nbsp;&nbsp;
+		<input type="checkbox" id="wed"/><span class="T T_wed">Wed.</span>&nbsp;&nbsp;
+		<input type="checkbox" id="thu"/><span class="T T_thur">Thur.</span>&nbsp;&nbsp;
+		<input type="checkbox" id="fri"/><span class="T T_fri">Fri.</span>&nbsp;&nbsp;
+		<input type="checkbox" id="sat"/><span class="T T_sat">Sat.</span>&nbsp;&nbsp;
+		<input type="checkbox" id="sun"/><span class="T T_sun">Sun.</span>
+		</p>
+		</div>
+		<p class="br"></p>
+		<div style="width: 524px; margin: 0 auto;">
+		<div style="float: left; width: 40px; padding: 1px 0 0 1px;">
+		<table class="week" style="border-collapse: collapse;" cellpadding="0" cellspacing="0">
+			<tr><th class="T T_time" style="height: 35px;">Time</th></tr>
+			<tr><th class="T T_sun">Sun.</th></tr>
+			<tr><th class="T T_mon">Mon.</th></tr>
+			<tr><th class="T T_tues">Tues.</th></tr>
+			<tr><th class="T T_wed">Wed.</th></tr>
+			<tr><th class="T T_thur">Thur.</th></tr>
+			<tr><th class="T T_fri">Fri.</th></tr>
+			<tr><th class="T T_sat">Sat.</th></tr>
+		</table>
+		</div>
+		<div style="overflow-x: scroll; width: 481px; padding: 1px 0 0 1px; float: left;">
+		<table id="timeTbl" class="cale bdr" style="border-collapse: collapse; width: 769px; table-layout: fixed;" cellpadding="0" cellspacing="0">
+		<tr height="35px">
+			<th>0:00</th><th>1:00</th><th>2:00</th><th>3:00</th><th>4:00</th><th>5:00</th>
+			<th>6:00</th><th>7:00</th><th>8:00</th><th>9:00</th><th>10:00</th><th>11:00</th>
+			<th>12:00</th><th>13:00</th><th>14:00</th><th>15:00</th><th>16:00</th><th>17:00</th>
+			<th>18:00</th><th>19:00</th><th>20:00</th><th>21:00</th><th>22:00</th><th>23:00</th>
+		</tr></table>
+		</div>
+		</div>
+		<div class="clr"></div>
+		<p class="br"></p>
+		<p><input type="button" class="button XL T" value="Clear Schedule" id="t_clear" onclick="cleanTbl();" /></p>
+		<p class="br"></p>
+		</div>
+		</div>
+	</div>
+	<p class="br"></p>
+	</div>
+
+	<p class="bl"></p>
+	<div id="gn_savebtn_div">
+		<p class="tail" id="tail">
+		<input type="button" class="button L T T_save" id="saveBtn" value="Save" onclick="doSave(this);"/>
+	</div>
+</div>
+<script language="javascript" type="text/javascript">$.loadHelpFrame("GuestNetWirelessCfgHelpRpm.htm");var basicList;var wlanObj,wlanObjSec,mssidObj,vapList,vapObj,vapObjSec,guestnetObj,qosEntryList,upQosEntry,downQosEntry;var beaconType,basicAuthenticationMode,WEPKeyIndex,wepLevel,basicEncryptionModes,WPAEncryptionModes,WPAAuthenticationMode,IEEE11iAuthenticationMode,X_TP_PreSharedKey,X_TP_RadiusServerIP,X_TP_RadiusServerPort,X_TP_RadiusServerPassword;if(INCLUDE_LAN_WLAN_SAE){var WPA3EncryptionModes,WPA3AuthenticationMode}var vapIndx;var scheTblInited=0;var oldVapEn;var manualSwitchWl=false;var guestObj=$.act(ACT_GL,LAN_WLAN_GUESTNET,null,null,["lastModified"]);var found=0;var pStk;var bandIdx=0;if(!$.exe()){$.each(guestObj,function(){if(this.lastModified=="1"){pStk=this.__stack;found=1}})}if(found==1){var wlan=$.act(ACT_GET,LAN_WLAN,pStk,null,["X_TP_Band"]);if(!$.exe()){if(wlan.X_TP_Band=="2.4GHz"){$.id("guestBand").value="0"}else{$.id("guestBand").value="1"}}}bandChange(1);if(!INCLUDE_LAN_WLAN_SAE){$.id("op_wpa2wpa3auto").remove()};</script>

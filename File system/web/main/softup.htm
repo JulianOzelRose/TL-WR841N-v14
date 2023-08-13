@@ -1,0 +1,18 @@
+﻿<script language="javascript" type="text/javascript">function doSubmit(){if($.id("filename").value==""){$.alert(ERR_FIRM_FILE_NONE);return false}var regex=/^.+\.bin$/;if(!regex.test($.id("filename").value)){$.alert(CMM_CFG_FILE_FORMAT_ERR);return false}var formObj=$.d.forms[0];try{formObj.target="up_frame";formObj.action="/cgi/softup";formObj.submit()}catch(e){}$.guage(["<span class='T T_uploading'>"+s_str.uploading+"</span>","<span class='T T_wait_upload'>"+s_str.wait_upload+"</span>"],10,300,function(){$.guage(["<span class='T T_upgrading'>"+s_str.upgrading+"</span>","<span class='T T_wait_upgrade'>"+s_str.wait_upgrade+"</span>"],100,1800,function(){$.deleteCookie("Authorization");if(INCLUDE_LOGIN_GDPR_ENCRYPT){try{$.newencryptorManager.cleanStorage()}catch(e){}}window.parent.$.refresh()});$.cgi("/cgi/softburn",null,function(ret){if(ret&&ret!=ERR_NETWORK&&ret!=ERR_EXIT&&ret!=ERR_NONE_FILE){$.errBack(ret,"softup.htm")}},false,true)})};</script>
+<p class="et T" id="et">Firmware Upgrade</p>
+<div class="con1 M">
+<p class="ct"></p>
+<p class="bl"></p>
+<div class="con2">
+
+<form action="/cgi/softup" enctype="multipart/form-data" method="post">
+<p><b class="item T" id="t_file">Firmware File Path</b><input type="file" name="filename" id="filename" /></p>
+</form>
+<p><b class="item T" id="t_swver">Firmware version</b><span id="up_sver">-</span></p>
+<p><b class="item T" id="t_hwver">Hardware version</b><span id="up_hver">-</span></p>
+
+</div>
+<p class="bl"></p>
+<p class="tail"><input type="button" class="button L T" id="t_upgrade" value="Upgrade" onclick="return doSubmit()" /></p>
+</div>
+<script language="javascript" type="text/javascript">$.loadHelpFrame("SoftwareUpgradeHelpRpm.htm");(function(){var obj=$.act(ACT_GET,IGD_DEV_INFO,null,null,["hardwareVersion","softwareVersion"]);if(!$.exe()){$.h($.id("up_sver"),obj.softwareVersion);$.h($.id("up_hver"),obj.hardwareVersion)}})();</script>

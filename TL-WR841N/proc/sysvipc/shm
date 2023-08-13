@@ -1,4 +1,0 @@
-       key      shmid perms       size  cpid  lpid nattch   uid   gid  cuid  cgid      atime      dtime      ctime
-     15002          0   666     327684    78   171      0     0     0     0     0      29828      29834          2
-      1234      32769   666     409600    78   361      2     0     0     0     0      29828      29839          2
-     15200      65538   666      24388   330   332      1     0     0     0     0      28807      28807      28807

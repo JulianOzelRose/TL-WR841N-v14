@@ -1,0 +1,32 @@
+﻿<script language="javascript" type="text/javascript">var logs;var severities=[s_str.emerg,s_str.alert,s_str.crit,m_str.err,m_str.warn,s_str.notice,s_str.info,s_str.debug];function resize(){if(arguments[0]&&arguments[0].nodeName){switch(arguments[0].nodeName.toLowerCase()){case"table":$.resizeTlb.apply(this,arguments);break}}else{switch($.flag){case 6:case 7:$.id("menu").style.height="auto";$.w.scrollBy(0,1);var height=$.d.body.clientHeight;$.id("menu").style.height=height-$.id("ban").clientHeight-($.id("bottom")?$.id("bottom").clientHeight:0)-30+"px";$.w.scrollBy(0,-1);break;default:$.id("con").style.minHeight=$.d.documentElement.clientHeight-($.id("bottom")?$.id("bottom").clientHeight:0)+"px";$.id("cover").style.height=$.d.body.clientHeight+"px";break}$.fixTbl()}}function clrtbl(tbl){$.clearAsync();while(tbl.rows.length>1){tbl.deleteRow(-1)}}function addOne(tbl,obj,index){var row=tbl.insertRow(-1);var cell=row.insertCell(-1);cell.width="31px";$.addClass(cell,"tc");$.h(cell,index);index++;cell=row.insertCell(-1);cell.width="115px";$.addClass(cell,"tc");$.h(cell,obj[1]);cell=row.insertCell(-1);$.addClass(cell,"tc");cell.width="44px";$.h(cell,obj[3]);cell=row.insertCell(-1);$.addClass(cell,"tc");cell.width="66px";$.h(cell,severities[obj[2]]);cell=row.insertCell(-1);$.h(cell,obj[4].replace(/\&/g,"&amp;").replace(/</g,"&lt;"))}function bldtbl(){var tbl=$.id("log_tbl");clrtbl(tbl);var module=$.id("module").options[$.id("module").selectedIndex].text;var severity=$.id("severity").value;var index=1;for(var i=0,l=logs.length;i<l;i++){if((module=="ALL"||module==s_str.all||module==logs[i][3])&&parseInt(logs[i][2],10)<=severity){if(index>21){break}addOne(tbl,logs[i],index);index++}}resize(tbl,20);$.auto(function(){for(;i<l;i++){if((module=="ALL"||module==s_str.all||module==logs[i][3])&&parseInt(logs[i][2],10)<=severity){addOne(tbl,logs[i],index);index++;return i++}}return false},13)}function init(){var opt;var sel=$.id("severity");for(var i=0,l=severities.length;i<l;i++){opt=$.c("option");opt.text=severities[i];opt.value=i;try{sel.add(opt,null)}catch(e){sel.add(opt)}}if($.mainParam){sel.selectedIndex=$.mainParam[1]}else{opt.selected=true}if($.local||$.sim){logs=$.io("./xml/log.txt",false).split("\r\n")}else{logs=$.io("/cgi/log",false).split("\r\n")}var ret=parseInt(logs.shift(),10);logs.pop();logs.reverse();var modules=[];if(ret){return $.alert(ret)}for(var i=0,l=logs.length;i<l;i++){logs[i]=logs[i].match(/([\d-]+\s[\d:]+)\s\[(\d)\]\s(\w+):\s(.*)/);logs[i][3]=logs[i][3].toUpperCase();if(!$.inArray(logs[i][3],modules)){modules.push(logs[i][3])}}modules.sort();sel=$.id("module");for(var i=0,l=modules.length;i<l;i++){opt=$.c("option");opt.text=modules[i];try{sel.add(opt,null)}catch(e){sel.add(opt)}}if($.mainParam){$.each(modules,function(arg,index){if($.mainParam[0]==this.toUpperCase()){sel.selectedIndex=index+1;return false}})}bldtbl()}function doLoad(url){var arg=[$.id("module").options[$.id("module").selectedIndex].text,$.id("severity").value];$.loadMain(url,arg)}function saveLog(url){var fakeLink=document.createElement("a");if(typeof(fakeLink.click)=="undefined"){location.href=url}else{fakeLink.href=url;document.body.appendChild(fakeLink);fakeLink.click()}};</script>
+<p class="et T" id="et">System Log</p>
+<div class="con1 XXL">
+<p class="ct"></p>
+<p class="bl"></p>
+<div class="con2">
+	<p class="L2">
+		<b class="T" id="t_logtype">Log Type:</b>
+		<select id="module" class="M" onchange="bldtbl()">
+			<option class="T T_all" selected>ALL</option>
+		</select>
+		<b class="ml T" id="t_loglevel">Log Level:</b>
+		<select id="severity" class="L" onchange="bldtbl()">
+		</select>
+	</p>
+	<p class="br"></p>
+	<div class="thead XXL ts">
+		<table cellspacing="0" cellpadding="0" class="bdr XXL" id="log_tbl">
+			<tr><th class="T T_index" width="31px">Index</th><th class="T" id="t_time" width="115px">Time</th><th class="T" id="t_type" width="44px">Type</th><th class="T" id="t_level" width="66px">Level</th><th class="T" id="t_content">Content</th></tr>
+		</table>
+	</div>
+
+</div>
+<p class="bl"></p>
+<p class="tail" id="tail">
+	<input type="button" class="button L T T_refresh>" value="Refresh" onclick="$.addLoading(this, 200, function(){doLoad();})" />
+	<input type="button" class="button L T" id="t_clear" value="Clear Log" onclick="$.cgi('/cgi/log', 'clr');doLoad();" />
+	<input type="button" class="button L T" id="t_save" value="Save Log" onclick="saveLog('/cgi/log?down');" />  
+	<input type="button" class="button L T" id="t_setting" value="Syslog Settings" onclick="doLoad('logConf.htm')" />
+</p>
+</div>
+<script language="javascript" type="text/javascript">$.loadHelpFrame("SystemLogHelpRpm.htm");init();</script>

@@ -1,0 +1,356 @@
+﻿<script language="javascript" type="text/javascript">if(INCLUDE_WAN_LAN_STATUS){var LAN1=2;var LAN2=3;var LAN3=4;var LAN4=5}function initMultiSSID(wlanObj){var mssid_status="Disabled";$.addClass($.id("wlanssid0"),"nd");$.removeClass($.id("multissid-ctn"),"nd");var multissidEn=$.act(ACT_GET,LAN_WLAN_MULTISSID,wlanObj.__stack,null,null);$.exe(function(ret){if(ret){return}var multissidList=$.act(ACT_GS,LAN_WLAN_MSSIDENTRY,null,multissidEn.__stack,null);$.exe(function(ret){if(ret){return}for(var i=1;i<5;i++){var mssidObj=multissidList[i-1];if(mssidObj.enable==1){$.h($.id("ssid"+i),mssidObj.SSID.replace(/\&/g,"&amp;").replace(/</g,"&lt;").replace(/ /g,"&nbsp;"));$.removeClass($.id("ssid"+i+"-ctn"),"nd");if($.sysMode=="MSSID"&&mssidObj.status=="Up"){mssid_status="Up"}}}if($.sysMode=="MSSID"&&mssid_status=="Up"){$.h($.id("wlstat"+0),"<span class='T T_enabled'>"+m_str.enabled+"</span>")}},true)},true)}function init(){$.auto(function(){$.reload();return false},20000);var days=0;var hours=0;var minutes=0;var seconds=0;var runTime;var tbl,row,cell;if($.fd==0){$.loadMain("qsStart.htm");$.loadHelpFrame("WzdStartHelpRpm.htm")}switch($.sysMode){case"Router":$.h($.id("operation"),s_str.router);break;case"AP":$.h($.id("operation"),s_str.ap);break;case"Repeater":$.h($.id("operation"),s_str.repeater);break;case"Client":$.h($.id("operation"),s_str.client);break;case"MSSID":$.h($.id("operation"),s_str.mssid);break;case"Hotspot":$.h($.id("operation"),s_str.hotspot);break;default:$.h($.id("operation"),s_str.router);break}if(INCLUDE_WAN_MODE){var sysMode=$.act(ACT_GET,SYS_MODE,null,null,["mode"])}var device=$.act(ACT_GET,IGD,null,null,["LANDeviceNumberOfEntries"]);var devInfo=$.act(ACT_GET,IGD_DEV_INFO,null,null,["softwareVersion","hardwareVersion","upTime"]);var wanComInfList=$.act(ACT_GL,WAN_COMMON_INTF_CFG,null,null,["WANAccessType"]);if(INCLUDE_WAN_LAN_STATUS){$.removeClass($.id("ethStatus"),"nd");$.h($.id("t_eth"),$.h($.id("t_eth"))+n_str.status.t_ethernet);$.h($.id("t_internet"),$.h($.id("t_internet"))+n_str.status.t_internet);$.h($.id("t_lan1"),$.h($.id("t_lan1"))+n_str.status.t_lan1);$.h($.id("t_lan2"),$.h($.id("t_lan2"))+n_str.status.t_lan2);$.h($.id("t_lan3"),$.h($.id("t_lan3"))+n_str.status.t_lan3);$.h($.id("t_lan4"),$.h($.id("t_lan4"))+n_str.status.t_lan4)}if(INCLUDE_WAN_LAN_STATUS){var wanEthStatus=$.act(ACT_GL,WAN_ETH_INTF,null,null,["status","maxBitRate","duplexMode"]);if(!$.exe()){if(wanEthStatus[0].status=="NoLink"){$.h($.id("internet"),$.h($.id("internet"))+n_str.status.t_unplugged)}else{if(wanEthStatus[0].maxBitRate=="10"){if(wanEthStatus[0].duplexMode=="Half"){$.h($.id("internet"),$.h($.id("internet"))+n_str.status.t_half_10)}else{$.h($.id("internet"),$.h($.id("internet"))+n_str.status.t_full_10)}}else{if(wanEthStatus[0].maxBitRate=="100"){if(wanEthStatus[0].duplexMode=="Half"){$.h($.id("internet"),$.h($.id("internet"))+n_str.status.t_half_100)}else{$.h($.id("internet"),$.h($.id("internet"))+n_str.status.t_full_100)}}else{}}}}var lanEthStatus=$.act(ACT_GL,LAN_ETH_INTF,null,null,["status","maxBitRate","duplexMode"]);if(!$.exe()){$.each(lanEthStatus,function(){if(this.__stack[2]==LAN1){if(this.status=="NoLink"){$.h($.id("lanPort1"),$.h($.id("lanPort1"))+n_str.status.t_unplugged)}else{if(this.maxBitRate=="10"){if(this.duplexMode=="Half"){$.h($.id("lanPort1"),$.h($.id("lanPort1"))+n_str.status.t_half_10)}else{$.h($.id("lanPort1"),$.h($.id("lanPort1"))+n_str.status.t_full_10)}}else{if(this.maxBitRate=="100"){if(this.duplexMode=="Half"){$.h($.id("lanPort1"),$.h($.id("lanPort1"))+n_str.status.t_half_100)}else{$.h($.id("lanPort1"),$.h($.id("lanPort1"))+n_str.status.t_full_100)}}else{}}}}if(this.__stack[2]==LAN2){if(this.status=="NoLink"){$.h($.id("lanPort2"),$.h($.id("lanPort2"))+n_str.status.t_unplugged)}else{if(this.maxBitRate=="10"){if(this.duplexMode=="Half"){$.h($.id("lanPort2"),$.h($.id("lanPort2"))+n_str.status.t_half_10)}else{$.h($.id("lanPort2"),$.h($.id("lanPort2"))+n_str.status.t_full_10)}}else{if(this.maxBitRate=="100"){if(this.duplexMode=="Half"){$.h($.id("lanPort2"),$.h($.id("lanPort2"))+n_str.status.t_half_100)}else{$.h($.id("lanPort2"),$.h($.id("lanPort2"))+n_str.status.t_full_100)}}else{}}}}if(this.__stack[2]==LAN3){if(this.status=="NoLink"){$.h($.id("lanPort3"),$.h($.id("lanPort3"))+n_str.status.t_unplugged)}else{if(this.maxBitRate=="10"){if(this.duplexMode=="Half"){$.h($.id("lanPort3"),$.h($.id("lanPort3"))+n_str.status.t_half_10)}else{$.h($.id("lanPort3"),$.h($.id("lanPort3"))+n_str.status.t_full_10)}}else{if(this.maxBitRate=="100"){if(this.duplexMode=="Half"){$.h($.id("lanPort3"),$.h($.id("lanPort3"))+n_str.status.t_half_100)}else{$.h($.id("lanPort3"),$.h($.id("lanPort3"))+n_str.status.t_full_100)}}else{}}}}if(this.__stack[2]==LAN4){if(this.status=="NoLink"){$.h($.id("lanPort4"),$.h($.id("lanPort4"))+n_str.status.t_unplugged)}else{if(this.maxBitRate=="10"){if(this.duplexMode=="Half"){$.h($.id("lanPort4"),$.h($.id("lanPort4"))+n_str.status.t_half_10)}else{$.h($.id("lanPort4"),$.h($.id("lanPort4"))+n_str.status.t_full_10)}}else{if(this.maxBitRate=="100"){if(this.duplexMode=="Half"){$.h($.id("lanPort4"),$.h($.id("lanPort4"))+n_str.status.t_half_100)}else{$.h($.id("lanPort4"),$.h($.id("lanPort4"))+n_str.status.t_full_100)}}else{}}}}})}}if($.sysMode=="Router"||$.sysMode=="Hotspot"){var wanIpConList=$.act(ACT_GL,WAN_IP_CONN,null,null);var wanPppConList=$.act(ACT_GL,WAN_PPP_CONN,null,null);if(INCLUDE_L2TP){var wanL2tpConList=$.act(ACT_GL,WAN_L2TP_CONN,null,null)}if(INCLUDE_PPTP){var wanPptpConList=$.act(ACT_GL,WAN_PPTP_CONN,null,null)}if(INCLUDE_USB_3G_DONGLE){var wan3glnkcfgList=$.act(ACT_GL,WAN_USB_3G_LINK_CFG,null,null,["enable","backupEnable","cardName"])}}var brList=$.act(ACT_GL,L2_BRIDGING_ENTRY,null,null,["bridgeName"]);if(INCLUDE_LAN_WLAN){$.removeClass($.id("wlan_con"),"nd");if(INCLUDE_LAN_WLAN_DUALBAND){$.removeClass($.id("wlan_con2"),"nd")}var wlanList=$.act(ACT_GL,LAN_WLAN,null,null,["status","SSID","BSSID","channel","autoChannelEnable","standard","beaconType","basicEncryptionModes","X_TP_Bandwidth","possibleDataTransmitRates","WPAAuthenticationMode","IEEE11iAuthenticationMode"]);if(!$.exe()){var wlanObj=wlanList[0];var wdsObj=$.act(ACT_GET,LAN_WLAN_WDSBRIDGE,wlanObj.__stack,null,["BridgeEnable","BridgeSSID"]);if(INCLUDE_LAN_WLAN_DUALBAND){var wlanObj1=wlanList[1];var wdsObj1=$.act(ACT_GET,LAN_WLAN_WDSBRIDGE,wlanObj1.__stack,null,["BridgeEnable","BridgeSSID"])}if($.sysMode=="MSSID"){initMultiSSID(wlanObj)}}if(INCLUDE_LAN_WLAN_SCHEDULE){var wlanScheList=$.act(ACT_GL,LAN_WLAN_TASK_SCHEDULE,null,null,["enable","isUsrCtrl"])}}if(INCLUDE_IPV6){var lanIp6List=$.act(ACT_GL,LAN_IP6_HOST_CFG,null,null);var lanIp6Info=$.act(ACT_GL,LAN_IP6_INTF,null,null)}if(INCLUDE_VOIP){$.removeClass($.id("voip_status"),"nd");var voipAccounts=$.act(ACT_GL,XTP_MULTI_ISP,null,null,["multiProfileName","multiRegistrarServer","multiExtension","multiStatus"])}if(!$.exe()){var ethStk;var usb3gStk;if(INCLUDE_IPV6){$.each(lanIp6List,function(){if(this.__ifName=="br0"){if(this.RADVDEnable==1){$.h($.id("cfgtype"),"RADVD")}else{$.h($.id("cfgtype"),"DHCPv6")}}});$.each(lanIp6Info,function(){if(this.__ifName=="br0"){$.h($.id("lan6addr"),(this.IPv6InterfaceAddress)?(this.IPv6InterfaceAddress):"N/A");$.h($.id("lan6prelen"),this.IPv6InterfaceAddressPrefixLength)}})}$.each(wanComInfList,function(){if(this.WANAccessType=="Ethernet"){ethStk=this.__stack}if(this.WANAccessType=="USB_3G"){usb3gStk=this.__stack}});$.h($.id("sver"),devInfo.softwareVersion);$.h($.id("hver"),devInfo.hardwareVersion);days=Math.floor((devInfo.upTime)/(24*60*60),10);hours=Math.floor((devInfo.upTime)/(60*60),10)%24;hours=hours<10?"0"+hours:hours;minutes=Math.floor(((devInfo.upTime)/60),10)%60;minutes=minutes<10?"0"+minutes:minutes;seconds=(devInfo.upTime)%60;seconds=seconds<10?"0"+seconds:seconds;runTime=days+s_str.days+hours+":"+minutes+":"+seconds;$.h($.id("UpTime"),runTime);var tbl=$.id("wan_table");var secondIP;var secondFind=0;if(INCLUDE_DUAL_ACCESS){$.addClass($.id("secondConn"),"nd")}if($.sysMode=="Router"||$.sysMode=="Hotspot"){var usb3gBackup=0;var usb3gModemStatus;if(INCLUDE_USB_3G_DONGLE){$.each(wan3glnkcfgList,function(){if(this.enable==1){usb3gBackup=this.backupEnable;usb3gModemStatus=this.cardName;return false}})}$.each(wanIpConList,function(){var tmpStk=$.stkPop(this.__stack,2);if(this.enable==1&&(!INCLUDE_IPV6||INCLUDE_IPV6&&this.X_TP_IPv4Enabled==1)){var row=tbl.insertRow(-1);if(INCLUDE_DUAL_ACCESS){secondIP=this;secondFind=1}cell=row.insertCell(-1);cell.innerHTML=this.name;var thisStkParts=(this.__stack).split(",");var stk=thisStkParts[0]+thisStkParts[1];var stk1=thisStkParts[0];if(ethStk==tmpStk){cell=row.insertCell(-1);if(this.connectionType=="IP_Routed"){if(this.addressingType=="DHCP"){cell.innerHTML="<span class='T T_dynip'>"+s_str.dynip+"</span>";cell=row.insertCell(-1);cell.innerHTML="N/A";cell=row.insertCell(-1);if(this.MACAddressOverride==1){$.h($.id("wanmac"),this.X_TP_ClonedMACAddress)}else{$.h($.id("wanmac"),this.MACAddress)}$.h($.id("wanip"),this.externalIPAddress+"("+s_str.dynip+")");if(INCLUDE_BPA){if(this.X_TP_BpaEnable==1){$.h($.id("wanip"),this.externalIPAddress+"("+s_str.bpa_cable+")")}}if(this.subnetMask==""){$.h($.id("wanmask"),"0.0.0.0")}else{$.h($.id("wanmask"),this.subnetMask)}$.h($.id("gateway"),this.defaultGateway);if(this.DNSServers==""){$.h($.id("dns"),"0.0.0.0 0.0.0.0")}else{$.h($.id("dns"),$.htmlEncodeStr(this.DNSServers.split(",")[0]+" "+this.DNSServers.split(",")[1]))}cell.innerHTML=(this.externalIPAddress+" /"+(32-($.getmaskbit(this.subnetMask))));cell=row.insertCell(-1);cell.innerHTML=(this.defaultGateway)?this.defaultGateway:"0.0.0.0";cell=row.insertCell(-1);if(this.DNSServers==""){cell.innerHTML="0.0.0.0 0.0.0.0"}else{cell.innerHTML=$.htmlEncodeStr(this.DNSServers.split(",")[0]+" "+this.DNSServers.split(",")[1])}}else{if(this.addressingType=="Static"){if(this.MACAddressOverride==1){$.h($.id("wanmac"),this.X_TP_ClonedMACAddress)}else{$.h($.id("wanmac"),this.MACAddress)}$.h($.id("wanip"),this.externalIPAddress+"("+s_str.staip+")");if(this.subnetMask==""){$.h($.id("wanmask"),"0.0.0.0")}else{$.h($.id("wanmask"),this.subnetMask)}$.h($.id("gateway"),this.defaultGateway);if(this.DNSServers==""){$.h($.id("dns"),"0.0.0.0 0.0.0.0")}else{$.h($.id("dns"),$.htmlEncodeStr(this.DNSServers.split(",")[0]+" "+this.DNSServers.split(",")[1]))}cell.innerHTML="<span class='T T_staip'>"+s_str.staip+"</span>";cell=row.insertCell(-1);cell.innerHTML="N/A";cell=row.insertCell(-1);cell.innerHTML=(this.externalIPAddress+" /"+(32-($.getmaskbit(this.subnetMask))));cell=row.insertCell(-1);cell.innerHTML=(this.defaultGateway)?this.defaultGateway:"0.0.0.0";cell=row.insertCell(-1);if(this.DNSServers==""){cell.innerHTML="0.0.0.0 0.0.0.0"}else{cell.innerHTML=$.htmlEncodeStr(this.DNSServers.split(",")[0]+" "+this.DNSServers.split(",")[1])}}}}cell=row.insertCell(-1);if(this.connectionStatus=="Connected"){cell.innerHTML="<span class='T T_connected'>"+m_str.connected+"</span>"}else{if((this.connectionStatus=="Disconnected")||(this.connectionStatus=="Unconfigured")){cell.innerHTML="<span class='T T_disconnected'>"+m_str.disconnected+"</span>"}else{cell.innerHTML="<span class='T T_connecting'>"+m_str.connecting+"</span>"}}}}});$.each(wanPppConList,function(){var tmpStk=$.stkPop(this.__stack,2);if((this.enable==1||(INCLUDE_USB_3G_DONGLE&&tmpStk==usb3gStk&&(sysMode.mode=="USB_3G"||usb3gBackup==1)))&&(!INCLUDE_IPV6||INCLUDE_IPV6&&this.X_TP_IPv4Enabled==1)){var row=tbl.insertRow(-1);cell=row.insertCell(-1);cell.innerHTML=this.name;var thisStkParts=(this.__stack).split(",");var stk=thisStkParts[0]+thisStkParts[1];var stk1=thisStkParts[0];cell=row.insertCell(-1);if(this.transportType=="PPPoA"){cell.innerHTML="PPPoA"}else{if(this.transportType=="PPPoE"){cell.innerHTML="PPPoE"}else{if(this.transportType=="L2TP"){cell.innerHTML="L2TP"}else{if(this.transportType=="PPTP"){cell.innerHTML="PPTP"}else{if(this.transportType=="PPP3G"){cell.innerHTML="PPP3G"}else{cell.innerHTML="<span class='T T_unknown'>"+m_str.unknown+"</span>"}}}}}cell=row.insertCell(-1);if(ethStk==tmpStk){cell.innerHTML="N/A"}else{if(usb3gStk==tmpStk){cell.innerHTML="N/A"}}if(this.MACAddressOverride==1){$.h($.id("wanmac"),this.X_TP_ClonedMACAddress)}else{$.h($.id("wanmac"),this.MACAddress)}$.h($.id("wanip"),this.externalIPAddress+"(PPPoE)");if(this.lastConnectionError=="ERROR_AUTHENTICATION_FAILURE"){$.removeClass($.id("authFail"),"nd")}$.removeClass($.id("t_online"),"nd");days=Math.floor((this.uptime)/(24*60*60),10);hours=Math.floor((this.uptime)/(60*60),10)%24;hours=hours<10?"0"+hours:hours;minutes=Math.floor(((this.uptime)/60),10)%60;minutes=minutes<10?"0"+minutes:minutes;seconds=(this.uptime)%60;seconds=seconds<10?"0"+seconds:seconds;onlineTime=days+s_str.days+hours+":"+minutes+":"+seconds;$.h($.id("online"),onlineTime);if(this.connectionStatus=="Connected"){$.h($.id("wanmask"),"255.255.255.255")}else{$.h($.id("wanmask"),"0.0.0.0")}$.h($.id("gateway"),this.defaultGateway);if(this.DNSServers==""){$.h($.id("dns"),"0.0.0.0 0.0.0.0")}else{$.h($.id("dns"),$.htmlEncodeStr(this.DNSServers.split(",")[0]+" "+this.DNSServers.split(",")[1]))}if(INCLUDE_DUAL_ACCESS){if((this.secondConnection=="sec_conn_dynip")||(this.secondConnection=="sec_conn_staip")){if((1==secondFind)&&(secondIP.externalIPAddress.substring(0,4)!="169.")){$.removeClass($.id("secondConn"),"nd");if(secondIP.addressingType=="DHCP"){$.h($.id("secondwanip"),secondIP.externalIPAddress+"("+s_str.dynip+")")}else{if(secondIP.addressingType=="Static"){$.h($.id("secondwanip"),secondIP.externalIPAddress+"("+s_str.staip+")")}}if(secondIP.subnetMask==""){$.h($.id("secondwanmask"),"0.0.0.0")}else{$.h($.id("secondwanmask"),secondIP.subnetMask)}}}}cell=row.insertCell(-1);if((this.externalIPAddress=="")||(this.externalIPAddress=="0.0.0.0")){cell.innerHTML="0.0.0.0 /0"}else{cell.innerHTML=(this.externalIPAddress+" /32")}cell=row.insertCell(-1);cell.innerHTML=(this.remoteIPAddress?this.remoteIPAddress:"0.0.0.0");cell=row.insertCell(-1);if(this.DNSServers==""){cell.innerHTML="0.0.0.0 0.0.0.0"}else{cell.innerHTML=$.htmlEncodeStr(this.DNSServers.split(",")[0]+" "+this.DNSServers.split(",")[1])}cell=row.insertCell(-1);if(ethStk==tmpStk){if(this.connectionStatus=="Connected"){cell.innerHTML="<span class='T T_connected'>"+m_str.connected+"</span>"}else{if((this.connectionStatus=="Disconnected")||(this.connectionStatus=="Unconfigured")){cell.innerHTML="<span class='T T_disconnected'>"+m_str.disconnected+"</span>"}else{cell.innerHTML="<span class='T T_connecting'>"+m_str.connecting+"</span>"}}}else{if(usb3gStk==tmpStk){if(usb3gModemStatus=="Identify successfully"){if(this.connectionStatus=="Connected"){cell.innerHTML="<span class='T T_connected'>"+m_str.connected+"</span>"}else{if((this.connectionStatus=="Disconnected")||(this.connectionStatus=="Unconfigured")){cell.innerHTML="<span class='T T_disconnected'>"+m_str.disconnected+"</span>"}else{cell.innerHTML="<span class='T T_connecting'>"+m_str.connecting+"</span>"}}}else{if(usb3gModemStatus=="Unplugged"){cell.innerHTML="<span class='T T_unplugged'>"+m_str.unplugged+"</span>"}else{if(usb3gModemStatus=="Identifying..."){cell.innerHTML="<span class='T T_identifying'>"+m_str.identifying+"</span>"}else{cell.innerHTML="<span class='T T_unknown'>"+m_str.unknown+"</span>"}}}}}}});if(INCLUDE_L2TP){$.each(wanL2tpConList,function(){var tmpStk=$.stkPop(this.__stack,1);if(this.enable==1){var row=tbl.insertRow(-1);cell=row.insertCell(-1);cell.innerHTML=this.name;if(ethStk==tmpStk){if(this.MACAddressOverride==1){$.h($.id("wanmac"),this.clonedMACAddress)}else{$.h($.id("wanmac"),this.MACAddress)}$.h($.id("wanip"),this.externalIPAddress+"(L2TP)");if(this.connectionStatus=="Connected"){$.h($.id("wanmask"),"255.255.255.255")}else{$.h($.id("wanmask"),"0.0.0.0")}if(this.defaultGateway==""){$.h($.id("gateway"),"0.0.0.0")}else{$.h($.id("gateway"),this.defaultGateway)}if(this.DNSServers==""){$.h($.id("dns"),"0.0.0.0 0.0.0.0")}else{$.h($.id("dns"),$.htmlEncodeStr(this.DNSServers.split(",")[0]+" "+this.DNSServers.split(",")[1]))}cell=row.insertCell(-1);cell.innerHTML="L2TP";cell=row.insertCell(-1);cell.innerHTML="N/A";cell=row.insertCell(-1);if((this.externalIPAddress=="")||(this.externalIPAddress=="0.0.0.0")){cell.innerHTML="0.0.0.0 /0"}else{cell.innerHTML=(this.externalIPAddress+" /32")}cell=row.insertCell(-1);cell.innerHTML=(this.remoteIPAddress?this.remoteIPAddress:"0.0.0.0");cell=row.insertCell(-1);if(this.DNSServers==""){cell.innerHTML="0.0.0.0 0.0.0.0"}else{cell.innerHTML=$.htmlEncodeStr(this.DNSServers.split(",")[0]+" "+this.DNSServers.split(",")[1])}cell=row.insertCell(-1);if(this.connectionStatus=="Connected"){cell.innerHTML="<span class='T T_connected'>"+m_str.connected+"</span>"}else{if((this.connectionStatusIP=="Disconnected")||(this.connectionStatusIP=="Unconfigured")||((this.addressingType=="Static")&&(this.connectionStatusIP=="Connected")&&(this.connectionStatus=="Unconfigured"))){cell.innerHTML="<span class='T T_disconnected'>"+m_str.disconnected+"</span>"}else{cell.innerHTML="<span class='T T_connecting'>"+m_str.connecting+"</span>"}}$.removeClass($.id("L2TP_PPTP_SecondConn"),"nd");$.h($.id("L2TP_PPTP_secondwanip"),this.externalIPAddressIP);$.h($.id("L2TP_PPTP_secondwanmask"),this.subnetMaskIP);$.h($.id("L2TP_PPTP_gateway"),(this.defaultGatewayIP?this.defaultGatewayIP:"0.0.0.0"));$.h($.id("L2TP_PPTP_dns"),(this.DNSServersIP.split(",")[0]?this.DNSServersIP.split(",")[0]:"0.0.0.0"));$.h($.id("L2TP_PPTP_secdns"),(this.DNSServersIP.split(",")[1]?this.DNSServersIP.split(",")[1]:"0.0.0.0"))}}})}if(INCLUDE_PPTP){$.each(wanPptpConList,function(){var tmpStk=$.stkPop(this.__stack,1);if(this.enable==1){var row=tbl.insertRow(-1);cell=row.insertCell(-1);cell.innerHTML=this.name;if(ethStk==tmpStk){if(this.MACAddressOverride==1){$.h($.id("wanmac"),this.clonedMACAddress)}else{$.h($.id("wanmac"),this.MACAddress)}$.h($.id("wanip"),this.externalIPAddress+"(PPTP)");if(this.connectionStatus=="Connected"){$.h($.id("wanmask"),"255.255.255.255")}else{$.h($.id("wanmask"),"0.0.0.0")}if(this.defaultGateway==""){$.h($.id("gateway"),"0.0.0.0")}else{$.h($.id("gateway"),this.defaultGateway)}if(this.DNSServers==""){$.h($.id("dns"),"0.0.0.0 0.0.0.0")}else{$.h($.id("dns"),$.htmlEncodeStr(this.DNSServers.split(",")[0]+" "+this.DNSServers.split(",")[1]))}cell=row.insertCell(-1);cell.innerHTML="PPTP";cell=row.insertCell(-1);cell.innerHTML="N/A";cell=row.insertCell(-1);if((this.externalIPAddress=="")||(this.externalIPAddress=="0.0.0.0")){cell.innerHTML="0.0.0.0 /0"}else{cell.innerHTML=(this.externalIPAddress+" /32")}cell=row.insertCell(-1);cell.innerHTML=(this.remoteIPAddress?this.remoteIPAddress:"0.0.0.0");cell=row.insertCell(-1);if(this.DNSServers==""){cell.innerHTML="0.0.0.0 0.0.0.0"}else{cell.innerHTML=$.htmlEncodeStr(this.DNSServers.split(",")[0]+" "+this.DNSServers.split(",")[1])}cell=row.insertCell(-1);if(this.connectionStatus=="Connected"){cell.innerHTML="<span class='T T_connected'>"+m_str.connected+"</span>"}else{if((this.connectionStatusIP=="Disconnected")||(this.connectionStatusIP=="Unconfigured")||((this.addressingType=="Static")&&(this.connectionStatusIP=="Connected")&&(this.connectionStatus=="Unconfigured"))){cell.innerHTML="<span class='T T_disconnected'>"+m_str.disconnected+"</span>"}else{cell.innerHTML="<span class='T T_connecting'>"+m_str.connecting+"</span>"}}$.removeClass($.id("L2TP_PPTP_SecondConn"),"nd");$.h($.id("L2TP_PPTP_secondwanip"),this.externalIPAddressIP);$.h($.id("L2TP_PPTP_secondwanmask"),this.subnetMaskIP);$.h($.id("L2TP_PPTP_gateway"),(this.defaultGatewayIP?this.defaultGatewayIP:"0.0.0.0"));$.h($.id("L2TP_PPTP_dns"),(this.DNSServersIP.split(",")[0]?this.DNSServersIP.split(",")[0]:"0.0.0.0"));$.h($.id("L2TP_PPTP_secdns"),(this.DNSServersIP.split(",")[1]?this.DNSServersIP.split(",")[1]:"0.0.0.0"))}}})}if($.sysMode=="Router"&&ethStk){var wanEthIntfObj=$.act(ACT_GET,WAN_ETH_INTF,ethStk,null,["status"]);if(!$.exe()){if(wanEthIntfObj.status=="NoLink"){$.h($.id("gateway"),$.h($.id("gateway"))+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#C11C66" id="t_unplugged">'+m_str.unplugged+"</span>")}}}if(INCLUDE_IPV6){var tbl=$.id("wan6_table");$.each(wanIpConList,function(){var tmpStk=$.stkPop(this.__stack,2);if(this.enable==1&&this.X_TP_IPv6Enabled==1){var row=tbl.insertRow(-1);cell=row.insertCell(-1);cell.innerHTML=this.name;var thisStkParts=(this.__stack).split(",");var stk=thisStkParts[0]+thisStkParts[1];var stk1=thisStkParts[0];cell=row.insertCell(-1);if(this.X_TP_IPv6AddressingType=="Static"){cell.innerHTML="<span class='T T_staip6'>"+s_str.staip6+"</span>"}else{cell.innerHTML="<span class='T T_dynip6'>"+s_str.dynip6+"</span>"}cell=row.insertCell(-1);if(ethStk==tmpStk){cell.innerHTML="N/A"}cell=row.insertCell(-1);cell.innerHTML=$.htmlEncodeStr(this.X_TP_ExternalIPv6Address)+" /"+this.X_TP_PrefixLength;cell=row.insertCell(-1);cell.innerHTML=(this.X_TP_DefaultIPv6Gateway!="::")?$.htmlEncodeStr(this.X_TP_DefaultIPv6Gateway):"Auto";cell=row.insertCell(-1);if(this.X_TP_IPv6DNSServers==""){cell.innerHTML=":: ::"}else{cell.innerHTML=$.htmlEncodeStr(this.X_TP_IPv6DNSServers.split(",")[0]+" "+this.X_TP_IPv6DNSServers.split(",")[1])}if(ethStk==tmpStk){cell=row.insertCell(-1);if(this.X_TP_IPv6ConnStatus=="Connected"){cell.innerHTML="<span class='T T_connected'>"+m_str.connected+"</span>"}else{if((this.X_TP_IPv6ConnStatus=="Disconnected")||(this.X_TP_IPv6ConnStatus=="Unconfigured")){cell.innerHTML="<span class='T T_disconnected'>"+m_str.disconnected+"</span>"}else{cell.innerHTML="<span class='T T_connecting'>"+m_str.connecting+"</span>"}}}}});$.each(wanPppConList,function(){var tmpStk=$.stkPop(this.__stack,2);if(this.enable==1&&this.X_TP_IPv6Enabled==1){var row=tbl.insertRow(-1);cell=row.insertCell(-1);cell.innerHTML=this.name;var thisStkParts=(this.__stack).split(",");var stk=thisStkParts[0]+thisStkParts[1];var stk1=thisStkParts[0];cell=row.insertCell(-1);cell.innerHTML="PPPoEv6";cell=row.insertCell(-1);if(ethStk==tmpStk){cell.innerHTML="N/A"}cell=row.insertCell(-1);cell.innerHTML=$.htmlEncodeStr(this.X_TP_ExternalIPv6Address)+" /"+this.X_TP_PrefixLength;cell=row.insertCell(-1);cell.innerHTML=(this.X_TP_DefaultIPv6Gateway!="::")?$.htmlEncodeStr(this.X_TP_DefaultIPv6Gateway):"Auto";cell=row.insertCell(-1);if(this.X_TP_IPv6DNSServers==""){cell.innerHTML=":: ::"}else{cell.innerHTML=$.htmlEncodeStr(this.X_TP_IPv6DNSServers.split(",")[0]+" "+this.X_TP_IPv6DNSServers.split(",")[1])}cell=row.insertCell(-1);if(ethStk==tmpStk){if(this.X_TP_IPv6ConnStatus=="Connected"){cell.innerHTML="<span class='T T_connected'>"+m_str.connected+"</span>"}else{if((this.X_TP_IPv6ConnStatus=="Disconnected")||(this.X_TP_IPv6ConnStatus=="Unconfigured")){cell.innerHTML="<span class='T T_disconnected'>"+m_str.disconnected+"</span>"}else{cell.innerHTML="<span class='T T_connecting'>"+m_str.connecting+"</span>"}}}}})}}else{$.addClass($.id("wanStatus"),"nd")}if(device.LANDeviceNumberOfEntries==1){$.addClass($.id("lan2"),"nd");$.removeClass($.id("lan1"),"nd");var lanIpCfg=$.act(ACT_GL,LAN_IP_INTF,null,null,["IPInterfaceIPAddress","IPInterfaceSubnetMask","X_TP_MACAddress"]);var lanHostCfg=$.act(ACT_GL,LAN_HOST_CFG,null,null,["DHCPServerEnable"]);if(!$.exe()){$.h($.id("lanmac"),lanIpCfg[0].X_TP_MACAddress);$.h($.id("lanip"),lanIpCfg[0].IPInterfaceIPAddress);$.h($.id("lanmask"),lanIpCfg[0].IPInterfaceSubnetMask);if(lanHostCfg[0].DHCPServerEnable==1){$.h($.id("dhcpen"),"<span class='T T_enabled'>"+m_str.enabled+"</span>")}else{$.h($.id("dhcpen"),"<span class='T T_disabled'>"+m_str.disabled+"</span>")}}}else{$.addClass($.id("lan1"),"nd");$.removeClass($.id("lan2"),"nd");for(var i=0;i<brList.length;i++){var lanIpCfg=$.act(ACT_GS,LAN_IP_INTF,null,brList[i].__stack,["IPInterfaceIPAddress","IPInterfaceSubnetMask","X_TP_MACAddress"]);var lanHostCfg=$.act(ACT_GET,LAN_HOST_CFG,brList[i].__stack,null,["DHCPServerEnable"]);if(!$.exe()){tbl=$.id("lan_table");row=tbl.insertRow(-1);cell=row.insertCell(-1);cell.innerHTML=brList[i].bridgeName;cell=row.insertCell(-1);cell.innerHTML=lanIpCfg[0].X_TP_MACAddress;cell=row.insertCell(-1);cell.innerHTML=lanIpCfg[0].IPInterfaceIPAddress;cell=row.insertCell(-1);cell.innerHTML=lanIpCfg[0].IPInterfaceSubnetMask;cell=row.insertCell(-1);if(lanHostCfg.DHCPServerEnable==1){cell.innerHTML="<span class='T T_enabled'>"+m_str.enabled+"</span>"}else{cell.innerHTML="<span class='T T_disabled'>"+m_str.disabled+"</span>"}}}}if(INCLUDE_LAN_WLAN){wlan_index=0;$.each(wlanList,function(){if($.sysMode=="Client"||$.sysMode=="Repeater"){$.h($.id("root"+wlan_index),wdsObj.bridgeSSID);$.removeClass($.id("root-ssid"+wlan_index),"nd")}if($.sysMode=="Client"){$.addClass($.id("wlanssid"+wlan_index),"nd")}$.addClass($.id("t_p_wlwds"),"nd");if(INCLUDE_LAN_WLAN_SCHEDULE){var scheEnable;if(wlanScheList[wlan_index].enable==1){scheEnable=1}else{scheEnable=0}if(scheEnable==1){if(wlanScheList[wlan_index].isUsrCtrl==0){if(wlanList[wlan_index].status=="Up"){$.h($.id("wlstat"+wlan_index),"<span class='T T_enabled'>"+m_str.enabled+"</span>")}else{if(wlanList[wlan_index].status=="Error"){$.h($.id("wlstat"+wlan_index),"Error")}else{if(wlanList[wlan_index].status=="Disabled"){$.h($.id("wlstat"+wlan_index),"<span class='T T_disabled'>"+m_str.disabled+"(schedule control)</span>")}}}}else{if(wlanList[wlan_index].status=="Up"){$.h($.id("wlstat"+wlan_index),"<span class='T T_enabled'>"+m_str.enabled+"(user control)</span>")}else{if(wlanList[wlan_index].status=="Error"){$.h($.id("wlstat"+wlan_index),"Error")}else{if(wlanList[wlan_index].status=="Disabled"){$.h($.id("wlstat"+wlan_index),"<span class='T T_disabled'>"+m_str.disabled+"(user control)</span>")}}}}$.h($.id("wlsche"+wlan_index),"<span class='T T_enabled'>"+m_str.enabled+"</span>")}else{if(wlanList[wlan_index].status=="Up"){$.h($.id("wlstat"+wlan_index),"<span class='T T_enabled'>"+m_str.enabled+"</span>")}else{if(wlanList[wlan_index].status=="Error"){$.h($.id("wlstat"+wlan_index),"Error")}else{if(wlanList[wlan_index].status=="Disabled"){$.h($.id("wlstat"+wlan_index),"<span class='T T_disabled'>"+m_str.disabled+"</span>")}}}$.h($.id("wlsche"+wlan_index),"<span class='T T_disabled'>"+m_str.disabled+"</span>")}}else{if(wlanList[wlan_index].status=="Up"){$.h($.id("wlstat"+wlan_index),"<span class='T T_enabled'>"+m_str.enabled+"</span>")}else{if(wlanList[wlan_index].status=="Error"){$.h($.id("wlstat"+wlan_index),"Error")}else{if(wlanList[wlan_index].status=="Disabled"){$.h($.id("wlstat"+wlan_index),"<span class='T T_disabled'>"+m_str.disabled+"</span>")}}}}$.h($.id("wlssid"+wlan_index),wlanList[wlan_index].SSID.replace(/\&/g,"&amp;").replace(/</g,"&lt;").replace(/ /g,"&nbsp;"));if(1==wlanList[wlan_index].autoChannelEnable){$.h($.id("wlchl"+wlan_index),"<span class='T T_auto'>"+m_str.auto+"</span>(<span class='T T_channel'>"+s_str.channel+"</span> "+wlanList[wlan_index].channel+")")}else{$.h($.id("wlchl"+wlan_index),wlanList[wlan_index].channel)}if(wlanList[wlan_index].X_TP_Bandwidth=="Auto"){$.h($.id("wlbw"+wlan_index),"<span class='T T_auto'>"+m_str.auto+"</span>")}else{$.h($.id("wlbw"+wlan_index),wlanList[wlan_index].X_TP_Bandwidth+"Hz")}if(wlanList[wlan_index].standard=="b"){$.h($.id("wlmod"+wlan_index),"<span class='T T_wl11b'>"+s_str.wl11b+"</span>")}if(wlanList[wlan_index].standard=="g"){$.h($.id("wlmod"+wlan_index),"<span class='T T_wl11bg'>"+s_str.wl11bg+"</span>")}if(wlanList[wlan_index].standard=="g-only"){$.h($.id("wlmod"+wlan_index),"<span class='T T_wl11g'>"+s_str.wl11g+"</span>")}if(wlanList[wlan_index].standard=="n"){$.h($.id("wlmod"+wlan_index),"<span class='T T_wl11bgn'>"+s_str.wl11bgn+"</span>")}if(wlanList[wlan_index].standard=="gn"){$.h($.id("wlmod"+wlan_index),"<span class='T T_wl11gn'>"+s_str.wl11gn+"</span>")}if(wlanList[wlan_index].standard=="n-only"){$.h($.id("wlmod"+wlan_index),"<span class='T T_wl11n'>"+s_str.wl11n+"</span>")}if(wlanList[wlan_index].standard=="an"){$.h($.id("wlmod"+wlan_index),"<span class='T T_wl11an'>"+s_str.wl11an+"</span>")}if(wlanList[wlan_index].standard=="ac"){$.h($.id("wlmod"+wlan_index),"<span class='T T_wl11ac'>"+s_str.wl11ac+"</span>")}if((wlanList[wlan_index].beaconType=="Basic")&&(wlanList[wlan_index].basicEncryptionModes=="None")){$.h($.id("wlenc"+wlan_index),"<span class='T T_none'>"+m_str.none+"</span>")}else{if((wlanList[wlan_index].beaconType=="Basic")&&(wlanList[wlan_index].basicEncryptionModes=="WEPEncryption")){$.h($.id("wlenc"+wlan_index),"WEP")}else{if(wlanList[wlan_index].beaconType=="WPAand11i"||wlanList[wlan_index].beaconType=="11i"||wlanList[wlan_index].beaconType=="WPA"){if(wlanList[wlan_index].WPAAuthenticationMode=="PSKAuthentication"||wlanList[wlan_index].IEEE11iAuthenticationMode=="PSKAuthentication"){$.h($.id("wlenc"+wlan_index),"WPA/WPA2-Personal")}else{if(wlanList[wlan_index].WPAAuthenticationMode=="EAPAuthentication"||wlanList[wlan_index].IEEE11iAuthenticationMode=="EAPAuthentication"){$.h($.id("wlenc"+wlan_index),"WPA/WPA2-Enterprise")}}}}}if(wlanList[wlan_index].BSSID){$.h($.id("wlmac"+wlan_index),wlanList[wlan_index].BSSID)}var rateList=(wlanList[wlan_index].possibleDataTransmitRates).split(",");var maxRate=0;for(var i=0;i<rateList.length;i++){if(parseInt(rateList[i],10)>maxRate){maxRate=parseInt(rateList[i],10)}}$.h($.id("wlrate"+wlan_index),maxRate+"Mbps");$.h($.id("wlmac"+wlan_index),wlanList[wlan_index].BSSID);if(wlan_index<=0){if(wdsObj.bridgeEnable=="1"){$.h($.id("wlwds"+wlan_index),"<span class='T T_enabled'>"+m_str.enabled+"</span>")}else{$.h($.id("wlwds"+wlan_index),"<span class='T T_disabled'>"+m_str.disabled+"</span>")}}else{if(INCLUDE_LAN_WLAN_DUALBAND&&wdsObj1.bridgeEnable=="1"){$.h($.id("wlwds"+wlan_index),"<span class='T T_enabled'>"+m_str.enabled+"</span>")}else{$.h($.id("wlwds"+wlan_index),"<span class='T T_disabled'>"+m_str.disabled+"</span>")}}wlan_index++})}if(INCLUDE_VOIP){var tlb=$.id("accountTlb");$.each(voipAccounts,function(arg,index){if(this.multiProfileName&&this.multiProfileName!=""){row=tlb.insertRow(-1);cell=row.insertCell(-1);if(this.multiProfileName.length>10){cell.innerHTML="<span class='fl'>"+this.multiProfileName.slice(0,10)+"</span><span class='fl'>"+this.multiProfileName.slice(10)+"</span>"}else{cell.innerHTML=this.multiProfileName}cell=row.insertCell(-1);if(this.multiRegistrarServer.length>20){cell.innerHTML="<span class='fl'>"+this.multiRegistrarServer.slice(0,20)+"</span><span class='fl'>"+this.multiRegistrarServer.slice(20)+"</span>"}else{cell.innerHTML=this.multiRegistrarServer}cell=row.insertCell(-1);cell.innerHTML=this.multiExtension;cell=row.insertCell(-1);var rtt=parseInt(this.multiStatus,10);if(rtt<=0){cell.innerHTML="down"}else{cell.innerHTML="up"}}})}}}function refresh(){$.reload()};</script>
+<p class="et T" id="et">Status</p>
+<p class="bl"></p>
+<div class="con1 L">
+    <div class="con2">
+        <p class="L2"><b class="item T" id="t_swver">Firmware Version:</b>
+            <span id="sver"></span>
+        </p>
+        <p class="L2"><b class="item T" id="t_hwver">Hardware Version:</b>
+            <span id="hver"></span>
+        </p>
+    </div>
+</div>
+<p class="bl"></p>
+<div class="con1 L">
+    <p class="st" id="t_lan">LAN</p>
+    <div class="con2">
+        <div id="lan1">
+            <p class="L2"><b class="item T T_macaddr">MAC Address:</b>
+                <span id="lanmac"></span>
+            </p>
+            <p class="L2"><b class="item T T_ipaddr">IP Address:</b>
+                <span id="lanip"></span>
+            </p>
+            <p class="L2"><b class="item T T_netmask">Subnet Mask:</b>
+                <span id="lanmask"></span>
+            </p>
+            <p class="L2 nd"><b class="item">DHCP:</b>
+                <span id="dhcpen"></span>
+            </p>
+        </div>
+        <div id="lan2">
+            <table class="tc bdr L" id="lan_table" cellspacing="0" cellpadding="0">
+                <tr>
+                    <th class="T T_group">Group</th>
+                    <th class="T T_macaddr">MAC Address</th>
+                    <th class="T T_ipaddr">IP Address</th>
+                    <th class="T T_netmask">Subnet Mask</th>
+                    <th>DHCP</th>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="con1 L nd" id="ip6_lan_status">
+    <p class="st">IPv6 LAN</p>
+    <div id="lan6">
+        <p class="L2"><b class="item T T_ip6addr">IPv6 Address:</b>
+            <span id="lan6addr"></span>
+        </p>
+        <p class="L2"><b class="item T T_plen">Prefix Length:</b>
+            <span id="lan6prelen"></span>
+        </p>
+        <p class="L2"><b class="item T" id="t_lan6cfgtype">Autoconfiguration Type:</b>
+            <span id="cfgtype"></span>
+        </p>
+    </div>
+</div>
+
+<div class="con1 L nd" id="wlan_con">
+    <p class="bl"></p>
+    <p class="st T T_wl2g">Wireless</p>
+    <div class="con2">
+        <div>
+            <p class="L2">
+                <b class="item T" id="t_operamode">Operation Mode:</b>
+                <span class="emp" id="operation"></span>
+            </p>
+        </div>
+        <div id="wlan0">
+            <p class="L2"><b class="item T" id="t_radio">Wireless Radio:</b>
+                <span id="wlstat0"></span>
+            </p>
+            <p class="L2 nd" id="schedule0"><b class="item T" id="t_wlSchedu">Schedule:</b>
+                <span id="wlsche0"></span>
+            </p>
+            <p id="root-ssid0" class="L2 nd">
+                <b class="item T" id="t_rootssid">Name(SSID) of Root AP:</b>
+                <span id="root0" class="T"></span>
+            </p>
+            <p class="L2" id="wlanssid0">
+                <b class="item T" id="t_name">Name(SSID):</b>
+                <span id="wlssid0"></span>
+            </p>
+            <div id="multissid-ctn" class="nd">
+                <div id="ssid1-ctn" class="nd">
+                    <p class="L2">
+                        <b class="item T" id="t_ssid1">SSID1:</b>
+                        <span id="ssid1"></span>
+                    </p>
+                    <p id="pwd-1-ctn" class="nd">
+                        <b class="item T T_passwd">Password1:</b>
+                        <span id="pwd1"></span>
+                    </p>
+                </div>
+                <div id="ssid2-ctn" class="nd">
+                    <p class="L2">
+                        <b class="item T" id="t_ssid2">SSID2:</b>
+                        <span id="ssid2"></span>
+                    </p>
+                    <p id="pwd-2-ctn" class="nd">
+                        <b class="item T T_passwd">Password2:</b>
+                        <span id="pwd2"></span>
+                    </p>
+                </div>
+                <div id="ssid3-ctn" class="nd">
+                    <p class="L2">
+                        <b class="item T" id="t_ssid3">SSID3:</b>
+                        <span id="ssid3"></span>
+                    </p>
+                    <p id="pwd-3-ctn" class="nd">
+                        <b class="item T T_passwd">Password3:</b>
+                        <span id="pwd3"></span>
+                    </p>
+                </div>
+                <div id="ssid4-ctn" class="nd">
+                    <p class="L2">
+                        <b class="item T" id="t_ssid4">SSID4:</b>
+                        <span id="ssid4"></span>
+                    </p>
+                    <p id="pwd-4-ctn" class="nd">
+                        <b class="item T T_passwd">Password:</b>
+                        <span id="pwd4"></span>
+                    </p>
+                </div>
+            </div>
+            <p class="L2"><b class="item T T_mode">Mode:</b>
+                <span id="wlmod0"></span>
+            </p>
+            <p class="L2"><b class="item T T_channel">Channel:</b>
+                <span id="wlchl0"></span>
+            </p>
+            <p class="L2"><b class="item T T_chnwidth">Channel Width:</b>
+                <span id="wlbw0"></span>
+            </p>
+            <p class="L2 nd"><b class="item T T_security">Security:</b>
+                <span id="wlenc0"></span>
+            </p>
+            <p class="L2"><b class="item T T_macaddr">MAC Address:</b>
+                <span id="wlmac0"></span>
+            </p>
+            <p class="L2 nd"><b class="item T" id="t_tx1">Max Tx Rate:</b>
+                <span id="wlrate0"></span>
+            </p>
+            <p class="L2" id="t_p_wlwds"><b class="item T" id="t_wlwds">WDS Status:</b>
+                <span id="wlwds0"></span>
+            </p>
+            <p class="br"></p>
+        </div>
+        <div id="wlan2" class="nd">
+            <table class="tc bdr L" id="wlan_table" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td class="T" id="t_status3">Status</td>
+                    <td>SSID</td>
+                    <td class="T T_channel">Channel</td>
+                    <td class="T T_mode">Mode</td>
+                    <td class="T" id="t_tx2">Max Tx Rate</td>
+                    <td class="T T_macaddr">MAC Address</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+<div id="wlan_con2" class="nd">
+    <p class="bl"></p>
+    <div class="con1 L">
+        <p class="st T T_wl5g">Wireless 5GHz</p>
+        <div class="con2">
+            <div id="wlan1">
+                <p class="L2"><b class="item T" id="t_radio5g">Wireless Radio:</b>
+                    <span id="wlstat1"></span>
+                </p>
+                <p class="L2 nd" id="schedule1"><b class="item T" id="t_wlSchedu">Schedule:</b>
+                    <span id="wlsche1"></span>
+                </p>
+                <p class="L2"><b class="item T" id="t_name5g">Name(SSID):</b>
+                    <span id="wlssid1"></span>
+                </p>
+                <p class="L2"><b class="item T T_mode">Mode:</b>
+                    <span id="wlmod1"></span>
+                </p>
+                <p class="L2"><b class="item T T_channel">Channel:</b>
+                    <span id="wlchl1"></span>
+                </p>
+                <p class="L2"><b class="item T T_chnwidth">Channel Width:</b>
+                    <span id="wlbw1"></span>
+                </p>
+                <p class="L2 nd"><b class="item T T_security">Security:</b>
+                    <span id="wlenc1"></span>
+                </p>
+                <p class="L2"><b class="item T T_macaddr">MAC Address:</b>
+                    <span id="wlmac1"></span>
+                </p>
+                <p class="L2 nd"><b class="item T" id="t_tx1">Max Tx Rate:</b>
+                    <span id="wlrate1"></span>
+                </p>
+                <p class="L2" id="t_p_wlwds5g"><b class="item T" id="t_wlwds5g">WDS Status:</b>
+                    <span id="wlwds1"></span>
+                </p>
+                <p class="br"></p>
+            </div>
+            <div id="wlan2" class="nd">
+                <table class="tc bdr L" id="wlan_table" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td class="T T_status">Status</td>
+                        <td>SSID</td>
+                        <td class="T T_channel">Channel</td>
+                        <td class="T T_mode">Mode</td>
+                        <td class="T" id="t_tx2">Max Tx Rate</td>
+                        <td class="T T_macaddr">MAC Address</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="wanStatus">
+    <p class="bl"></p>
+    <div class="con1 L">
+        <p class="st" id="t_wan">WAN</p>
+        <div class="con2">
+            <div id="wan">
+                <p class="L2"><b class="item T T_macaddr">MAC Address:</b>
+                    <span id="wanmac"></span>
+                </p>
+                <p class="L2"><b class="item T" id="t_wanip">IP Address:</b>
+                    <span id="wanip"></span><i id="authFail" class="nd" style="padding-left:10px;">Authentication failed, incorrect username or password.</i>
+                </p>
+                <p class="L2"><b class="item T" id="t_mask">Subnet Mask:</b>
+                    <span id="wanmask"></span>
+                </p>
+                <p class="L2"><b class="item T" id="t_gateway">Default Gateway:</b>
+                    <span id="gateway"></span>
+                </p>
+                <p class="L2"><b class="item T" id="t_dns">DNS Server:</b>
+                    <span id="dns"></span>
+                </p>
+                <p class="L2"><b class="item T nd" id="t_online">Online Time:</b>
+                    <span id="online"></span>
+                </p>
+                <p class="br"></p>
+            </div>
+            <div id="secondConn" class="nd">
+                <p class="st T T_secConn">Secondary Connection</p>
+                <p class="L2"><b class="item T T_ipaddr">IP Address:</b>
+                    <span id="secondwanip"></span>
+                </p>
+                <p class="L2"><b class="item T T_netmask">Subnet Mask:</b>
+                    <span id="secondwanmask"></span>
+                </p>
+            </div>
+            <div id="L2TP_PPTP_SecondConn" class="nd">
+                <p class="st T T_secConn">Secondary Connection</p>
+                <p class="L2"><b class="item T T_ipaddr">IP Address:</b>
+                    <span id="L2TP_PPTP_secondwanip"></span>
+                </p>
+                <p class="L2"><b class="item T T_netmask">Subnet Mask:</b>
+                    <span id="L2TP_PPTP_secondwanmask"></span>
+                </p>
+                <p class="L2"><b class="item T T_gateway" id="t_gateway">Default Gateway:</b>
+                    <span id="L2TP_PPTP_gateway"></span>
+                </p>
+                <p class="L2"><b class="item T T_dns" id="t_dns">DNS Server:</b>
+                    <span id="L2TP_PPTP_dns"></span>
+                </p>
+                <p class="L2"><b class="item L T T_secdns" id="secdns">Secondary DNS Server:</b>
+                    <span id="L2TP_PPTP_secdns"></span>
+                </p>
+            </div>
+            <table class="tc bdr nd" width="750px" id="wan_table" cellspacing="0" cellpadding="0">
+                <tr>
+                    <th class="T" id="t_title" width="110px">Name</th>
+                    <th class="T T_conntype" width="70px">Connection Type</th>
+                    <th width="70px">VPI/VCI</th>
+                    <th width="116px" class="T T_ipmask">IP/Mask</th>
+                    <th width="108px" class="T T_gateway">Gateway</th>
+                    <th>DNS</th>
+                    <th class="T T_status" width="70px">Status</th>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="con1 L nd" id="ip6_wan_status">
+        <p class="br"></p>
+        <p class="st">IPv6 WAN</p>
+        <div class="con2">
+            <div class="scrollx" style="width: 750px;">
+                <table class="tc bdr" width="750px" id="wan6_table" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <th class="T" id="t_ip6title" width="110px">Name</th>
+                        <th class="T T_conntype" width="70px">Connection Type</th>
+                        <th width="70px">VPI/VCI</th>
+                        <th class="T" id="t_ip6addrplen">IPv6 Address/Prefix Length</th>
+                        <th class="T T_gateway">Gateway</th>
+                        <th>DNSv6</th>
+                        <th class="T T_status" width="70px">Status</th>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="ethStatus" class="nd">
+    <p class="bl"></p>
+    <div class="con1 L">
+        <p class="st" id="t_eth"></p>
+        <div class="con2">
+            <div id="eth">
+                <p class="L2"><b class="item T" id="t_internet"></b>
+                    <span id="internet"></span>
+                </p>
+                <p class="L2"><b class="item T" id="t_lan1"></b>
+                    <span id="lanPort1"></span>
+                </p>
+                <p class="L2"><b class="item T" id="t_lan2"></b>
+                    <span id="lanPort2"></span>
+                </p>
+                <p class="L2"><b class="item T" id="t_lan3"></b>
+                    <span id="lanPort3"></span>
+                </p>
+                <p class="L2"><b class="item T" id="t_lan4"></b>
+                    <span id="lanPort4"></span>
+                </p>
+                <p class="br"></p>
+           </div>
+        </div>
+    </div>
+</div>
+
+<div class="con1 L nd" id="voip_status">
+    <p class="bl"></p>
+    <p class="st T " id="t_voice">Voice</p>
+    <div class="con2">
+        <table id="accountTlb" align="center" class="bdr XXL" cellpadding="0" cellspacing="0">
+            <tr>
+                <th class="T T_prof">Profile Name</th>
+                <th class="T T_registraraddr">Registrar Address</th>
+                <th class="T T_phone">Phone Number/User ID</th>
+                <th class="T T_status">Status</th>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<p class="bl"></p>
+<div>
+    <p class="L2">
+        <b class="item T" id="t_uptime">System Up Time:</b>
+        <span id="UpTime"></span>
+        <input class="T T_refresh" type="button" id="refresh" value="Refresh" onclick="refresh()" />
+    </p>
+</div>
+<script language="javascript" type="text/javascript">if($.sysMode=="AP"||$.sysMode=="MSSID"){$.loadHelpFrame("StatusHelpRpm_AP.htm")}else{if($.sysMode=="Repeater"){$.loadHelpFrame("StatusHelpRpm_Repeater.htm")}else{if($.sysMode=="Client"){$.loadHelpFrame("StatusHelpRpm_Client.htm")}else{$.loadHelpFrame("StatusHelpRpm.htm")}}}init();</script>

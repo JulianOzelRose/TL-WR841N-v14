@@ -1,0 +1,159 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<HTML>
+<HEAD>
+    <TITLE></TITLE>
+	<META http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+	
+	<script src="./js/oid_str.js" type="text/javascript"></script>
+	<script src="./js/root.js" type="text/javascript"></script>
+	<script src="./js/lib.js" type="text/javascript"></script>
+</HEAD>
+<style type="text/css">
+div.qr-code-container{
+	width: 100%;
+	position: absolute;
+	bottom: 37px;
+	right: 0px;
+	z-index: 0;
+	/*background-color: #f2f2f3;*/
+}
+div.qr-code-container div.qr-code-container-wrapper{
+    margin: 0 auto;
+	width:1000px;
+	/*background-color:#f2f2f3;*/
+}
+div.qr-code-container div.qr-code-container-wrapper div.qr-code{
+	font-size: 0;
+	position: relative;
+	background-color: #f2f2f3;
+}
+div.qr-code-container div.qr-code-container-wrapper div.characters-illustrate{
+	width: 340px;
+	height: 66px;
+	padding: 31px 148px 42px 148px;
+	display: inline-block;
+	vertical-align: top;
+}
+div.qr-code-container div.qr-code-container-wrapper span.characters-illustrate-title{
+	font-size: 15px;
+	font-family: Arial;
+	color: #36444b;
+}
+div.qr-code-container div.qr-code-container-wrapper span.characters-illustrate-note{
+	width:100%;
+	font-size: 12px;
+	font-family: Arial;
+	color: #36444b;
+	margin-top: 16px;
+    display: inline-block;
+    line-height: 18px;
+}
+span.qr-code-picture{
+	display: inline-block;
+	width: 100px;
+	height: 100px;
+	margin: 25px 11px 0 0;
+	background: url(./img/login/qr.png) no-repeat -2px -2px;
+}
+div.app-download-place{
+	display: inline-block;
+	padding-top: 29px;
+	vertical-align: top;
+}
+div.app-download-place a{
+	width: 136px;
+	height: 40px;
+	display: block;
+	cursor: pointer;
+}
+div.app-download-place a.apple-store{
+	background: url(./img/login/qr.png) no-repeat -112px -2px;
+}
+div.app-download-place a.google-play{
+	background: url(./img/login/qr.png) no-repeat -112px -63px;
+	margin-top: 12px;
+}
+div.qr-code-container-wrapper span.close-icon{
+	width: 20px;
+	height: 20px;
+	display: block;
+	background: url(./img/login/qr.png) no-repeat -263px -26px;
+	position: absolute;
+	top: 10px;
+	right: 10px;
+}
+div.qr-code-container-wrapper span.close-icon:hover{
+	background: url(./img/login/qr.png) no-repeat -263px -56px;
+	cursor: pointer;
+}
+div.qr-code-container div.qr-code-container-delta {
+    width: 24px;
+    height: 14px;
+    margin-left: 955px;
+    vertical-align: top;
+    background: url("./img/login/qr.png") no-repeat scroll -260px -3px transparent;
+}
+div.footer-container{
+	display: block;
+	/*height:35px;*/
+	width:100%;
+	bottom: 0px;
+	position: absolute;
+	z-index: 2;
+	background-color: #f2f2f3;
+}
+div.footer-container div.footer-container-wrap{
+	position: relative;
+	z-index: 1;
+	width:1000px;
+	margin:0 auto;
+	padding: 13px 0px;
+	background-color: #f2f2f3;
+	height:13px;
+}
+div.footer-container div.footer-container-wrap span.footer-container-wrap-show{
+	float: right;
+}
+div.footer-container a.btn-app{
+	font-family: Verdana,Geneva,sans-serif;
+	margin-left: 15px;
+	padding-right: 13px;
+	color:#4D4D4D;
+	text-decoration: underline;
+	cursor: pointer;
+}
+#btn-support{
+	display: none;
+}
+</style>
+<BODY leftMargin=0 topMargin=0 marginheight="0" marginwidth="0">
+<div id="qr-code-container" class="qr-code-container">
+	<div class="qr-code-container-wrapper">
+		<div id="qr-code-content" class="qr-code">
+			<span id="close-icon" class="close-icon" onclick="closeFrame()"></span>
+			<div id="characters-illustrate" class="characters-illustrate">
+				<span id="characters-illustrate-title" class="characters-illustrate-title T">Scan the QR code to download TP-Link Tether app</span>
+				<span id="characters-illustrate-note" class="characters-illustrate-note T">Conveniently manage your network from any mobile device.<br />Complete control from the palm of your hand.</span>
+			</div>
+			<span class="qr-code-picture"></span>
+			<div class="app-download-place">
+				<a class="apple-store" target="_blank" href="https://itunes.apple.com/us/app/tp-link-tether/id599496594?ls=1&mt=8"></a>
+				<a class="google-play" target="_blank" href="https://play.google.com/store/apps/details?id=com.tplink.tether"></a>
+			</div>
+		</div>
+		<div id="qr-code-container-delta" class="qr-code-container-delta"></div>
+	</div>
+</div>
+<div id="footer-container" class="footer-container" >
+	<div id="footer-wrap" class="footer-container-wrap">
+		<span class="footer-container-wrap-show">
+			<a id = "btn-support" class="btn-app" href="http://www.tp-link.com/en/support/" target= "_blank">Support</a>
+			<a id = "btn-app" class="btn-app" onclick="btnAppHandler()">App</a>
+
+		</span>
+	</div>
+</div>
+</BODY>
+<script type="text/javascript">var lang="en_US";closeFrame();if(window.parent.$.country){lang=window.parent.$.country;if(window.parent.$.fd==0){showQRcode()}}if(typeof INCLUDE_PORTABLE_APP=="undefined"||INCLUDE_PORTABLE_APP!=1){if(window.parent.document.getElementsByTagName("frameset")[2]){window.parent.document.getElementsByTagName("frameset")[2].rows="*"}else{self.frameElement.style.display="none"}}function closeFrame(){document.getElementById("qr-code-container").style.display="none";if(window.parent.document.getElementsByTagName("frameset")[2]){window.parent.document.getElementsByTagName("frameset")[2].rows="*,40"}else{self.frameElement.style.height="30px"}}function showQRcode(){document.getElementById("qr-code-container").style.display="block";if(window.parent.document.getElementsByTagName("frameset")[2]){window.parent.document.getElementsByTagName("frameset")[2].rows="*,197"}else{self.frameElement.style.height="200px"}}function btnAppHandler(){var oldDiplay=document.getElementById("qr-code-container").style.display;if(oldDiplay=="none"){showQRcode()}else{closeFrame()}}function resizeHandler(){var width=document.body.clientWidth;var minWidth=700;var maxWidth=1000;if(width<=minWidth){document.getElementById("footer-wrap").style.width=minWidth+"px";document.getElementById("qr-code-content").style.width=minWidth+"px";document.getElementById("qr-code-container-delta").style.marginLeft=(minWidth-45)+"px";document.getElementById("characters-illustrate").style.padding="31px 28px 42px 28px"}if(width>=maxWidth){document.getElementById("footer-wrap").style.width=maxWidth+"px";document.getElementById("qr-code-content").style.width=maxWidth+"px";document.getElementById("qr-code-container-delta").style.marginLeft=(maxWidth-45)+"px";document.getElementById("characters-illustrate").style.padding="31px 148px 42px 148px"}if((width>minWidth)&&(width<maxWidth)){document.getElementById("footer-wrap").style.width=width+"px";document.getElementById("qr-code-content").style.width=width+"px";document.getElementById("qr-code-container-delta").style.marginLeft=(width-45)+"px";document.getElementById("characters-illustrate").style.padding="31px "+(148-0.4*(maxWidth-width))+"px 42px "+(148-0.4*(maxWidth-width))+"px"}}document.body.onresize=resizeHandler;document.body.onload=resizeHandler;if(window.parent.localString){document.getElementById("characters-illustrate-title").innerHTML=window.parent.localString[lang].QR_TITLE;document.getElementById("characters-illustrate-note").innerHTML=window.parent.localString[lang].QR_NOTE;document.getElementById("btn-app").innerHTML=window.parent.localString[lang].APP;document.getElementById("btn-support").innerHTML=window.parent.localString[lang].SUPPORT}if(typeof INCLUDE_WEBUI_SUPPORT!="undefined"&&INCLUDE_WEBUI_SUPPORT==1){document.getElementById("btn-support").style.display="inline";var SUPPORT={BG_BG:"http://www.tp-link.bg/support/",CS_CZ:"http://www.tp-link.com/cz/support/",DA_DK:"http://www.tp-link.com/dk/support/",DE_DE:"http://www.tp-link.com.de/support",EN_US:"http://www.tp-link.com/support/",ES_ES:"http://www.tp-link.com/es/support/",ES_LA:"http://www.tp-link.com/ar/support/",ES_MX:"http://www.tp-link.com.mx/support/",FI_FI:"http://www.tp-link.com/fi/support/",FR_FR:"http://www.tp-link.com/fr/support/",EN_CA:"http://www.tp-link.com/ca/support/",FR_CA:"http://www.tp-link.com/fr-ca/support/",IT_IT:"http://www.tp-link.com/it/support/",JP_JP:"http://www.tp-link.com/jp/support/",KO_KR:"http://www.tp-link.com/kr/support/",NL_NL:"http://www.tp-link.com/nl/support/",NO_NO:"http://www.tp-link.com/no/support/",PL_PL:"http://www.tp-link.com/pl/support/",PT_PT:"http://www.tp-link.com/pt/support/",PT_BR:"http://www.tp-link.com.br/support/",RO_RO:"http://www.tp-link.com/ro/support/",RU_RU:"http://www.tp-link.com/ru/support/",SK_SK:"http://www.tp-link.sk/support/",SV_SE:"http://www.tp-link.com/se/support/",TH_TH:"http://www.tp-link.com/th/support/",TR_TR:"http://www.tp-link.com/tr/support/",UK_UA:"http://www.tp-link.com/uk/support/",VI_VN:"http://www.tp-link.com/vn/support/",ZH_CN:"http://www.tp-link.com/ch/support/",ZH_TW:"http://www.tp-link.com/tw/support/"};setTimeout(function(){if(typeof INCLUDE_MULTILOCALCOEX!="undefined"&&INCLUDE_MULTILOCALCOEX==1){var currentLanguage=lang||parent.window.localStorage.getItem("lang")||"en_US"}else{var currentLanguage=parent.window.localStorage.getItem("lang")||lang||"en_US"}if(typeof INCLUDE_CANADA_SPEC!="undefined"&&INCLUDE_CANADA_SPEC==1){var currentLanguage=window.parent.localString[lang].LANG||parent.window.localStorage.getItem("lang")||"en_US"}document.getElementById("btn-support").href=SUPPORT[currentLanguage.toUpperCase()]},1000)};</script>
+</HTML>

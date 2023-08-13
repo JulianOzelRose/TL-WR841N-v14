@@ -1,0 +1,29 @@
+﻿<script language="javascript" type="text/javascript">var selAll;var index;var allStk;var staticRte_stack;var staticRte_stackIndex;var param;function doAdd(){param[0]=0;$.loadMain("routeEdit.htm",param)}function doEdit(val){param[0]=1;param[1]=val;$.loadMain("routeEdit.htm",param)}function doSelAll(){if(selAll==0){for(var i=1;i<=index;i++){var tmpEntryid="staticRteid"+i;$.id(tmpEntryid).checked=1}staticRte_stack=[];staticRte_stackIndex=index;for(var j=0;j<staticRte_stackIndex;j++){staticRte_stack[j]=allStk[j]}selAll=1}else{if(selAll==1){for(var i=1;i<=index;i++){var tmpEntryid="staticRteid"+i;$.id(tmpEntryid).checked=0}staticRte_stack=[];staticRte_stackIndex=0;selAll=0}}}function selEntry(){staticRte_stack=[];staticRte_stackIndex=0;for(var i=1;i<=index;i++){var tmpEntryId="staticRteid"+i;if($.id(tmpEntryId).checked==1){staticRte_stack[staticRte_stackIndex]=allStk[i-1];staticRte_stackIndex++}}}function init(){selAll=0;index=0;param=[];allStk=[];staticRte_stack=[];staticRte_stackIndex=0;var staticRteList=$.act(ACT_GL,L3_FORWARDING_ENTRY,null,null,["destIPAddress","destSubnetMask","gatewayIPAddress","__ifType","enable"]);if(INCLUDE_WAN_MODE){var sysMode=$.act(ACT_GET,SYS_MODE,null,null,["mode"]);var wanCommIntfCfgList=$.act(ACT_GL,WAN_COMMON_INTF_CFG,null,null,["WANAccessType"]);var wanIPList=$.act(ACT_GL,WAN_IP_CONN,null,null,["name"]);var wanPPPList=$.act(ACT_GL,WAN_PPP_CONN,null,null,["name"]);if(INCLUDE_L2TP){var wanL2TPList=$.act(ACT_GL,WAN_L2TP_CONN,null,null,["name"])}if(INCLUDE_PPTP){var wanPPTPList=$.act(ACT_GL,WAN_PPTP_CONN,null,null,["name"])}}if(!$.exe()){if(INCLUDE_WAN_MODE){$.merge(wanIPList,wanPPPList);if(INCLUDE_L2TP){$.merge(wanIPList,wanL2TPList)}if(INCLUDE_PPTP){$.merge(wanIPList,wanPPTPList)}var mode=(sysMode.mode=="ETH")?"Ethernet":sysMode.mode}var tbl=$.id("staticRtetbl");$.each(staticRteList,function(){if(INCLUDE_WAN_MODE){var notShow=0;var wanName=this.__ifType;$.each(wanIPList,function(){if(wanName==this.name){var tmpStk=$.stkPop(this.__stack,2);$.each(wanCommIntfCfgList,function(){if(tmpStk==this.__stack&&this.WANAccessType!=mode){notShow=1;return}})}});if(notShow==1){return}}var thisStk="["+this.__stack+"]";var row=tbl.insertRow(-1);index++;var cell=row.insertCell(-1);cell.width="5%";cell.innerHTML="<input type='checkbox' id='staticRteid"+index+"'/>";cell=row.insertCell(-1);cell.innerHTML=this.destIPAddress;cell=row.insertCell(-1);cell.width="25%";cell.innerHTML=this.destSubnetMask;cell=row.insertCell(-1);cell.width="25%";cell.innerHTML=(this.gatewayIPAddress=="")?"0.0.0.0":this.gatewayIPAddress;cell=row.insertCell(-1);cell.width="12%";cell.innerHTML=(this.enable==1)?"<span class='T T_en'>"+m_str.en+"</span>":"<span class='T T_dis'>"+m_str.dis+"</span>";cell=row.insertCell(-1);cell.width="7%";cell.innerHTML="<span class='a T T_edit' onclick='doEdit("+thisStk+");'>Edit</span>";allStk[index-1]=this.__stack});$.resize($.id("staticRtetbl"),8)}}function doEnable(obj){selEntry();if(staticRte_stackIndex==0){$.alert(ERR_SEL_INVAD);return}$.addLoading(obj);for(var i=0;i<staticRte_stackIndex;i++){$.act(ACT_SET,L3_FORWARDING_ENTRY,staticRte_stack[i],null,["enable=1"])}$.exe(function(ret){if(!ret){$.reload()}})}function doDisable(obj){selEntry();if(staticRte_stackIndex==0){$.alert(ERR_SEL_INVAD);return}$.addLoading(obj);for(var i=0;i<staticRte_stackIndex;i++){$.act(ACT_SET,L3_FORWARDING_ENTRY,staticRte_stack[i],null,["enable=0"])}$.exe(function(ret){if(!ret){$.reload()}})}function doDel(obj){selEntry();if(staticRte_stackIndex==0){$.alert(ERR_SEL_INVAD);return}$.addLoading(obj);for(var i=0;i<staticRte_stackIndex;i++){$.act(ACT_DEL,L3_FORWARDING_ENTRY,staticRte_stack[i],null)}$.exe(function(ret){if(!ret){$.reload()}})};</script>
+<p class="et T" id="et">Static Route</p>
+<div class="con1 XL">
+<p class="ct"></p>
+<p class="bl"></p>
+<div class="con2">
+
+<div class="XXL thead" ><table class="XXL bdr tc">
+<tr>
+<th width="5%"><input type="checkbox" id="selAll" onclick="doSelAll();"/></th>
+<th class="T" id="t_dstip">Destination IP Address</th>
+<th width="25%" class="T T_netmask">Subnet Mask</th>
+<th width="25%" class="T T_gateway">Gateway</th>
+<th width="12%" class="T T_status">Status</th>
+<th width="7%" class="T T_edit">Edit</th>
+</tr>
+</table></div>
+<div class="XXL tbody"><table class="XXL bdr tc" id="staticRtetbl"></table></div>
+<p class="br"></p>
+<p class="L1">
+<input type="button" class="button XL T T_addnew" value="Add New" onclick="doAdd();"/>
+<input type="button" class="button XL T T_ensel" value="Enable Selected" onclick="doEnable(this);"/>
+<input type="button" class="button XL T T_dissel" value="Disable Selected" onclick="doDisable(this);"/>
+<input type="button" class="button XL T T_delsel" value="Delete Selected" onclick="doDel(this);"/></p>
+</div>
+<p class="bl"></p>
+<p class="tail" id="tail"><input type="button" class="button L T T_refresh" value="Refresh" onclick="$.addLoading(this, 200, function(){$.reload()});"/></p>
+</div>
+<script language="javascript" type="text/javascript">$.loadHelpFrame("StaticRouteTableHelpRpm.htm");init();</script>

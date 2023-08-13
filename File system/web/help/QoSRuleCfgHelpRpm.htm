@@ -1,0 +1,19 @@
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+<HTML>
+<HEAD><TITLE>Archer C2</TITLE>
+<META http-equiv=Pragma content=no-cache>
+<LINK href="../css/css_help.css" rel=stylesheet type="text/css">
+<SCRIPT language="javascript" type="text/javascript">function Click(){return false}document.oncontextmenu=Click;</SCRIPT>
+<h1 class="header">Bandwidth Control Rules Setting Help</h1>
+<p class="brief">This page is for the bandwidth configure of the Bandwidth Control rules.</p>
+<ul>
+<li class="status"><b>Status</b> Enable or disable the rule.</li>
+<li class="ip_rang"><b>IP Range</b> - Interior PC address range. If both are blank(or 0.0.0.0), the domain is noneffective.</li>
+<li class="port_rang"><b>Port Range</b> - The port range which the Interior PC access the outside PC. If all are blank(or 0), the domain is noneffective.</li>
+<li class="proto"><b>Protocol</b> - Transport layer protocol, here there are all, TCP, UDP.</li>
+
+<li class="priority"><b>Priority</b> -  Priority of Bandwidth Control rules. ‘1’ stands for the highest priority while ‘8’ stands for the lowest priority. The total Upstream/ Downstream Bandwidth is first allocated to guarantee all the Min Rate of Bandwidth Control rules. If there is any bandwidth left, it is first allocated to the rule with the highest priority, then to the rule with the second highest priority, and so on.</li>
+<li class="egress_band"><b>Egress Bandwidth</b> - The max and the min upload speed which through the WAN port.</li>
+<li class="ingress_band"><b>Ingress Bandwidth</b> - The max and the min download speed through the WAN port.</li>
+</ul>
+<script language="javascript" type="text/javascript">window.parent.$.transHelp(document.URL);</script>

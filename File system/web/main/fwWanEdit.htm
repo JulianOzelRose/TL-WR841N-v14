@@ -1,0 +1,51 @@
+﻿<script language="javascript" type="text/javascript">var opt=$.mainParam[0];var returnPage=$.mainParam[1];var stk=$.mainParam[2];var selAll;var index;var allUrl;var allUrlType;var fwAttrs;var fwCfg;var delList;var delListIndex;var delFlag;function doReturn(){if(returnPage==1){var param=[];if($.mainParam[2]!=undefined&&$.mainParam[2]!=-1){param[0]=1;param[1]=$.mainParam[2]}else{param[0]=0;param[1]=-1}$.loadMain("fwRulesEdit.htm",param)}else{if(returnPage==2){$.loadMain("fwRules.htm")}else{$.loadMain("fwWan.htm")}}}function doSelAll(){if(selAll==0){for(var i=1;i<=index;i++){var urlid="urlid"+i;$.id(urlid).checked=1}selAll=1}else{if(selAll==1){for(var i=1;i<=index;i++){var urlid="urlid"+i;$.id(urlid).checked=0}selAll=0}}}function initUrlTbl(){var urlTbl=$.id("urltbl");while(urlTbl.rows.length>0){urlTbl.deleteRow(-1)}index=0;for(var i=0;i<allUrl.length;i++){var row=urlTbl.insertRow(-1);index++;var cell=row.insertCell(-1);cell.width="20px";cell.innerHTML="<input type='checkbox' id='urlid"+index+"'/>";cell=row.insertCell(-1);cell.innerHTML=allUrl[i]}$.resize($.id("urltbl"),8);$.fixTbl()}function init(){selAll=0;var urlTbl=$.id("urltbl");index=0;allUrl=[];allUrlType=[];fwAttrs={};delList=[];delListIndex=0;delFlag=0;if(opt==1){fwCfg=$.act(ACT_GET,EXTERNAL_HOST,stk,null);var urlCfgList=$.act(ACT_GL,URL_CFG,null,null,["urlAddr"]);$.exe(function(err){if(!err){$.id("entryName").value=fwCfg.entryName;if(fwCfg.type==0){$.id("ipMode").selected=1;$.removeClass($.id("ipMode_elem"),"nd");$.addClass($.id("macMode_elem"),"nd");$.addClass($.id("urlMode_elem"),"nd");if(fwCfg.IPStart==fwCfg.IPEnd){$.id("ipStart").value=(fwCfg.IPStart!=0)?$.num2ip(parseInt(fwCfg.IPStart,10)):"";$.id("ipEnd").value=""}else{$.id("ipStart").value=(fwCfg.IPStart!=0)?$.num2ip(parseInt(fwCfg.IPStart,10)):"";$.id("ipEnd").value=(fwCfg.IPEnd!=0)?$.num2ip(parseInt(fwCfg.IPEnd,10)):""}if(fwCfg.portStart==fwCfg.portEnd){$.id("portStart").value=(fwCfg.portStart!=0)?fwCfg.portStart:"";$.id("portEnd").value=""}else{$.id("portStart").value=(fwCfg.portStart!=0)?fwCfg.portStart:"";$.id("portEnd").value=(fwCfg.portEnd!=0)?fwCfg.portEnd:""}}else{if(fwCfg.type==1){$.id("macMode").selected=1;$.addClass($.id("ipMode_elem"),"nd");$.addClass($.id("urlMode_elem"),"nd");$.removeClass($.id("macMode_elem"),"nd");$.id("macAddr").value=fwCfg.mac}else{if(fwCfg.type==2){$.id("urlMode").selected=1;$.addClass($.id("ipMode_elem"),"nd");$.removeClass($.id("urlMode_elem"),"nd");$.addClass($.id("macMode_elem"),"nd");for(var i=0;i<fwCfg.urlIndexs.length;i++){if(fwCfg.urlIndexs.charAt(i)==1){allUrl[index]=urlCfgList[i].urlAddr;allUrlType[index]=1;index++}}initUrlTbl()}}}}})}}function doAddUrl(){var urlTbl=$.id("urltbl");if(($.id("urlInfo").value=="")||(!$.isdomain($.id("urlInfo").value))){$.alert(ERR_FW_URL_INVAD);var element=$.id("urlInfo");if(element){element.focus();element.select()}return}var row=urlTbl.insertRow(-1);index++;var cell=row.insertCell(-1);cell.width="20px";cell.innerHTML="<input type='checkbox' id='urlid"+index+"'/>";cell=row.insertCell(-1);cell.innerHTML=$.id("urlInfo").value;$.resize($.id("urltbl"),8);allUrl[index-1]=$.id("urlInfo").value;allUrlType[index-1]=0;$.id("urlInfo").value=""}function doDelUrl(){var urlTbl=$.id("urltbl");for(var i=1;i<=urlTbl.rows.length;i++){var tmpEntryId="urlid"+i;if($.id(tmpEntryId).checked==1){if(allUrlType[i-1]!=0){delList[delListIndex]=allUrl[i-1];delListIndex++;delFlag=1}allUrl[i-1]="";allUrlType[i-1]=""}}var tmpAllUrl=[];var tmpAllUrlType=[];for(var j=0;j<allUrl.length;j++){tmpAllUrl[j]=allUrl[j];tmpAllUrlType[j]=allUrlType[j]}index=0;allUrl=[];allUrlType=[];for(var j=0;j<tmpAllUrl.length;j++){if((tmpAllUrl[j]!="")||(tmpAllUrlType[j]!="")){allUrl[index]=tmpAllUrl[j];allUrlType[index]=tmpAllUrlType[j];index++}}initUrlTbl()}function changeMode(){if($.id("ipMode").selected==1){$.removeClass($.id("ipMode_elem"),"nd");$.addClass($.id("macMode_elem"),"nd");$.addClass($.id("urlMode_elem"),"nd")}else{if($.id("macMode").selected==1){$.removeClass($.id("macMode_elem"),"nd");$.addClass($.id("ipMode_elem"),"nd");$.addClass($.id("urlMode_elem"),"nd")}else{if($.id("urlMode").selected==1){$.removeClass($.id("urlMode_elem"),"nd");$.addClass($.id("ipMode_elem"),"nd");$.addClass($.id("macMode_elem"),"nd");$.fixTbl()}}}}function doSave(){if(!$.isname($.id("entryName").value)){$.alert(ERR_FW_ENTRYNAME_INVAD);var element=$.id("entryName");if(element){element.focus();element.select()}return}fwAttrs.entryName=$.id("entryName").value;if($.id("mode").value==0){if(($.id("ipStart").value!="")&&($.ifip($.id("ipStart").value,true))){$.alert(ERR_IP_FORMAT);var element=$.id("ipStart");if(element){element.focus();element.select()}return false}if(($.id("ipEnd").value!="")&&($.ifip($.id("ipEnd").value,true))){$.alert(ERR_IP_FORMAT);var element=$.id("ipEnd");if(element){element.focus();element.select()}return false}if(($.id("ipStart").value!="")&&($.id("ipEnd").value!="")&&(!$.isOrderIp($.id("ipStart").value,$.id("ipEnd").value))){$.alert(ERR_TC_IP_ORDER_INVAD);var element=$.id("ipEnd");if(element){element.focus();element.select()}return false}if(($.id("portStart").value!="")&&(!$.isnum($.id("portStart").value))||(parseInt($.id("portStart").value,10)<1)||(parseInt($.id("portStart").value,10)>65535)){$.alert(ERR_PORT_NUM_INVAD);var element=$.id("portStart");if(element){element.focus();element.select()}return false}if(($.id("portEnd").value!="")&&(!$.isnum($.id("portEnd").value))||(parseInt($.id("portEnd").value,10)<1)||(parseInt($.id("portEnd").value,10)>65535)){$.alert(ERR_PORT_NUM_INVAD);var element=$.id("portEnd");if(element){element.focus();element.select()}return false}if(($.id("portEnd").value!="")&&($.id("portStart").value!="")&&(parseInt($.id("portEnd").value)<parseInt($.id("portStart").value))){$.alert(ERR_PORT_ORDER_INVAD);var element=$.id("portEnd");if(element){element.focus();element.select()}return false}if(($.id("ipStart").value=="")&&($.id("ipEnd").value=="")&&($.id("portStart").value=="")&&($.id("portEnd").value=="")){$.alert(ERR_TC_IP_PORT_INVAD);var element=$.id("ipStart");if(element){element.focus();element.select()}return false}fwAttrs.type=0;fwAttrs.IPStart=($.id("ipStart").value)?$.ip2num($.id("ipStart").value):0;fwAttrs.IPEnd=($.id("ipEnd").value)?$.ip2num($.id("ipEnd").value):0;fwAttrs.portStart=($.id("portStart").value)?parseInt($.id("portStart").value,10):0;fwAttrs.portEnd=($.id("portEnd").value)?parseInt($.id("portEnd").value,10):0}else{if($.id("mode").value==1){if($.mac($.id("macAddr").value)){return}fwAttrs.type=1;fwAttrs.mac=$.id("macAddr").value}else{if($.id("mode").value==2){if(allUrl.length==0){$.alert(ERR_FW_URL_NULL);var element=$.id("urlInfo");if(element){element.focus();element.select()}return}if(delFlag==1){for(var i=0;i<delList.length;i++){fwAttrs.addUrl=0;fwAttrs.tmpUrl=delList[i];$.act(ACT_SET,EXTERNAL_HOST,stk,null,fwAttrs)}}for(var i=0;i<allUrl.length;i++){fwAttrs.type=2;fwAttrs.addUrl=1;fwAttrs.tmpUrl=allUrl[i];if((opt==0)&&(i==0)){var newUrlCfg=$.act(ACT_ADD,EXTERNAL_HOST,null,null,fwAttrs);if($.exe()){return}stk=newUrlCfg.__stack}else{if((i>0)||((opt==1)&&(i==0))){$.act(ACT_SET,EXTERNAL_HOST,stk,null,fwAttrs)}}}}}}if($.id("mode").value!=2){if(opt==0){$.act(ACT_ADD,EXTERNAL_HOST,null,null,fwAttrs)}else{if(opt==1){$.act(ACT_SET,EXTERNAL_HOST,stk,null,fwAttrs)}}}$.addLoading($.id("saveBtn"));$.exe(function(ret){if(!ret){$.loadMain("fwWan.htm")}})};</script>
+<p class="et T" id="et">WAN Host</p>
+<div class="con1 L">
+<p class="ct"></p>
+<p class="bl"></p>
+<div class="con2">
+<p class="L1"><b class="item T T_mode">Mode:</b>
+<select id="mode" onchange="changeMode();">
+<option value="0" class="T T_ipaddr" id="ipMode">IP Address</option>
+<option value="1" class="T T_macaddr" id="macMode">MAC Address</option>
+<option value="2" class="T" id="urlMode">URL Address</option>
+</select></p>
+<p class="br"></p>
+<p class="L1"><b class="item T T_desc">Description:</b><input type="text" class="text" size="17" id="entryName" maxlength="15"/></p>
+<div id="ipMode_elem">
+<p class="L1"><b class="item T T_ipaddr">IP Address:</b>
+<input type="text" class="text" id="ipStart" maxlength="15" size="17"/>-
+<input type="text" class="text" id="ipEnd" maxlength="15" size="17"/>
+</p>
+<p class="L1"><b class="item T T_port">Port:</b>
+<input type="text" class="text" id="portStart" size="10"/>-
+<input type="text" class="text" id="portEnd" size="10"/></p>
+
+</div>
+<div id="macMode_elem" class="nd">
+<p class="L1"><b class="item T T_macaddr">MAC Address:</b><input type="text" class="text" size="17" maxlength="17" id="macAddr"/></p>
+</div>
+<div id="urlMode_elem" class="nd">
+<p class="L1"><b class="item T" id="t_addurl">Add URL:</b>
+<input type="text" class="text" size="17" maxlength="31" id="urlInfo"/>
+<input type="button" class="button L T T_add" value="Add" onclick="doAddUrl();"/>
+</p>
+<p class="br"></p>
+<div class="M thead" ><table class="M bdr tc">
+<tr>
+<th width="20px"><input type="checkbox" id="selAll" onclick="doSelAll();"/></th>
+<th class="T" id="t_detail">Detail</th>
+</tr>
+</table></div>
+<div class="M tbody"><table id="urltbl" class="M bdr tc"></table></div>
+<p class="br"></p>
+<p class="L2 center">
+<input type="button" class="button L T T_del" value="Delete" onclick="doDelUrl();"/>&nbsp;&nbsp;<span class="T" id="t_apply">(It won't take effect until you save it)</span></p>
+</div>
+</div>
+<p class="bl"></p>
+<p class="tail" id="tail">
+<input type="button" class="button L T T_save" id="saveBtn" value="Save" onclick="doSave();" />
+<input type="button" class="button L T T_back" value="Back" onclick="doReturn();" /></p>
+</div>
+<script language="javascript" type="text/javascript">$.loadHelpFrame("AccessCtrlAccessTargetsAdvHelpRpm.htm");init();</script>

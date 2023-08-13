@@ -1,0 +1,42 @@
+<script type="text/javascript" language="javascript">function checkParam(){var element;var lanIp=$.id("lanip").value;var netmask=$.id("netmask").value;if($.ifip(lanIp,true)){$.alert(ERR_LAN_IP_INVAD);element=$.id("lanip");if(element){element.focus();element.select()}return false}if($.mask(netmask,true)){$.alert(ERR_LAN_MASK_INVAD);element=$.id("netmask");if(element){element.focus();element.select()}return false}if($.ipmask(lanIp,netmask,true)){$.alert(ERR_LAN_IPMASK_INVAD);element=$.id("lanip");if(element){element.focus();element.select()}return false}}function goPrev(){$.qf.prev()}function goNext(){if(checkParam()==false){return false}$.qd.lan.addressType=$.id("lantype").value;$.qd.lan.tmpLanIp=$.id("lanip").value==""?"0.0.0.0":$.ip2ip($.id("lanip").value);$.qd.lan.tmpLanMask=$.id("netmask").value==""?"255.255.255.0":$.ip2ip($.id("netmask").value);$.qd.lan.dhcpEnable=$.id("dhcpen").checked?1:0;$.qf.next()}function changeLanType(){if($.id("lantype").value==1){$.id("lanip").value=dhcpCfg.X_TP_DefaultIp;$.id("netmask").value="255.255.255.0";$.id("lanip").disabled=true;$.id("netmask").disabled=true;$.id("dhcpen").disabled=true;$.id("dhcpdis").disabled=true;if(dhcpCfg.DHCPServerEnable==1){$.id("dhcpen").checked=true;$.id("dhcpdis").checked=false}else{$.id("dhcpdis").checked=true;$.id("dhcpen").checked=false}}else{$.id("lanip").value=lanIPv4Cfg[0].IPInterfaceIPAddress?lanIPv4Cfg[0].IPInterfaceIPAddress:"0.0.0.0";$.id("netmask").value=lanIPv4Cfg[0].IPInterfaceSubnetMask?lanIPv4Cfg[0].IPInterfaceSubnetMask:"255.255.255.0";$.id("lanip").disabled=false;$.id("netmask").disabled=false;$.id("dhcpen").disabled=false;$.id("dhcpdis").disabled=false;$.id("dhcpen").checked=true}}var lanIPv4Cfg;var dhcpCfg;(function(){$.loadHelpFrame("QsLanApHelpRpm.htm");if($.qd.lan==undefined){$.qd.lan={}}var brLanList=$.act(ACT_GL,L2_BRIDGING_ENTRY,null,null,["bridgeName"]);$.exe();lanIPv4Cfg=$.act(ACT_GS,LAN_IP_INTF,null,brLanList[0].__stack,["IPInterfaceIPAddress","IPInterfaceSubnetMask"]);dhcpCfg=$.act(ACT_GET,LAN_HOST_CFG,brLanList[0].__stack,null,null);$.exe();$.qd.lan.stackHost=dhcpCfg.__stack;$.qd.lan.stackIP=lanIPv4Cfg[0].__stack;$.qd.lan.oldLanIp=lanIPv4Cfg[0].IPInterfaceIPAddress?lanIPv4Cfg[0].IPInterfaceIPAddress:"0.0.0.0";$.qd.lan.oldLanMask=lanIPv4Cfg[0].IPInterfaceSubnetMask?lanIPv4Cfg[0].IPInterfaceSubnetMask:"0.0.0.0";if(INCLUDE_SMART_DHCP){$.qd.lan.oldDhcpAuto=dhcpCfg.X_TP_DHCPAuto;$.removeClass($.id("address-type-div"),"nd");$.removeClass($.id("dhcp-div"),"nd")}if(INCLUDE_SMART_DHCP){if($.qd.lan.addressType==undefined||$.qd.lan.dhcpEnable==undefined||$.qd.lan.tmpLanIp==undefined||$.qd.lan.tmpLanMask==undefined){$.id("lantype").value=1;$.id("lanip").value=dhcpCfg.X_TP_DefaultIp;$.id("netmask").value="255.255.255.0";$.id("lanip").disabled=true;$.id("netmask").disabled=true;$.id("dhcpen").disabled=true;$.id("dhcpdis").disabled=true;if(dhcpCfg.DHCPServerEnable==1){$.id("dhcpen").checked=true;$.id("dhcpdis").checked=false}else{$.id("dhcpdis").checked=true;$.id("dhcpen").checked=false}}else{$.id("lantype").value=$.qd.lan.addressType;if($.qd.lan.dhcpEnable==1){$.id("dhcpen").checked=true;$.id("dhcpdis").checked=false}else{$.id("dhcpen").checked=false;$.id("dhcpdis").checked=true}$.id("lanip").value=$.qd.lan.tmpLanIp;$.id("netmask").value=$.qd.lan.tmpLanMask;if($.id("lantype").value==1){$.id("lanip").disabled=true;$.id("netmask").disabled=true;$.id("dhcpen").disabled=true;$.id("dhcpdis").disabled=true}else{$.id("lanip").disabled=false;$.id("netmask").disabled=false;$.id("dhcpen").disabled=false;$.id("dhcpdis").disabled=false}}}else{$.id("lanip").value=$.qd.lan.oldLanIp;$.id("netmask").value=$.qd.lan.oldLanMask;$.id("lanip").disabled=false;$.id("netmask").disabled=false;$.id("dhcpen").disabled=false;$.id("dhcpdis").disabled=false;$.id("dhcpen").checked=true}})();</script>
+<p class="et T" id="et">Quick Setup - Network Setting</p>
+<div class="con1 M">
+    <p class="ct"></p>
+    <p class="bl"></p>
+    <div class="con2">
+        <div class="nd" id="address-type-div">
+            <p><b class="item T T_lantype">Type: </b>
+                <select id="lantype" onchange="changeLanType()">
+                    <option value="0" class="T T_staip">Static IP</option>
+                    <option value="1" id="t_smart">Smart IP(DHCP)</option>
+                </select>
+            </p>
+
+            <p><b class="item">&nbsp;</b><span class="L fl T" id="t_lantype1">Note: The IP parameters cannot be configured if you have chosen Smart IP(DHCP)</span></p>
+            <p class="br"></p>
+            <p><b class="item">&nbsp;</b><span class="L fl T" id="t_lantype2">(In this situation the device will help you configure the IP parameters automatically as you need).</span></p>
+        </div>
+        <p class="br"></p>
+        <p><b class="item T T_ipaddr">IP Address: </b>
+            <input id="lanip" type="text" class="text" size="22" maxlength="32" value="" />
+        </p>
+        <p><b class="item T T_netmask">Subnet Mask: </b>
+            <input id="netmask" type="text" class="text" size="22" maxlength="32" value="" />
+        </p>
+        <p><b class="item">&nbsp;</b><span class="L fl T" id="t_lantype3">We recommend you configure this AP with the same IP subnet and subnet mask, but different IP address from your root AP/Router.</span></p>
+        <p class="br"></p>
+        <div id="dhcp-div" class="nd">
+            <p><b class="item T T_dhcp">DHCP Server:</b>
+                <input type="radio" name="dhcpen" id="dhcpen" />
+                <span class="T T_en">Enable</span>
+                <input type="radio" name="dhcpen" id="dhcpdis" />
+                <span class="T T_dis">Disable</span>
+            </p>
+        </div>
+        <p class="bl"></p>
+        <p class="tail ctr">
+            <input type="button" class="button L T T_back" value="Back" onclick="goPrev()" />
+            <input type="button" class="button L T T_next" value="Next" onclick="goNext()" />
+        </p>
+    </div>
+</div>

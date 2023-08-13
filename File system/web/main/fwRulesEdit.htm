@@ -1,0 +1,60 @@
+﻿<script language="javascript" type="text/javascript">var opt=$.mainParam[0];var stk=$.mainParam[1];var param=[];var lanType;var lanName;var wanType;var wanName;var lanList;var wanList;function showWan(lanType){var sel=$.id("externalHostRef");while(sel.length>1){sel.remove(sel.length-1)}if(lanType=="ip"){$.each(wanList,function(){if((this.isParentCtrl==0)&&(this.type!=1)){var option=$.c("option");option.value=this.type+":"+this.entryName;option.text=this.entryName;try{sel.add(option,null)}catch(e){sel.add(option)}}})}else{$.each(wanList,function(){if(this.isParentCtrl==0){var option=$.c("option");option.value=this.type+":"+this.entryName;option.text=this.entryName;try{sel.add(option,null)}catch(e){sel.add(option)}}})}}function changeLan(){lanType=$.id("internalHostRef").value.split(":")[0];if(lanType==0){showWan("ip")}else{if(lanType==1){showWan("mac")}else{showWan("any")}}changeWan()}function changeWan(){lanType=$.id("internalHostRef").value.split(":")[0];wanType=$.id("externalHostRef").value.split(":")[0];var direction=parseInt($.id("direction").value,10);if(lanType==0){if((wanType=="any")||(wanType==0)){$.removeClass($.id("protocol_elem"),"nd");$.removeClass($.id("direction_elem"),"nd");$.id("direction").disabled=0}else{if(wanType==2){$.removeClass($.id("direction_elem"),"nd");$.id("direction").value=1;$.id("direction").disabled=1;$.addClass($.id("protocol_elem"),"nd");$.id("protocol").value=0}}}else{if(lanType==1){if(wanType=="any"){$.addClass($.id("protocol_elem"),"nd");$.id("protocol").value=3;if(direction==0){$.removeClass($.id("direction_elem"),"nd");$.id("direction").value=0;$.id("direction").disabled=0}else{if(direction==1){$.removeClass($.id("direction_elem"),"nd");$.id("direction").value=1;$.id("direction").disabled=0}}}else{if(wanType==0){$.removeClass($.id("direction_elem"),"nd");$.id("direction").value=1;$.id("direction").disabled=1;$.removeClass($.id("protocol_elem"),"nd")}else{if(wanType==1){$.removeClass($.id("direction_elem"),"nd");$.id("direction").disabled=0;$.addClass($.id("protocol_elem"),"nd");$.id("protocol").value=0}else{if(wanType==2){$.removeClass($.id("direction_elem"),"nd");$.id("direction").value=1;$.id("direction").disabled=1;$.addClass($.id("protocol_elem"),"nd");$.id("protocol").value=0}}}}}else{if(wanType==0){$.removeClass($.id("direction_elem"),"nd");$.id("direction").disabled=0;$.removeClass($.id("protocol_elem"),"nd")}else{if(wanType==1){$.removeClass($.id("direction_elem"),"nd");$.id("direction").disabled=0;$.addClass($.id("protocol_elem"),"nd");$.id("protocol").value=0}else{if(wanType==2){$.removeClass($.id("direction_elem"),"nd");$.id("direction").value=1;$.id("direction").disabled=1;$.addClass($.id("protocol_elem"),"nd");$.id("protocol").value=0}else{if(wanType=="any"){$.removeClass($.id("direction_elem"),"nd");$.id("direction").disabled=0;$.removeClass($.id("protocol_elem"),"nd");$.alert(ERR_FW_RULE_INVAD);return}}}}}}}function changeDir(){var direction=parseInt($.id("direction").value,10);if(direction==0){changeWan();$.id("direction").value=0}else{if(direction==1){changeWan();$.id("direction").value=1}}}function init(){lanList=$.act(ACT_GL,INTERNAL_HOST,null,null,["entryName","isParentCtrl","type"]);wanList=$.act(ACT_GL,EXTERNAL_HOST,null,null,["entryName","isParentCtrl","type"]);var taskList=$.act(ACT_GL,TASK_SCHEDULE,null,null,["entryName","isParentCtrl"]);if(opt==1){var fwEntry=$.act(ACT_GET,RULE,stk,null)}if(!$.exe()){$.each(lanList,function(){if(this.isParentCtrl==0){var sel=$.id("internalHostRef");var option=$.c("option");option.value=this.type+":"+this.entryName;option.text=this.entryName;try{sel.add(option,null)}catch(e){sel.add(option)}}});$.each(wanList,function(){if(this.isParentCtrl==0){var sel=$.id("externalHostRef");var option=$.c("option");option.value=this.type+":"+this.entryName;option.text=this.entryName;try{sel.add(option,null)}catch(e){sel.add(option)}}});$.each(taskList,function(){if(this.isParentCtrl==0){var sel=$.id("scheduleRef");var option=$.c("option");option.value=this.entryName;option.text=this.entryName;try{sel.add(option,null)}catch(e){sel.add(option)}}});if(opt==1){$.id("ruleName").value=fwEntry.ruleName;var selLan=$.id("internalHostRef");for(var i=0;i<selLan.length;i++){if(selLan.options[i].text==fwEntry.internalHostRef){selLan.selectedIndex=i}}var selWan=$.id("externalHostRef");for(var i=0;i<selWan.length;i++){if(selWan.options[i].text==fwEntry.externalHostRef){selWan.selectedIndex=i}}$.id("scheduleRef").value=fwEntry.scheduleRef?fwEntry.scheduleRef:"any";$.id("action").value=fwEntry.action;$.id("enable").value=fwEntry.enable;$.id("direction").value=fwEntry.direction;$.id("protocol").value=fwEntry.protocol;changeWan()}}}function doSave(){var fwAttrs={};if(!$.isname($.id("ruleName").value)){$.alert(ERR_FW_ENTRYNAME_INVAD);var element=$.id("ruleName");if(element){element.focus();element.select()}return false}fwAttrs.ruleName=$.id("ruleName").value;if(($.id("internalHostRef").value=="any:any")&&($.id("externalHostRef").value=="any:any")){$.alert(ERR_FW_RULE_INVAD);return}if($.id("internalHostRef").value=="any:any"){fwAttrs.internalHostRef=""}else{fwAttrs.internalHostRef=$.id("internalHostRef").value.split(":")[1]}if($.id("externalHostRef").value=="any:any"){fwAttrs.externalHostRef=""}else{fwAttrs.externalHostRef=$.id("externalHostRef").value.split(":")[1]}if($.id("scheduleRef").value=="any"){fwAttrs.scheduleRef=""}else{fwAttrs.scheduleRef=$.id("scheduleRef").value}fwAttrs.action=$.id("action").value;fwAttrs.enable=$.id("enable").value;fwAttrs.direction=$.id("direction").value;fwAttrs.protocol=$.id("protocol").value;if(opt==0){$.act(ACT_ADD,RULE,null,null,fwAttrs)}else{if(opt==1){$.act(ACT_SET,RULE,stk,null,fwAttrs)}}$.addLoading($.id("saveBtn"));$.exe(function(err){if(!err){$.loadMain("fwRules.htm")}})}function doClick(val){if(val=="lan"){param[0]=0;param[1]=1;param[2]=(opt==1)?stk:-1;$.loadMain("fwLanEdit.htm",param)}else{if(val=="wan"){param[0]=0;param[1]=1;param[2]=(opt==1)?stk:-1;$.loadMain("fwWanEdit.htm",param)}else{if(val=="task"){param[0]=0;param[1]=1;param[2]=(opt==1)?stk:-1;$.loadMain("fwScheEdit.htm",param)}}}};</script>
+<p class="et T" id="et">Add Internet Access Control Entry</p>
+<div class="con1 L">
+<p class="ct"></p>
+<p class="bl"></p>
+<div class="con2">
+
+<p class="L2"><b class="item T T_desc">Description:</b><input type="text" class="text" size="17" id="ruleName" maxlength="15"/></p>
+<p class="br"></p>
+<p class="L2"><b class="item T" id="t_lan">LAN Host:</b>
+<select id="internalHostRef" class="L" onchange="changeLan();">
+<option class="T T_any_host" value="any:any" selected>Any Host</option></select>
+<span class="a T" id="t_addlan" onClick="doClick('lan')">Add LAN Host</span></p>
+
+<p class="L2"><b class="item T" id="t_wan">Target:</b>
+<select id="externalHostRef" class="L" onchange="changeWan();">
+<option class="T T_any_host" value="any:any" selected>Any Host</option></select>
+<span class="a T" id="t_addwan" onClick="doClick('wan')">Add Target</span></p>
+
+<p class="L2"><b class="item T" id="t_sche">Schedule:</b>
+<select id="scheduleRef"  class="L">
+<option class="T T_any_time" value="any" selected>Any Time</option></select>
+<span class="a T" id="t_addsche" onClick="doClick('task')">Add Schedule</span></p>
+
+<p class="L2"><b class="item T" id="t_action">Rule:</b>
+<select id="action" class="L">
+<option class="T T_deny" value="1" selected>Deny</option>
+<option class="T T_allow" value="0">Allow</option>
+</select></p>
+
+<p class="L2"><b class="item T T_status">Status:</b>
+<select id="enable" class="L">
+<option class="T T_enabled" value="1">Enabled</option>
+<option class="T T_disabled" value="0">Disabled</option>
+</select></p>
+
+<div id="direction_elem">
+<p class="L2"><b class="item T" id="t_direction">Direction:</b>
+<select id="direction" class="L" onchange="changeDir();">
+<option class="T" id="t_in" value="0">IN</option>
+<option class="T" id="t_out" value="1">OUT</option>
+</select></p>
+</div>
+
+<div id="protocol_elem">
+<p class="L2"><b class="item T T_proto">Protocol:</b>
+<select id="protocol"  class="L">
+<option class="T T_all" id="ALL" value="3">ALL</option>
+<option id="TCP" value="0">TCP</option>
+<option id="UDP" value="1">UDP</option>
+<option id="ICMP" value="2">ICMP</option>
+</select></p>
+</div>
+</div>
+<p class="bl"></p>
+<p class="tail" id="tail">
+<input type="button" class="button L T T_save" id="saveBtn" value="Save" onclick="doSave();" />
+<input type="button" class="button L T T_back" value="Back" onclick="$.loadMain('fwRules.htm');" /></p>
+</div>
+<script language="javascript" type="text/javascript">$.loadHelpFrame("AccessCtrlAccessRulesAdvHelpRpm.htm");init();</script>

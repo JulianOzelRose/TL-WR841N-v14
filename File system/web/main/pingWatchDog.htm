@@ -1,0 +1,24 @@
+﻿<script language="javascript" type="text/javascript">var ipList;function init(){var brList;pingWDog=$.act(ACT_GET,PING_WATCH_DOG,null,null,null);brList=$.act(ACT_GL,L2_BRIDGING_ENTRY,null,null,["bridgeName"]);if(!$.exe()){if(pingWDog.enable==0){$.id("pwd_disable").checked=1;changePwdStatus()}else{$.id("pwd_enable").checked=1;changePwdStatus()}$.id("dstip").value=pingWDog.IPAddress?pingWDog.IPAddress:"0.0.0.0";$.id("interval").value=pingWDog.interval;$.id("delay").value=pingWDog.delay;$.id("failCnt").value=pingWDog.failCount;ipList=$.act(ACT_GS,LAN_IP_INTF,null,brList[0].__stack);if(!$.exe()){}}}function checkifip(){var lanmode;var ipaddr;var subnetmask;var targetIp;lanmode=ipList[0].IPInterfaceAddressingType;ipaddr=$.ip2num(ipList[0].IPInterfaceIPAddress);subnetmask=$.ip2num(ipList[0].IPInterfaceSubnetMask);targetIp=$.ip2num($.id("dstip").value);if(lanmode=="DHCP"){return 0}else{if(lanmode=="Static"){if((ipaddr&subnetmask)!=(targetIp&subnetmask)){return 1}}}}function changePwdStatus(){if($.id("pwd_disable").checked){$.addClass($.id("pwd_cfg_div"),"nd")}else{$.removeClass($.id("pwd_cfg_div"),"nd")}}function doSave(){var element;var pwdEnable=0;pwdEnable=$.id("pwd_enable").checked?1:0;if($.num($.id("interval").value,[10,300],true)){element=$.id("interval");if(element){$.alert(ERR_PING_WATCHDOG_INTERVAL_INVALID);element.focus();element.select()}return}if($.num($.id("delay").value,[60,300],true)){element=$.id("delay");if(element){$.alert(ERR_PING_WATCHDOG_STARTDELAY_INVALID);element.focus();element.select()}return}if($.num($.id("failCnt").value,[1,65535],true)){element=$.id("failCnt");if(element){$.alert(ERR_PING_WATCHDOG_FAILCOUNT_INVALID);element.focus();element.select()}return}if($.ifip($.id("dstip").value,true)||checkifip()){element=$.id("dstip");if(element){$.alert(ERR_PING_WATCHDOG_IPADDR_INVALID);element.focus();element.select()}return}$.addLoading($.id("saveBtn"));$.act(ACT_SET,PING_WATCH_DOG,null,null,["enable="+pwdEnable,"delay="+$.id("delay").value,"interval="+$.id("interval").value,"IPAddress="+$.id("dstip").value,"failCount="+$.id("failCnt").value]);$.exe(function(err){if(!err){$.loadMain("pingWatchDog.htm")}})}$.loadHelpFrame("PingWatchDogHelpRpm.htm");init();</script>
+<p class="et T" id="et">Ping WatchDog Settings</p>
+<div class="con1 M">
+<p class="ct"></p>
+<p class="bl"></p>
+<div class="con2">
+<p class="line T lbk nd" id="t_info">Ping WathDog will be the monitor to detect AP's network, reboot device while AP disconnected.</p>
+<p class="br"></p>
+<p class="L2"><b class="item L T" id="t_switch">Switch:</b>
+<input name="pwdAgent" id="pwd_disable" type="radio" onclick="changePwdStatus()"/><span class="T T_dis">Disable</span>
+<input name="pwdAgent" id="pwd_enable" type="radio" onclick="changePwdStatus()"/><span class="T T_en">Enable</span>
+</p>
+<div id="pwd_cfg_div">
+<p class="br"></p>
+<p class="L2"><b class="item L T" id="t_dstip">Destination IP:</b><input id="dstip" type="text" class="text" size="16" maxlength="16"/></p>
+<p class="L2"><b class="item L T" id="t_interval">Interval:</b><input id="interval" type="text" class="text" size="5" maxlength="5"/><span>(10-300)s</span></p>
+<p class="L2"><b class="item L T" id="t_delay">Startup Delay:</b><input id="delay" type="text" class="text" size="5" maxlength="5"/><span>(60-300)s</span></p>
+<p class="L2"><b class="item L T" id="t_failCnt">Fail Count:</b><input id="failCnt" type="text" class="text" size="5" maxlength="5"/><span>(1-65535)</span></p>
+</div>
+</div>
+<p class="bl"></p>
+<p class="tail">
+<input type="button" class="button L T T_save" id="saveBtn" value="Save" onclick="doSave();"/></p>
+</div>

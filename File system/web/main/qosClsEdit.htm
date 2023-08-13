@@ -1,0 +1,114 @@
+﻿<script language="javascript" type="text/javascript">var opt=$.mainParam[0];var stk=$.mainParam[1];var wanIpConList;var wanPppConList;var lanEthIntfList;var qosList;var lanIntfLocal=[];var wanIntfLocal=[];var lanIntfNum=0;var wanIntfNum=0;var upQueueList=[];var downQueueList=[];var upQueueNum=0;var downQueueNum=0;var ip_addr="";var mask_addr="";if(INCLUDE_LAN_WLAN){var wlanIntfList;if(INCLUDE_LAN_WLAN_WDS){var wlanWdsIntf}if(INCLUDE_LAN_WLAN_MSSID){var wlanMultiSsid;var wlanMultiSsidIntfList}}var dscp_list=new Array(["AF13","56"],["AF12","48"],["AF11","40"],["CS1","32"],["AF23","88"],["AF22","80"],["AF21","72"],["CS2","64"],["AF33","120"],["AF32","112"],["AF31","104"],["CS3","96"],["AF43","152"],["AF42","144"],["AF41","136"],["CS4","128"],["EF","184"],["CS5","160"],["CS6","192"],["CS7","224"]);var ethtype_list=new Array(["","-1"],["IP","2048"],["ARP","2054"],["802.1Q","33024"],["PPP_DISC","34915"],["PPP_SES","34916"]);var ip_proto_list=new Array(["TCP","6"],["UDP","17"],["ICMP","1"]);var src_ip_option=new Array(["Source IP Address[/Mask]         :","1"]);function draw_one_option(id,name,value){var option=$.id(id).options;var opt=new Option(name,option.length);opt.value=value;option.add(opt)}function draw_lan_intf_option(){draw_one_option("ing_intf","LAN","LAN");lanIntfLocal[lanIntfNum++]="LAN";$.each(lanEthIntfList,function(){if(this.enable&&"Up"==this.status){draw_one_option("ing_intf",this.__ifName,this.__ifName);lanIntfLocal[lanIntfNum++]=this.__ifName}});if(INCLUDE_LAN_WLAN){var wlanIntfNum=0;$.each(wlanIntfList,function(){if(0!=this.enable){draw_one_option("ing_intf",this.name,this.name);lanIntfLocal[lanIntfNum++]=this.name}wlanIntfNum++});if(INCLUDE_LAN_WLAN_WDS){$.each(wlanWdsIntf,function(){var i=0;for(;i<wlanIntfNum;i++){if(this.__stack==wlanIntfList[i].__stack&&0!=wlanIntfList[i].enable&&0!=wlanWdsIntf.BridgeEnable){draw_one_option("ing_intf",this.X_TP_WDSName,this.X_TP_WDSName);lanIntfLocal[lanIntfNum++]=this.X_TP_WDSName}}})}if(INCLUDE_LAN_WLAN_MSSID){var multiSsidNum=0;$.each(wlanMultiSsid,function(){multiSsidNum++});$.each(wlanMultiSsidIntfList,function(){if(0!=this.enable){var i=0;for(;i<wlanIntfNum;i++){if(wlanIntfList[i].__stack==$.stkPop(this.__stack,1)&&0!=wlanIntfList[i].enable){var j=0;for(;j<multiSsidNum;j++){if(wlanIntfList[i].__stack==wlanMultiSsid[j].__stack&&0!=wlanMultiSsid[j].multiSSIDEnable){draw_one_option("ing_intf",this.name,this.name);lanIntfLocal[lanIntfNum++]=this.name}}}}}})}}}function draw_wan_intf_option(){draw_one_option("ing_intf","WAN","WAN");wanIntfLocal[wanIntfNum++]="WAN";$.each(wanIpConList,function(){if(0!=this.enable&&"Connected"==this.connectionStatus){var tmpName=this.X_TP_IfName;if("IP_Bridged"==this.connectionType){tmpName+="(Bridged)"}else{tmpName+="(Routed)"}draw_one_option("ing_intf",tmpName,this.X_TP_IfName);wanIntfLocal[wanIntfNum++]=this.X_TP_IfName}});$.each(wanPppConList,function(){if(0!=this.enable&&"Connected"==this.connectionStatus){var tmpName=this.X_TP_IfName+"(Routed)";draw_one_option("ing_intf",tmpName,this.X_TP_IfName);wanIntfLocal[wanIntfNum++]=this.X_TP_IfName}})}function draw_src_ip_option(val){var option=$.id("src_ip_or_dhcp_option").options;option.length=0;if(0==val){draw_one_option("src_ip_or_dhcp_option",src_ip_option[0][0],src_ip_option[0][1])}else{$.each(src_ip_option,function(){draw_one_option("src_ip_or_dhcp_option",this[0],this[1])})}}function draw_ether_type_option(val){var option=$.id("etherType").options;option.length=0;if(0==val){draw_one_option("etherType",ethtype_list[1][0],ethtype_list[1][1])}else{$.each(ethtype_list,function(){draw_one_option("etherType",this[0],this[1])})}}function draw_cos_option(id){var i=0;for(;i<8;i++){draw_one_option(id,i,i)}}function draw_dscp_option(id){$.each(dscp_list,function(){draw_one_option(id,this[0],this[1])})}function draw_ip_proto_option(){$.each(ip_proto_list,function(){draw_one_option("ip_proto",this[0],this[1])})}function draw_queue_option(queueNameList,queueNum){var option=$.id("qos_queue").options;option.length=0;draw_one_option("qos_queue","","-1");for(var i=0;i<queueNum;i+=2){draw_one_option("qos_queue",queueNameList[i],queueNameList[i+1])}}function doChangeEtherType(){if(2048==$.id("etherType").value){var ingText=$.id("ing_intf").options[$.id("ing_intf").selectedIndex].text;if($.id("ing_intf").value=="WAN"||ingText.search("Rou")!=-1){$.addClass($.id("destMac"),"nd")}else{$.removeClass($.id("destMac"),"nd")}$.removeClass($.id("layer3"),"nd");if("6"==$.id("ip_proto").value||"17"==$.id("ip_proto").value){$.removeClass($.id("layer4"),"nd")}else{$.addClass($.id("layer4"),"nd")}$.addClass($.id("8021q"),"nd");if($.id("ing_intf").value=="WAN"||ingText.search("Rou")!=-1||ingText.search("Bri")!=-1){draw_src_ip_option(0)}else{draw_src_ip_option(1)}}else{$.removeClass($.id("destMac"),"nd");if(33024==$.id("etherType").value){$.removeClass($.id("8021q"),"nd")}else{$.addClass($.id("8021q"),"nd")}$.addClass($.id("layer3"),"nd");$.addClass($.id("layer4"),"nd")}}function doChangeIpProto(){if("6"==$.id("ip_proto").value||"17"==$.id("ip_proto").value){$.removeClass($.id("layer4"),"nd")}else{$.addClass($.id("layer4"),"nd")}}function showAccordingtoEtherType(clsObj){doChangeEtherType();$.id("src_mac").value=clsObj.sourceMACAddress;$.id("src_mac_mask").value=clsObj.sourceMACMask;$.id("dest_mac").value=clsObj.destMACAddress;$.id("dest_mac_mask").value=clsObj.destMACMask;if(2048==clsObj.ethertype){if(""!=clsObj.sourceIP){$.id("src_ip_or_dhcp_option").value=1;if(""!=clsObj.sourceMask){$.id("src_ip").value=clsObj.sourceIP+"/"+clsObj.sourceMask}else{$.id("src_ip").value=clsObj.sourceIP}}else{if(""!=clsObj.sourceVendorClassID){$.id("src_ip_or_dhcp_option").value=2;$.id("src_ip").value=clsObj.sourceVendorClassID}else{if(""!=clsObj.sourceUserClassID){$.id("src_ip_or_dhcp_option").value=3;$.id("src_ip").value=clsObj.sourceUserClassID}}}if(""!=clsObj.destIP){if(""!=clsObj.destMask){$.id("dest_ip").value=clsObj.destIP+"/"+clsObj.destMask}else{$.id("dest_ip").value=clsObj.destIP}}$.id("dscp_check").value=clsObj.DSCPCheck;$.id("ip_proto").value=clsObj.protocol;if(-1!=clsObj.protocol){doChangeIpProto();if(6==clsObj.protocol||17==clsObj.protocol){if(-1!=clsObj.sourcePort){$.id("src_port").value=clsObj.sourcePort}if(-1!=clsObj.sourcePortRangeMax){$.id("src_port_end").value=clsObj.sourcePortRangeMax}if(-1!=clsObj.destPort){$.id("dest_port").value=clsObj.destPort}if(-1!=clsObj.destPortRangeMax){$.id("dest_port_end").value=clsObj.destPortRangeMax}}}}else{if(33024==clsObj.ethertype){$.id("cos_check").value=clsObj.ethernetPriorityCheck}}}function init(){wanIpConList=$.act(ACT_GL,WAN_IP_CONN,null,null,["enable","connectionStatus","X_TP_IfName","connectionType"]);wanPppConList=$.act(ACT_GL,WAN_PPP_CONN,null,null,["enable","connectionStatus","X_TP_IfName","connectionType"]);lanEthIntfList=$.act(ACT_GL,LAN_ETH_INTF,null,null,["enable","status","__ifName"]);if(INCLUDE_LAN_WLAN){wlanIntfList=$.act(ACT_GL,LAN_WLAN,null,null,["enable","name"]);if(INCLUDE_LAN_WLAN_WDS){wlanWdsIntf=$.act(ACT_GL,LAN_WLAN_WDSBRIDGE,null,null,["BridgeName","BridgeEnable"])}if(INCLUDE_LAN_WLAN_MSSID){wlanMultiSsid=$.act(ACT_GL,LAN_WLAN_MULTISSID,null,null,["multiSSIDEnable"]);wlanMultiSsidIntfList=$.act(ACT_GL,LAN_WLAN_MSSIDENTRY,null,null,["enable","name"])}}var clsList=$.act(ACT_GL,CLASSIFICATION,null,null,["classificationOrder"]);qosList=$.act(ACT_GL,QOS_INTF,null,null,["interfaceKey"]);var queueList=$.act(ACT_GL,QOS_QUEUE,null,null,["queueName","queueKey"]);if(1==opt){var clsCfg=$.act(ACT_GET,CLASSIFICATION,stk,null)}if(!$.exe()){var maxOrder=0;$.each(clsList,function(){draw_one_option("order",this.classificationOrder,this.classificationOrder);if(maxOrder<this.classificationOrder){maxOrder=this.classificationOrder}});$.each(queueList,function(){if(qosList[0].__stack==$.stkPop(this.__stack,1)){upQueueList[upQueueNum++]=this.queueName;upQueueList[upQueueNum++]=this.queueKey}else{downQueueList[downQueueNum++]=this.queueName;downQueueList[downQueueNum++]=this.queueKey}});draw_ip_proto_option();draw_cos_option("cos_mark");draw_cos_option("cos_check");draw_dscp_option("dscp_mark");draw_dscp_option("dscp_check");if(1==opt){$.id("cls_name").value=clsCfg.X_TP_ClassName;$.id("status").value=clsCfg.classificationEnable;$.id("order").value=clsCfg.classificationOrder;if(clsCfg.X_TP_ClassInterface==qosList[0].interfaceKey){draw_lan_intf_option();$.id("qos_dir").value="Upstream";draw_queue_option(upQueueList,upQueueNum)}else{draw_wan_intf_option();$.id("qos_dir").value="Downstream";draw_queue_option(downQueueList,downQueueNum)}$.id("ing_intf").value=clsCfg.classInterface;$.id("qos_queue").value=clsCfg.classQueue;var ingText=$.id("ing_intf").options[$.id("ing_intf").selectedIndex].text;if($.id("ing_intf").value=="WAN"||ingText.search("Rou")!=-1){draw_ether_type_option(0)}else{draw_ether_type_option(1)}$.id("etherType").value=clsCfg.ethertype;showAccordingtoEtherType(clsCfg);$.id("cos_mark").value=clsCfg.ethernetPriorityMark;$.id("dscp_mark").value=clsCfg.DSCPMark}else{maxOrder++;draw_one_option("order","Last",maxOrder);$.id("order").value=maxOrder;draw_lan_intf_option();draw_wan_intf_option();$.id("ing_intf").value="LAN";draw_ether_type_option(1);$.id("etherType").value="-1";$.removeClass($.id("destMac"),"nd");$.addClass($.id("8021q"),"nd");$.addClass($.id("layer3"),"nd");$.addClass($.id("layer4"),"nd");$.id("qos_dir").value="Upstream";draw_queue_option(upQueueList,upQueueNum);$.id("qos_queue").value="-1";$.id("cos_mark").value="-1";$.id("cos_check").value="-1";$.id("dscp_mark").value="-1";$.id("dscp_check").value="-1";$.id("ip_proto").value="-1"}}}function doChangeIngIntf(){var i=0;if(0==opt){for(;i<lanIntfNum;i++){if($.id("ing_intf").value==lanIntfLocal[i]){$.id("qos_dir").value="Upstream";draw_queue_option(upQueueList,upQueueNum);draw_ether_type_option(1);doChangeEtherType();$.removeClass($.id("destMac"),"nd");return}}}for(i=0;i<wanIntfNum;i++){if($.id("ing_intf").value==wanIntfLocal[i]){if(0==opt){$.id("qos_dir").value="Downstream";draw_queue_option(downQueueList,downQueueNum)}var ingText=$.id("ing_intf").options[$.id("ing_intf").selectedIndex].text;if($.id("ing_intf").value=="WAN"||ingText.search("Rou")!=-1){$.addClass($.id("destMac"),"nd");draw_ether_type_option(0);$.id("etherType").value="2048";doChangeEtherType()}else{$.removeClass($.id("destMac"),"nd");draw_ether_type_option(1);doChangeEtherType()}return}}}function get_ip_mask(ip_mask){if(ip_mask==""){return}if(ip_mask.length){var ret=ip_mask.search("/");if(ret==-1){ip_addr=ip_mask;return}ip_addr=ip_mask.substring(0,ret);mask_addr=ip_mask.substring(ret+1,ip_mask.length)}}function check_ip_mask(id){ip_addr="";mask_addr="";get_ip_mask($.id(id).value);if((""!=ip_addr&&$.ifip(ip_addr))||(""==ip_addr&&""!=mask_addr)){$.alert(ERR_IP_FORMAT);var element=$.id(id);if(element){element.focus();element.select()}return false}if(""!=mask_addr&&$.mask(mask_addr)){$.alert(ERR_IP_MASK_FORMAT);var element=$.id(id);if(element){element.focus();element.select()}return false}if(""!=ip_addr&&""!=mask_addr&&$.ipmask(ip_addr,mask_addr)){$.alert(ERR_IP_MASK_FORMAT);var element=$.id(id);if(element){element.focus();element.select()}return false}return true}function check_port(port_id,port_end_id){var port_value=$.id(port_id).value;var port_end_value=$.id(port_end_id).value;if(""!=$.id(port_id).value&&(!$.isnum(port_value)||parseInt(port_value,10)==0||parseInt(port_value,10)>65535)){$.alert(ERR_PORT_NUM_INVAD);var element=$.id(port_id);if(element){element.focus();element.select()}return false}if(""!=$.id(port_end_id).value&&(!$.isnum(port_end_value)||parseInt(port_end_value==0,10)||parseInt(port_end_value,10)>65535)){$.alert(ERR_PORT_NUM_INVAD);var element=$.id(port_end_id);if(element){element.focus();element.select()}return false}if(""!=$.id(port_id).value&&""!=$.id(port_end_id).value&&parseInt(port_value,10)>parseInt(port_end_value,10)){$.alert(ERR_PORT_ORDER_INVAD);var element=$.id(port_end_id);if(element){element.focus();element.select()}return false}else{if(""==$.id(port_id).value&&""!=$.id(port_end_id).value){$.alert(ERR_EMPTY_START_PORT);var element=$.id(port_id);if(element){element.focus();element.select()}return false}}return true}function selectObj(id){var element=$.id(id);if(element){element.focus();element.select()}}function getLeftMostZeroBitPos(num){var i=0;var numArr=[128,64,32,16,8,4,2,1];for(i=0;i<numArr.length;i++){if((num&numArr[i])==0){return i}}return numArr.length}function isValidMacMask(mask){var c="";var num=0;var i=0,j=0;var zeros=0;var zeroBitPos=0,oneBitPos=8;var zeroBitExisted=false;maskParts=mask.split(":");if(maskParts.length!=6){return false}for(i=0;i<6;i++){if(maskParts[i]==""){return false}for(j=0;j<maskParts[i].length;j++){c=maskParts[i].toLowerCase().charAt(j);if((c>="0"&&c<="9")||(c>="a"&&c<="f")){continue}else{return false}}num=parseInt(maskParts[i],16);if(num==NaN||num<0||num>255){return false}if(zeroBitExisted==true&&num!=0){return false}if(num==0){zeros++;continue}oneBitPos=8-$.getrightfirstonebitpos(num);zeroBitPos=getLeftMostZeroBitPos(num);if(zeroBitPos<8){zeroBitExisted=true}if(oneBitPos==8||zeroBitPos==oneBitPos){continue}else{return false}}if(zeros==6){return false}return true}function doSave(){var clsArg={};if(!$.isname($.id("cls_name").value)){$.alert(ERR_QOS_CLS_NAME);selectObj("cls_name");return false}if($.id("cls_name").value.length>12){$.alert(ERR_QOS_CLS_NAME_LENGTH);selectObj("cls_name");return false}if($.id("ing_intf").value==""){$.alert(ERR_QOS_CLS_INTF_INVAD);selectObj("ing_intf");return false}clsArg.X_TP_ClassName=$.id("cls_name").value;clsArg.classificationEnable=$.id("status").value;clsArg.classificationOrder=$.id("order").value;clsArg.classInterface=$.id("ing_intf").value;clsArg.sourceMACAddress=$.id("src_mac").value;if(""!=clsArg.sourceMACAddress&&$.mac(clsArg.sourceMACAddress,true)){$.alert(ERR_MAC_FORMAT);selectObj("src_mac");return false}clsArg.sourceMACMask="";clsArg.destMACAddress="";clsArg.destMACMask="";var ingText=$.id("ing_intf").options[$.id("ing_intf").selectedIndex].text;if($.id("qos_dir").value=="Upstream"||(($.id("ing_intf").value!="WAN"&&ingText.search("Rou")==-1))){clsArg.sourceMACMask=$.id("src_mac_mask").value;if(""!=clsArg.sourceMACMask&&!isValidMacMask(clsArg.sourceMACMask)){$.alert(ERR_MAC_MASK_INVAD);selectObj("src_mac_mask");return false}clsArg.destMACAddress=$.id("dest_mac").value;if(""!=clsArg.destMACAddress&&$.mac(clsArg.destMACAddress,true)){$.alert(ERR_MAC_FORMAT);selectObj("dest_mac");return false}clsArg.destMACMask=$.id("dest_mac_mask").value;if(""!=clsArg.destMACMask&&!isValidMacMask(clsArg.destMACMask)){$.alert(ERR_MAC_MASK_INVAD);selectObj("dest_mac_mask");return false}}clsArg.sourceIP="";clsArg.sourceMask="";clsArg.sourceVendorClassID="";clsArg.sourceUserClassID="";clsArg.destIP="";clsArg.destMask="";clsArg.DSCPCheck=-1;clsArg.protocol=-1;clsArg.sourcePort=-1;clsArg.sourcePortRangeMax=-1;clsArg.destPort=-1;clsArg.destPortRangeMax=-1;clsArg.ethernetPriorityCheck=-1;clsArg.ethertype=$.id("etherType").value;if(2048==$.id("etherType").value){if(""!=$.id("src_ip").value){if(1==$.id("src_ip_or_dhcp_option").value){ip_addr="";mask_addr="";if(!check_ip_mask("src_ip")){return false}clsArg.sourceIP=ip_addr;clsArg.sourceMask=mask_addr}else{if(2==$.id("src_ip_or_dhcp_option").value){clsArg.sourceVendorClassID=$.id("src_ip").value}else{clsArg.sourceUserClassID=$.id("src_ip").value}}}ip_addr="";mask_addr="";if(""!=$.id("dest_ip").value&&!check_ip_mask("dest_ip")){return false}clsArg.destIP=ip_addr;clsArg.destMask=mask_addr;clsArg.DSCPCheck=parseInt($.id("dscp_check").value,10);clsArg.protocol=parseInt($.id("ip_proto").value,10);if(6==clsArg.protocol||17==clsArg.protocol){if(!check_port("src_port","src_port_end")){return false}clsArg.sourcePort=(""!=$.id("src_port").value)?parseInt($.id("src_port").value,10):-1;clsArg.sourcePortRangeMax=(""!=$.id("src_port_end").value)?parseInt($.id("src_port_end").value,10):-1;if(!check_port("dest_port","dest_port_end")){return false}clsArg.destPort=(""!=$.id("dest_port").value)?parseInt($.id("dest_port").value,10):-1;clsArg.destPortRangeMax=(""!=$.id("dest_port_end").value)?parseInt($.id("dest_port_end").value,10):-1}}else{if(33024==$.id("etherType").value){clsArg.ethernetPriorityCheck=parseInt($.id("cos_check").value,10)}}if(-1==$.id("qos_queue").value||""==$.id("qos_queue").value){$.alert(ERR_QOS_EMPTY_QUEUE);selectObj("qos_queue");return false}clsArg.classQueue=$.id("qos_queue").value;if("Upstream"==$.id("qos_dir").value){clsArg.X_TP_ClassInterface=qosList[0].interfaceKey}else{clsArg.X_TP_ClassInterface=qosList[1].interfaceKey}clsArg.DSCPMark=parseInt($.id("dscp_mark").value,10);clsArg.ethernetPriorityMark=parseInt($.id("cos_mark").value,10);var optCode=ACT_ADD;var stack=null;if(1==opt){optCode=ACT_SET;stack=stk}$.act(optCode,CLASSIFICATION,stack,null,clsArg);$.addLoading($.id("saveBtn"));$.exe(function(ret){if(!ret){$.loadMain("qosList.htm")}})};</script>
+<p class="et"><b>Flow Classification Configuration</b></p>
+
+<div class="con1 XXL">
+	<p class="ct"></p>
+	<p class="bl"></p>
+<div class="con2">
+	<p class="br"></p>
+	<p class="L2"><b class="item T" >Class Name:</b><input type="text" class="text" id="cls_name"  maxlength="12" /></p>
+	<p class="L2"><b class="item T" id="cls_stu">Status:</b>
+		<select id="status" class="XL">
+			<option id="en" value="1">Enable</option>
+			<option id="dis" value="0" selected>Disable</option>
+		</select>
+	</p>
+	<p class="L2"><b class="item T" id="cls_order">Order:</b>
+		<select id="order" class="XL"></select>
+	</p>
+
+	<p class="br"></p>
+	<p class="L1"><b >Specify Classification Criteria</b><span>(A blank criteria indicates it is not used for classification.)</span></p>
+	<p class="L2">
+		<b class="item T" id="cls_intf">Ingress Interface:</b>
+		<select id="ing_intf" class="XL" onchange="doChangeIngIntf()"></select>
+	</p>
+	<p class="L2">
+		<b class="item T" id="ether_type">Ether Type:</b>
+		<select id="etherType" class="XL" onchange="doChangeEtherType()">
+			<option value="-1"></option>
+		</select>
+	</p>
+	
+<div id="srcMac">
+	<p class="L2"><b class="item T" >Source MAC Address:</b><input type="text" class="text" id="src_mac" /></p>
+</div>
+<div id="destMac">
+	<p class="L2"><b class="item T" >Source MAC Mask:</b><input type="text" class="text" id="src_mac_mask" /></p>
+	<p class="L2"><b class="item T" >Destination MAC Address:</b><input type="text" class="text" id="dest_mac" /></p>
+	<p class="L2"><b class="item T" >Destination MAC Mask:</b><input type="text" class="text" id="dest_mac_mask" /></p>
+</div>
+<div id="8021q">
+	<p class="L2">
+		<b class="item T" >802.1P Priority Check:</b>
+		<select id="cos_check" class="XL">
+			<option value="-1"></option>
+		</select>
+	</p>
+</div>
+<div id="layer3">
+	<p  class="L2"><b class="item T">&nbsp;<select id="src_ip_or_dhcp_option" class="XL" ></select></b>
+		<input type="text" class="text" id="src_ip"/></p>
+		
+	<p class="L2"><b class="item T" >Destination IP Address[/Mask]:</b><input type="text" class="text" id="dest_ip" /></p>
+	<p class="L2">
+		<b class="item T" >Differentiated Service Code Point (DSCP) Check:</b>
+		<select id="dscp_check" class="XL">
+			<option value="-1"></option>
+		</select>
+	</p>
+	<p class="L2">
+		<b class="item T" >Protocol:</b>
+		<select id="ip_proto" class="XL" onchange="doChangeIpProto()">
+			<option value="-1"></option>
+		</select>
+	</p>
+</div>	
+<div id="layer4">
+	<p class="L2">
+		<b class="item T" >Source Port Range:</b>
+		<input type="text" class="text" id="src_port" maxlength="5" />--
+		<input type="text" class="text" id="src_port_end" maxlength="5" />
+	</p>
+	<p class="L2"><b class="item T" >Destination Port Range:</b>
+		<input type="text" class="text" id="dest_port" maxlength="5" />--
+		<input type="text" class="text" id="dest_port_end" maxlength="5" />
+	</p>
+</div>
+
+	<p class="br"></p>
+	<p class="L1"><b >Specify Classification Results</b><span>(A blank criteria indicates no operation.)</span></p>
+	<p class="L2">
+		<b class="item T" id="dir">Direction:</b>
+		<input type="text" class="text" id="qos_dir" disabled />
+	</p>
+	<p class="L2">
+		<b class="item T" id="queue">Queue:</b>
+		<select id="qos_queue" class="XL">
+			<option value="-1"></option>
+		</select>
+	</p>
+	<p class="L2">
+		<b class="item T" >Mark Differentiated Service Code Point (DSCP):</b>
+		<select id="dscp_mark" class="XL">
+			<option value="-1"></option>
+		</select>
+	</p>
+<div id="8021p_mark">
+	<p class="L2">
+		<b class="item T" >Mark 802.1P Priority:</b>
+		<select id="cos_mark" class="XL">
+			<option value="-1"></option>
+		</select>
+	</p>
+</div>
+
+</div>
+<p class="bl"></p>
+<p class="tail" id="tail">
+	<input type="button" class="button L T T_save" id="saveBtn" value="Save" onclick="doSave();" />
+	<input type="button" class="button L T T_back" value="Back" onclick="$.loadMain('qosList.htm');" />
+</p>
+</div>
+
+<script language="javascript" type="text/javascript">$.loadHelp();$.addClass($.id("8021p_mark"),"nd");init();</script>

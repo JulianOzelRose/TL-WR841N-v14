@@ -1,0 +1,21 @@
+﻿<script language="javascript" type="text/javascript">var lanip_dut;var lanmask_dut;function doCollect(){$.qd.staip.ip=$.id("ip").value;$.qd.staip.mask=$.id("mask").value;$.qd.staip.gw=$.id("gw").value;$.qd.staip.dns=$.id("dns").value;$.qd.staip.dns2=$.id("dns2").value}function isSameSubnet(wanip,wanmask,lanip,lanmask){var wanip_num=$.ip2num(wanip);var wanmask_num=$.ip2num(wanmask);var lanip_num=$.ip2num(lanip);var lanmask_num=$.ip2num(lanmask);if((lanip_num&lanmask_num)==(wanip_num&lanmask_num)||((lanip_num&wanmask_num)==(wanip_num&wanmask_num))){return true}return false}function goNext(){doCollect();var ip=$.id("ip");var mask=$.id("mask");var gw=$.id("gw");var dns=$.id("dns");var dns2=$.id("dns2");if($.ifip($.qd.staip.ip,true)){ip.focus();ip.select();return $.alert(ERR_STAIP_IP_INVAD)}if($.mask($.qd.staip.mask,true)){mask.focus();mask.select();return $.alert(ERR_STAIP_MASK_INVAD)}if($.ipmask($.qd.staip.ip,$.qd.staip.mask,true)){ip.focus();ip.select();return $.alert(ERR_STAIP_IP_MASK_CONFLICT)}if(isSameSubnet($.qd.staip.ip,$.qd.staip.mask,lanip_dut,lanmask_dut)){ip.focus();ip.select();return $.alert(CMM_WAN_IP_IP_IN_THE_SAME_SUBNET_WITH_LAN)}if($.ifip($.qd.staip.gw,true)){gw.focus();gw.select();return $.alert(ERR_STAIP_GW_INVAD)}if($.ipmask($.qd.staip.gw,$.qd.staip.mask,true)){gw.focus();gw.select();return $.alert(ERR_STAIP_GW_MASK_CONFLICT)}if($.ipmaskgw($.qd.staip.ip,$.qd.staip.mask,$.qd.staip.gw,true)){gw.focus();gw.select();return $.alert(ERR_STAIP_IP_GW_CONFLICT)}if($.ifip($.qd.staip.dns,true)){dns.focus();dns.select();return $.alert(ERR_STAIP_DNS1_INVAD)}if($.qd.staip.dns2&&$.ip2num($.qd.staip.dns2)!==0&&$.ifip($.qd.staip.dns2,true)){dns2.focus();dns2.select();return $.alert(ERR_STAIP_DNS2_INVAD)}if($.qd.sysMode){$.qf.next($.qd.sysMode)}else{$.qf.next()}}function goPrev(){doCollect();$.qf.prev()};</script>
+<p class="et T" id="et">Quick Setup - Static IP</p>
+<div class="con1 M">
+<p class="ct"></p>
+<p class="bl"></p>
+<div class="con2">
+<p class="T" id="t_info">Please enter the basic parameters provided by your ISP. If you forget, please ask your ISP.</p>
+<p class="br"></p>
+<p><b class="item T T_ipaddr">IP Address:</b><input type="text" class="text" size="15"  maxlength="15" id="ip" value="0.0.0.0" /></p>
+<p><b class="item T T_netmask">Subnet Mask:</b><input type="text" class="text" size="15"  maxlength="15" id="mask" value="0.0.0.0" /></p>
+<p><b class="item T T_defgw">Gateway:</b><input type="text" class="text" size="15" maxlength="15" id="gw" value="0.0.0.0" /></p>
+<p><b class="item T T_primarydns">Primary DNS Server:</b><input type="text" class="text" size="15"  maxlength="15" id="dns" value="0.0.0.0" /></p>
+<p><b class="item T T_secdns">Secondary DNS Server:</b><input type="text" class="text" size="15"  maxlength="15" id="dns2" value="0.0.0.0" /><span class="T T_optional">(optional)</span></p>
+</div>
+<p class="bl"></p>
+<p class="tail ctr">
+<input type="button" class="button L T T_back" value="Back" onclick="goPrev()" />
+<input type="button" class="button L T T_next" value="Next" onclick="goNext()" />
+</p>
+</div>
+<script language="javascript" type="text/javascript">var multimodeObj;(function(){$.loadHelpFrame("WzdStaticIpHelpRpm.htm");if(!$.mainParam){return $.loadMain("qsStart.htm")}if(!$.qd.staip){$.qd.staip={}}if($.qd.staip.ip!==undefined){$.id("ip").value=$.qd.staip.ip}if($.qd.staip.mask!==undefined){$.id("mask").value=$.qd.staip.mask}if($.qd.staip.gw!==undefined){$.id("gw").value=$.qd.staip.gw}if($.qd.staip.dns!==undefined){$.id("dns").value=$.qd.staip.dns}if($.qd.staip.dns2!==undefined){$.id("dns2").value=$.qd.staip.dns2}var lanIpIntfObj=$.act(ACT_GL,LAN_IP_INTF,null,null,["IPInterfaceIPAddress","IPInterfaceSubnetMask"]);if(INCLUDE_MULTIMODE){multimodeObj=$.act(ACT_GET,MULTIMODE,null,null)}if(!$.exe()){$.each(lanIpIntfObj,function(){lanip_dut=this.IPInterfaceIPAddress;lanmask_dut=this.IPInterfaceSubnetMask});if(INCLUDE_MULTIMODE){if(multimodeObj.mode=="Client"||multimodeObj.mode=="Repeater"||multimodeObj.mode=="AP"){lanip_dut=multimodeObj.router_IPInterfaceIPAddress;lanmask_dut=multimodeObj.router_IPInterfaceSubnetMask}}}})();</script>

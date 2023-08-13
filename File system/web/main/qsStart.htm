@@ -1,0 +1,25 @@
+<p class="et T" id="et">Quick Setup - Start</p>
+<div class="con1 M">
+    <p class="ct"></p>
+    <p class="bl"></p>
+    <div class="con2">
+        <p class="br"></p>
+        <p class="T" id="t_note1">Run the Quick Setup to manually configure your internet connection and wireless settings.</p>
+		<p>
+		<span class="T" id="t_note2_1">To continue, please click the </span>
+		<b><span class="T" id="t_note2_2">Next</span></b>
+		<span class="T" id="t_note2_3"> button.</span>
+		</p>
+		<p>
+		<span class="T" id="t_note3_1">To exit, please click the </span>
+		<b><span class="T" id="t_note3_2">Exit</span></b>
+		<span class="T" id="t_note3_3"> button.</span>
+		</p>
+    </div>
+    <p class="bl"></p>
+    <p class="tail ctr">
+        <input type="button" class="button L T T_exit" value="Exit" onclick="gotoStatus()">
+        <input type="button" class="button L T T_next" value="Next" onclick="nextPage()" />
+    </p>
+</div>
+<script language="javascript" type="text/javascript">$.loadHelpFrame("WzdStartHelpRpm.htm");if($.fd==0){$.fd=1;$.act(ACT_SET,IGD_DEV_INFO,null,null,["X_TP_isFD=1"]);$.exe()}if(!$.mainParam){$.qs=[];$.qd={};$.qm={"qsStart.htm":{__enable:true,__default:"qsMode.htm"},"qsMode.htm":{__enable:true,__default:"qsType.htm",AP:"qsWlAP.htm",Repeater:"qsWlScanClient.htm",Client:"qsWlScanClient.htm",MSSID:"qsMultiSSID.htm",Hotspot:"qsType.htm"},"qsType.htm":{__enable:true,__default:"qsPPP.htm",auto:"qsAuto.htm",ppp:"qsPPP.htm",staip:"qsStaIP.htm",dhcp:"qsMacClone.htm",l2tp:"qsL2tp.htm",pptp:"qsPptp.htm",dhcph:"qsWlScanClient.htm"},"qsWlScanClient.htm":{__enable:true,__default:"qsRepeater.htm",Client:"qsWlClient.htm",Repeater:"qsWlClient.htm",Hotspot:"qsWlHotspot.htm"},"qsWlClient.htm":{__enable:true,__default:"qsLan.htm"},"qsMultiSSID.htm":{__enable:true,__default:"qsLan.htm"},"qsWlHotspot.htm":{__enable:true,__default:"qsReview.htm"},"qsAuto.htm":{__enable:true,__default:"qsStaIP.htm",staip:"qsDetectErr.htm",dhcp:"qsMacClone.htm",ppp:"qsPPP.htm"},"qsDetectErr.htm":{__enable:true,__default:"qsStaIP.htm",staip:"qsStaIP.htm",macclone:"qsMacClone.htm",dhcp:"qsWl.htm"},"qsPPP.htm":{__enable:true,__default:"qsWl.htm",Hotspot:"qsWlScanClient.htm"},"qsStaIP.htm":{__enable:true,__default:"qsWl.htm",Hotspot:"qsWlScanClient.htm"},"qsL2tp.htm":{__enable:true,__default:"qsWl.htm",Hotspot:"qsWlScanClient.htm"},"qsPptp.htm":{__enable:true,__default:"qsWl.htm",Hotspot:"qsWlScanClient.htm"},"qsWl.htm":{__enable:true,__default:"qsMacClone.htm",save:"qsSave.htm"},"qsMacClone.htm":{__enable:true,__default:"qsWl.htm",Hotspot:"qsWlScanClient.htm"},"qsWlAP.htm":{__enable:true,__default:"qsLan.htm"},"qsLan.htm":{__enable:true,__default:"qsReview.htm"},"qsSave.htm":{__enable:true,__default:"qsEnd.htm"},"qsEnd.htm":{__enable:true,__default:"no.htm"},"qsReview.htm":{__enable:true,__default:"no.htm"}};if(WEB_QS_CHANGEPASSWORD){$.qm["qsStart.htm"]={__enable:true,__default:"qspassword.htm"};$.qm["qspassword.htm"]={__enable:true,__default:"qsMode.htm"}}if(INCLUDE_LAN_WLAN_DUALBAND){$.qm["qsWlAP.htm"]={__enable:true,__default:"qsWlAP5G.htm"};$.qm["qsWlAP5G.htm"]={__enable:true,__default:"qsLan.htm"}}$.qf={next:function(arg,param){$.qs.push($.curPage);$.qm[$.curPage].__v=true;for(var path=$.curPage;$.curPage;){if(arg&&$.qm[path][arg]){path=$.qm[path][arg]}else{path=$.qm[path].__default}arg=undefined;if($.qm[path].__enable){return $.loadMain(path,param||true)}}},prev:function(){$.qm[$.curPage].__v=true;$.loadMain($.qs.pop(),true)}}}function nextPage(){$.qf.next()}function gotoStatus(){$.loadMain("status.htm",false)};</script>

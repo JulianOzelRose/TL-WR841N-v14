@@ -1,0 +1,52 @@
+﻿<script language="javascript" type="text/javascript">var stackList=[];function doStatEnable(obj){$.addLoading(obj);$.act(ACT_SET,STAT_CFG,null,null,["enable="+($.id("stat_en").checked?1:0)]);$.exe(function(ret){if(!ret){$.reload()}})}function changeInterval(){$.act(ACT_SET,STAT_CFG,null,null,["interval="+($.id("interval").value)]);if(!$.exe()){$.reload()}}function doReset(index){$.act(ACT_SET,STAT_ENTRY,stackList[index],null,null);if(!$.exe()){$.reload()}}function doResetAll(obj){$.addLoading(obj);$.act(ACT_SET,STAT_CFG,null,null,["action=1"]);$.exe(function(ret){if(!ret){$.reload()}})}function doDelete(index){$.act(ACT_DEL,STAT_ENTRY,stackList[index],null);if(!$.exe()){$.reload()}}function doDeleteAll(obj){$.addLoading(obj);$.act(ACT_SET,STAT_CFG,null,null,["action=2"]);$.exe(function(ret){if(!ret){$.reload()}})}function doRefresh(){$.addLoading($.id("refreshAll"),200,function(){$.reload()})}function statInit(){var statCfg=$.act(ACT_GET,STAT_CFG,null,null);var statEntryList=$.act(ACT_GL,STAT_ENTRY,null,null);if(!$.exe()){var sel=$.id("interval");for(var i=5;i<=60;i+=5){opt=$.c("option");opt.value=i;opt.text=i;try{sel.add(opt,null)}catch(e){sel.add(opt)}}sel.value=statCfg.interval;if(statCfg.enable==1){$.id("stat_en").checked=true;$.timeout($.reload,parseInt(sel.value,10)*1000)}else{$.id("stat_dis").checked=true}if(0==statEntryList.length){var stat_table=$.id("stat_table");var newrow=stat_table.insertRow(-1);var newcell=newrow.insertCell(-1);newcell.colSpan="9";newcell.innerHTML="<span class='T T_list_blank'>"+s_str.list_blank+"</span>"}for(var i=0;i<statEntryList.length;i++){var stat_table=$.id("stat_table");var newrow=stat_table.insertRow(-1);var cell=newrow.insertCell(-1);var string;var int1,int2,int3,int4;int4=statEntryList[i].ipAddress%256;int3=(parseInt(statEntryList[i].ipAddress/256))%256;int2=(parseInt(statEntryList[i].ipAddress/Math.pow(256,2)))%256;int1=(parseInt(statEntryList[i].ipAddress/Math.pow(256,3)));string=int1+"."+int2+"."+int3+"."+int4+" "+statEntryList[i].macAddress;cell.innerHTML=string;cell.width="130px";cell=newrow.insertCell(-1);cell.innerHTML=$.formatNum(statEntryList[i].totalPkts);cell.width="80px";cell=newrow.insertCell(-1);cell.innerHTML=$.formatNum(statEntryList[i].totalBytes);cell.width="180px";cell=newrow.insertCell(-1);cell.innerHTML=$.formatNum(statEntryList[i].currPkts);cell.width="80px";cell=newrow.insertCell(-1);cell.innerHTML=$.formatNum(statEntryList[i].currBytes);cell.width="180px";cell=newrow.insertCell(-1);cell.innerHTML=statEntryList[i].currIcmp+"/"+statEntryList[i].currIcmpMax;cell.width="80px";cell=newrow.insertCell(-1);cell.innerHTML=statEntryList[i].currUdp+"/"+statEntryList[i].currUdpMax;cell.width="80px";cell=newrow.insertCell(-1);cell.innerHTML=statEntryList[i].currSyn+"/"+statEntryList[i].currSynMax;cell.width="80px";cell=newrow.insertCell(-1);var cellInner="<span class='a T T_reset' onClick='doReset("+i+");'>"+m_str.reset+"</span>&nbsp;&nbsp;";cellInner+="<span class='a T T_del' onClick='doDelete("+i+");'>"+m_str.del+"</span>";cell.innerHTML=cellInner;stackList[i]=statEntryList[i].__stack}$.resize($.id("stat_table"),8)}};</script>
+<p class="et T" id="et">Traffic Statistics</p>
+<div class="con1 XXL">
+<p class="ct"></p>
+<p class="bl"></p>
+<div class="con2">
+	<p class="L1 T" id="t_info">Traffic Statistics--LAN</p>
+	<p class="br"></p>
+	<p class="L3">
+		<span class="T" id="t_stat">Traffic Statistics:</span>
+		<input type="radio" name="stat" id="stat_en" value="1" /><span class="T T_en">Enable</span>
+		<input type="radio" name="stat" id="stat_dis" value="0" /><span class="T T_dis">Disable</span>
+		<input class="button L T T_save" type="button" value="Save" style="margin-left:20px;" onclick="doStatEnable(this)"/>
+	</p>
+	<p class="L3">
+		<b class="item T" id="t_interval">Statistics Interval:</b> 
+		<select id="interval" name="interval" onchange="changeInterval();">
+		</select>
+		<span class="T T_seconds">seconds</span>
+	</p>
+	<p class="br"></p>
+
+	<p class="L1 T" id="t_list">Statistics List:</p>
+	<p class="L1"></p>
+	<div class="XXL thead" style="overflow:hidden"><table class="XXL bdr tc" id="stat_table">
+	<tr>
+	<th width="130px">&nbsp;</th>
+	<th colspan="2" class="T" id="t_total">Total</th>
+	<th colspan="5" class="T" id="t_cur">Current</th>
+	<th rowspan="2" class="T T_operation" width="80px">Operation</th>
+	</tr>
+	<tr>
+	<th width="130px"><span class="T T_ipaddr">IP Address</span><br /><span class="T T_macaddr">MAC Address</span></th>
+	<th width="80px" class="T T_pkts">Packets</th>
+	<th width="180px" class="T T_bytes">Bytes</th>
+	<th width="80px" class="T T_pkts">Packets</th>
+	<th width="180px" class="T T_bytes">Bytes</th>
+	<th width="80px">ICMP Tx</th>
+	<th width="80px">UDP Tx</th>
+	<th width="80px">SYN Tx</th>
+	</tr>
+	</table></div>
+	<p class="br"></p>
+</div>
+<p class="bl"></p>
+<p class="tail" id="tail">
+<input type="button" id="resetAll" class="button L T T_reset_all" value="Reset All" onclick="doResetAll(this)" />
+<input type="button" id="deleteAll" class="button L T T_delall" value="Delete All" onclick="doDeleteAll(this)" />
+<input type="button" id="refreshAll" class="button L T T_refresh" value="Refresh" onclick="doRefresh()" />
+</p>
+</div>
+<script language="javascript" type="text/javascript">$.loadHelpFrame("SystemStatisticHelpRpm.htm");statInit();</script>

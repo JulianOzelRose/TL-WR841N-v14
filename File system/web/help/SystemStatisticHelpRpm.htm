@@ -1,0 +1,48 @@
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+<HTML>
+<HEAD><TITLE>Archer C7</TITLE>
+<META http-equiv=Pragma content=no-cache>
+<META http-equiv=Expires content="wed, 26 Feb 1997 08:21:57 GMT">
+<LINK href="../css/css_help.css" rel=stylesheet type="text/css">
+<SCRIPT language="javascript" type="text/javascript"></SCRIPT>
+<LINK href="../css/css_help.css" rel=stylesheet>
+
+<h1 class="header">Statistics Help</h1>
+<p class="brief">The Statistics page shows the network traffic of each PC on the LAN, including total traffic and the value of the last <B>Packets Statistic interval</B> in seconds. </p>
+
+<ul>
+	<li class="statistics"><B>Current Statistics Status</B> - Enabled or Disabled. The default value is disabled. To enable it, click the Enable button. If it is disabled, the function of DoS protection in Security settings will be disabled.</li>
+	<li class="statistics_0"><B>Packets Statistics Interval</B> - The default value is 10. Select a value between 5 and 60 seconds in the pull-down list. The Packets Statistic interval value indicates the time section of the packets statistic. </li>
+
+	
+	<li class="refresh">Click the <B>Refresh</B> button to refresh the page.</li>
+	<li class="rese_all">Click the <b>Reset All</b> button to reset the values of all entries to zero.</li>
+	<li class="dele_all">Click the <b>Delete All</b> button to delete all entries in the table.</li>
+</ul>
+<p class="stat_table"><B>Statistics Table</B></p>
+<ul>
+	<li class="address"><B>IP Address/MAC Address</B> - The IP Address and MAC address are displayed with related statistics.</li> 
+	<li class="total"><B>Total</B></li>
+		<ul>
+
+		<li class="t_packets" type="disc"><B>Packets</B> - The total number of packets received and transmitted by the Router.</li> 
+		<li class="t_bytes" type="disc"><B>Bytes</B> - The total number of bytes received and transmitted by the Router.</li>
+		</ul>
+	<li class="current"><B>Current</B></li>
+		<ul>  
+		<li class="c_packets" type="disc"><B>Packets</B> - The number of packets received and transmitted per second at the specified Packets Statistics interval.</li>
+
+		<li class="c_bytes" type="disc"><B>Bytes</B> - The number of bytes received and transmitted per second at the specified Packets Statistics interval.</li>
+		<li class="icmpTx" type="disc"><B>ICMP Tx</B> - The number of ICMP packets transmitted to the WAN per second at the specified Packets Statistics interval. It is shown like "current transmitting rate / Max transmitting rate".</li>
+		<li class="udpTx" type="disc"><B>UDP Tx</B> - The number of UDP packets transmitted to the WAN per second at the specified Packets Statistics interval. It is shown like "current transmitting rate / Max transmitting rate".</li>
+		<li class="tcpTx" type="disc"><B>TCP SYN Tx</B> - The number of TCP SYN packets transmitted to the WAN per second at the specified Packets Statistics interval. It is shown like "current transmitting rate / Max transmitting rate".</li>
+		</ul>
+
+	<li class="operation"><B>Operation</B></li>
+		<ul>
+		<li class="t_reset" type = "disc"><b>Reset</b> - Renew the values of the entry to zero.</li>
+		<li class="t_delete" type = "disc"><b>Delete</b> - Delete the existing entry in the table.</li>
+		</ul>
+</ul>
+
+<script language="javascript" type="text/javascript">window.parent.$.transHelp(document.URL);</script>

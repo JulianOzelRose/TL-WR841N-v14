@@ -1,0 +1,74 @@
+<script language="javascript" type="text/javascript">var vlanObj;var ispService;function loadIgmpCfg(){var igmpCfg=$.act(ACT_GL,LAN_IGMP_SNOOP,null,null,["enabled"]);var wanIPv4ListAll=$.act(ACT_GL,WAN_IP_CONN,null,null,["enable","addressingType","X_TP_IPv4Enabled","X_TP_BpaEnable","X_TP_IGMPProxyEnabled","X_TP_IGMPForceVersion"]);var wanIPList={};var wanIndex=0;if(!$.exe()){$.each(wanIPv4ListAll,function(){if(this.X_TP_IPv4Enabled==1){wanIPList[wanIndex]=this;wanIndex++}})}$.id("igmp_snooping_enable").checked=(igmpCfg[0].enabled==1)?1:0;$.id("igmp_proxy_enable").checked=wanIPList[0].X_TP_IGMPProxyEnabled=="1";$.id("igmp_version").value=wanIPList[0].X_TP_IGMPForceVersion}function setIgmpCfg(){var igmp_state=$.id("igmp_proxy_enable").checked?"1":"0";var igmp_version=$.id("igmp_version").value;var igmp_snooping=$.id("igmp_snooping_enable").checked?"1":"0";var igmpCfg=$.act(ACT_GL,LAN_IGMP_SNOOP,null,null,["enabled"]);var wanIPListAll=$.act(ACT_GL,WAN_IP_CONN,null,null,["enable","X_TP_IPv4Enabled","X_TP_BpaEnable","X_TP_IGMPProxyEnabled","X_TP_IGMPForceVersion"]);var wanPPPListAll=$.act(ACT_GL,WAN_PPP_CONN,null,null,["enable","X_TP_IPv4Enabled","X_TP_IGMPProxyEnabled","X_TP_IGMPForceVersion"]);var wanL2tpList=$.act(ACT_GL,WAN_L2TP_CONN,null,null,["enable","IGMPProxyEnabled","IGMPForceVersion"]);var wanPptpList=$.act(ACT_GL,WAN_PPTP_CONN,null,null,["enable","IGMPProxyEnabled","IGMPForceVersion"]);if(!$.exe()){$.each(wanIPListAll,function(){if(this.X_TP_IPv4Enabled==1){$.act(ACT_SET,WAN_IP_CONN,this.__stack,null,["X_TP_IGMPProxyEnabled="+igmp_state,"X_TP_IGMPForceVersion="+igmp_version])}});$.each(wanPPPListAll,function(){if(this.X_TP_IPv4Enabled==1){$.act(ACT_SET,WAN_PPP_CONN,this.__stack,null,["X_TP_IGMPProxyEnabled="+igmp_state,"X_TP_IGMPForceVersion="+igmp_version])}});$.each(wanL2tpList,function(){$.act(ACT_SET,WAN_L2TP_CONN,this.__stack,null,["IGMPProxyEnabled="+igmp_state,"IGMPForceVersion="+igmp_version])});$.each(wanPptpList,function(){$.act(ACT_SET,WAN_PPTP_CONN,this.__stack,null,["IGMPProxyEnabled="+igmp_state,"IGMPForceVersion="+igmp_version])});$.act(ACT_SET,LAN_IGMP_SNOOP,igmpCfg[0].__stack,null,["enabled="+igmp_snooping]);if(!$.exe()){}}}function setVlanCfg(obj,doAct){var lanPort=0;var needReboot=false;for(var j=0;j<ispService.length;j++){var found=false;for(var i=1;i<services.length;i++){if(services[i].name==ispService[j].name){found=true;break}}if(!found){if(ispService[j].enable=="1"){needReboot=true}if(doAct){$.act(ACT_DEL,ISP_SERVICE,ispService[j].__stack)}}}for(var i=1;i<services.length;i++){var ispObj={};var found=false;ispObj.name=services[i].name;ispObj.enable=obj.vlanSetting[services[i].name].enable?"1":"0";ispObj.vlanID=obj.vlanSetting[services[i].name].vlanID;ispObj.priority=obj.vlanSetting[services[i].name].priority;ispObj.extendID=obj.vlanSetting[services[i].name].extendID;ispObj.untag=obj.vlanSetting[services[i].name].untag;ispObj.lanPort=obj.vlanSetting[services[i].name].lanPort;lanPort+=ispObj.lanPort;for(var j=0;j<ispService.length;j++){if(services[i].name==ispService[j].name){found=true;if(ispObj.enable!=ispService[j].enable||ispObj.vlanID!=ispService[j].vlanID||ispObj.priority!=ispService[j].priority||ispObj.extendID!=ispService[j].extendID||ispObj.untag!=ispService[j].untag||ispObj.lanPort!=ispService[j].lanPort){needReboot=true}if(doAct){$.act(ACT_SET,ISP_SERVICE,ispService[j].__stack,null,ispObj)}break}}if(!found){if(ispObj.enable!="0"){needReboot=true}if(doAct){$.act(ACT_ADD,ISP_SERVICE,null,null,ispObj)}}}var tmpObj={};tmpObj.workingMode=obj.workingMode;tmpObj.enable="1";tmpObj.internetGroupVlanID=obj.vlanSetting[services[0].name].vlanID;tmpObj.internetGroupExtendID=obj.vlanSetting[services[0].name].extendID;tmpObj.internetGroupPriority=obj.vlanSetting[services[0].name].priority;tmpObj.internetGroupLanPort=255-lanPort;tmpObj.internetUntag=obj.vlanSetting[services[0].name].untag;if((tmpObj.workingMode!=vlanObj.workingMode&&vlanObj.workingMode!="")||(tmpObj.workingMode!="automatic"&&vlanObj.workingMode=="")||tmpObj.enable!=vlanObj.enable||tmpObj.internetGroupVlanID!=vlanObj.internetGroupVlanID||tmpObj.internetGroupExtendID!=vlanObj.internetGroupExtendID||tmpObj.internetGroupPriority!=vlanObj.internetGroupPriority||tmpObj.internetGroupLanPort!=vlanObj.internetGroupLanPort||tmpObj.internetUntag!=vlanObj.internetUntag){needReboot=true}if(doAct){$.act(ACT_SET,VLAN,null,null,tmpObj);$.exe()}return needReboot}function saveCfg(obj){setVlanCfg(obj,true);setIgmpCfg()}function doSave(obj){var mode=$.id("iptv_mode").value;var needReboot=false;var tmp={};$.addLoading(obj);if($.id("iptv_enable").checked){tmp=getDefaultCfg(mode);doCollectData(tmp)}else{tmp=getDefaultCfg("automatic")}if(doCheckData(tmp)==false){$.removeLoading();return}needReboot=setVlanCfg(tmp);if(needReboot==true){if(!confirm(c_str.save_reboot)){$.removeLoading();return}}saveCfg(tmp);$.exe(function(ret){if(!ret){if(needReboot==true){$.guage(["<span class='T T_rebooting'>"+s_str.rebooting+"</span>","<span class='T T_wait_reboot'>"+s_str.wait_reboot+"</span>",],100,$.guageInterval,function(){window.parent.$.refresh()});$.act(ACT_OP,ACT_OP_REBOOT);$.exe(true)}else{$.reload()}}$.removeLoading()})};</script>
+<style type="text/css">
+b.item 
+{
+	width: 30% !important;
+}
+b.ispService
+{
+	width:150px;
+	display:inline-block;
+	text-align:right;
+	padding-right: 16px;
+}
+p.iptv_disable b, p.iptv_disable select, p.iptv_disable input
+{
+    color: #b3b3b3;
+}
+p.vidDisable .vid, p.vpriDisable .vpri, p.vlanTagDisable .tagEnable, p.vlanDisable .vlanEnable
+{
+    color: #b3b3b3;
+}
+</style>
+<div class="con1 M">
+    <p class="et" id="t_et">IPTV Settings</p>
+    <p class="bl"></p>
+    <div class="con2">
+        <p class="br"></p>
+        <p class="L1">
+            <b class="item T" id="t_igmp_snooping">IGMP Snooping:</b>
+            <input id="igmp_snooping_enable" type="checkbox" onclick="" />
+            <span id="t_igmp_snooping_enable" class="T T_en">Enable</span>
+        </p>
+
+        <p class="L1">
+            <b class="item T" id="t_igmp_proxy">IGMP Proxy:</b>
+            <input id="igmp_proxy_enable" type="checkbox" onclick="" />
+            <span id="t_igmp_proxy_enable" class="T T_en">Enable</span>
+        </p>
+
+        <p class="L1" id="igmp_version_select">
+            <b class="item T" id="t_igmp_version">IGMP Version:</b>
+            <select class="L" id="igmp_version" onchange="">
+                <option value="2" class="T" id="igmp_v2">V2</option>
+                <option value="0" class="T" id="igmp_v3">V3</option>
+            </select>
+        </p>
+
+        <p class="L1">
+            <b class="item T" id="t_iptv">IPTV:</b>
+            <input id="iptv_enable" type="checkbox" onclick="showMode()" />
+            <span id="t_iptv_enable">Enable IPTV</span>
+        </p>
+
+        <p class="L1 nd" id="iptv_mode_div">
+            <b class="item T" id="t_iptv_mode">IPTV Mode:</b>
+            <select class="XXL" id="iptv_mode" onchange="showMode();">
+            </select>
+        </p>
+
+		<p class="br"></p>
+
+		<div id="ispService"></div>
+
+     	<p class="br"></p>
+
+		<div id="lan_setting"></div>
+
+        <p class="bl"></p>
+        <p class="tail ctr" id="tail">
+        <input type="button" class="button L T T_save" value="Save" id="b_save" onclick="doSave(this);" />
+        </p>
+    </div>
+</div>
+<script language="javascript" type="text/javascript">(function(){if(default_mode_data[0]==noIptvData){default_mode_data.splice(0,1)}initModeOptions();initISPService();initVlanCfg(fillVlanCfg);loadIgmpCfg();$.loadHelpFrame("IPTVHelp.htm")})();</script>

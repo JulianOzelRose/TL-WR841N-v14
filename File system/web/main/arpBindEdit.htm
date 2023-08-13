@@ -1,0 +1,19 @@
+﻿<script language="javascript" type="text/javascript">var arpIpStr;var opt=$.mainParam[0];var stk=$.mainParam[1];function init(){if(opt==1){var arpCfg=$.act(ACT_GET,ARP_BIND_ENTRY,stk,null);$.exe(function(err){if(!err){$.id("arpBind").checked=(arpCfg.state==1)?1:0;$.id("macAddr").value=arpCfg.mac;$.id("ipAddr").value=$.num2ip(parseInt(arpCfg.ip,10))}})}}function doSave(){var state=($.id("arpBind").checked==1)?1:0;var ipaddr=$.id("ipAddr").value;var macaddr=$.id("macAddr").value;if($.ifip(ipaddr,true)){$.alert(ERR_IP_FORMAT);return false}if($.mac(macaddr,true)){$.alert(ERR_MAC_FORMAT);return false}if(opt==0){$.act(ACT_ADD,ARP_BIND_ENTRY,null,null,["state="+state,"ip="+$.ip2num(ipaddr),"mac="+macaddr])}else{if(opt==1){$.act(ACT_SET,ARP_BIND_ENTRY,stk,null,["state="+state,"ip="+$.ip2num(ipaddr),"mac="+macaddr])}}$.addLoading($.id("saveBtn"));$.exe(function(err){if(!err){$.loadMain("arpBind.htm")}})};</script>
+<p class="et T" id="et">Binding Settings</p>
+<div class="con1 L">
+<p class="ct"></p>
+<p class="bl"></p>
+<div class="con2">
+<p class="L1 T" id="t_info">This page allows you to set IP-MAC Binding entries.</p>
+<p class="br"></p>
+<p><b class="item T T_macaddr">MAC Address:</b><input type="text" class="text" id="macAddr" size="17"  maxlength="17" /></p>
+<p><b class="item T T_ipaddr">IP Address:</b><input type="text" class="text" id="ipAddr" size="17"  maxlength="15" /></p>
+<p><b class="item T" id="t_bind">Bind:</b><input type="checkbox" id="arpBind" checked />&nbsp;</p>
+</div>
+<p class="bl"></p>
+<p class="tail" id="tail">
+<input type="button" class="button L T T_save" id="saveBtn" value="Save" onclick="doSave();" />
+<input type="button" class="button L T T_back" value="Back" onclick="$.loadMain('arpBind.htm')"/>
+</p>
+</div>
+<script language="javascript" type="text/javascript">$.loadHelp();init();</script>

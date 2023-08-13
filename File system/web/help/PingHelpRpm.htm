@@ -1,0 +1,37 @@
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+<HTML>
+<HEAD><TITLE>Archer C7</TITLE>
+<META http-equiv=Pragma content=no-cache>
+<META http-equiv=Expires content="wed, 26 Feb 1997 08:21:57 GMT">
+<LINK href="../css/css_help.css" rel=stylesheet type="text/css">
+<SCRIPT language="javascript" type="text/javascript"></SCRIPT>
+
+<HTML><HEAD><TITLE></TITLE>
+<META http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+</head>
+
+
+	 <h1 class="header">Diagnostic Tools Help</H1> 
+	 <p class="brief">The diagnostic tools (Ping and Traceroute) allow you to check the connections of your network components.</p> 
+	 <p class="diag_tool"><B>Diagnostic Tool</B> - Click the radio button to select one diagnostic tool:</P> 
+	 <ul> 
+	 <li class="ping"><B>Ping</B> - This diagnostic tool troubleshoots connectivity, reachability, and name resolution to a given host or gateway by using the Internet Control Message Protocol (ICMP) protocol's mandatory Echo Request datagram to elicit an ICMP Echo Response from a host or gateway. You can use ping to test both numeric IP address or domain name. If pinging the IP address is successful, but pinging the domain name is not, you might have a name resolution problem. In this case, ensure that the domain name you are specifying can be resolved by using Domain Name System (DNS) queries.</lI> 
+	 <li class="traceroute"><B>Traceroute</B> - This diagnostic tool determines the path taken to a given host by sending Internet Control Message Protocol (ICMP) Echo Request messages with varying Time to Live (TTL) values to the destination. Each gateway along the path is required to decrement the TTL in an IP packet by at least 1 before forwarding it. Effectively, the TTL is a maximum link counter. When the TTL on a packet reaches 0, the gateway is expected to return an ICMP Time Exceeded response to your Router. Traceroute determines the path by sending the first Echo Request message with a TTL of 1 and incrementing the TTL by 1 on each subsequent transmission until the target responds or the maximum number of hops is reached. The maximum number of hops is 20 by default and can be specified in the field "Traceroute Max TTL". The path is determined by examining the ICMP Time Exceeded messages returned by intermediate gateways and the Echo Reply message returned by the destination. However, some gateways do not return Time Exceeded messages for packets with expired TTL values and are invisible to the traceroute tool. In this case, a row of asterisks (*) is displayed for that hop. </lI> 
+	 </ul> 
+
+	<p class="address"><B>IP Address/ Domain Name</B> - Enter the IP Address or Domain Name of the PC whose connection you wish to diagnose.</p> 
+	<p class="ping_coun"><B>Ping Count</B> - Specifies the number of Echo Request messages sent. The default is 4. </p>
+	<p class="packet"><B>Ping Packet Size</B> - Specifies the number of data bytes to be sent. The default is 64.</p>
+	<p class="ping_time"><B>Ping Timeout</B> - Time to wait for a response, in seconds. The default is 1.</p>
+	<p class="traceroute_0"><B>Traceroute Max TTL</B> - Set the maximum number of hops (max TTL to be reached) in the path to search for the target (destination). The default is 20. </p>
+	 
+	 <p class="start">Click the <B>Start</B> button to start the diagnostic procedure.</p>
+
+
+	 <p class="note"><B>Note:</B></P> 
+	 <ol type=1> 
+	 <li class="s_0">Only one user can use the diagnostic tools at one time.</lI>
+	 <li class="s_1">"Ping Count", "Ping Packet Size" and "Ping Timeout" are Ping Parameters, and "Traceroute Max TTL" is Traceroute Parameter.</lI> 
+	 </ol> 
+
+<script language="javascript" type="text/javascript">window.parent.$.transHelp(document.URL);</script>

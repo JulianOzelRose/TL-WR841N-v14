@@ -1,0 +1,20 @@
+﻿<script language="javascript" type="text/javascript">function doSubmit(){if($.id("filename").value==""){$.alert(ERR_CONF_FILE_NONE);return false}if(typeof($.id("filename").files)!="undefined"&&typeof($.id("filename").files[0])!="undefined"){if($.id("filename").files[0].size==0){$.alert(CMM_CFG_FILE_FORMAT_ERR);return false}}var formObj=$.d.forms[1];try{formObj.target="up_frame";formObj.action="/cgi/confup";formObj.submit()}catch(e){}$.guage(["<span class='T T_uploading'>"+s_str.uploading+"</span>","<span class='T T_wait_upload'>"+s_str.wait_upload+"</span>..."],10,100,function(){$.guage(["<span class='T T_rebooting'>"+s_str.rebooting+"</span>","<span class='T T_wait_restore'>"+s_str.wait_restore+"</span>"],100,$.guageInterval,function(){$.deleteCookie("Authorization");window.parent.$.refresh()});$.cgi("/cgi/bnr",null,function(ret){if(ret&&ret!=ERR_NETWORK&&ret!=ERR_EXIT&&ret!=ERR_NONE_FILE){$.errBack(ret,"backNRestore.htm")}},false,true)})};</script>
+<p class="et T" id="et">Backup and Restore</p>
+<div class="con1 L">
+<p class="ct"></p>
+<p class="bl"></p>
+<div class="con2">
+<form action="/cgi/conf.bin" id="backupConf">
+<p class="L1"><input type="button" class="button XL T" id="t_backup" value="Backup" onclick="$.d.forms[0].submit()" /></p>
+</form>
+<p class="br"></p>
+<p class="L1 T" id="t_info2">You can restore a previously saved configuration bin file.</p>
+<form action="/cgi/confup" enctype="multipart/form-data" method="post">
+<p class="L1"><b class="T" id="t_file">Configuration File:</b> <input type="file" name="filename" id="filename" /><input type="button" class="button XL T" id="t_restore" value="Restore" onclick="return doSubmit()" /></p>
+</form>
+
+</div>
+<p class="bl"></p>
+<p class="tail">&nbsp;</p>
+</div>
+<script language="javascript" type="text/javascript">$.loadHelpFrame("BackNRestoreHelpRpm.htm");$.loadHelp("./staip_h.htm");if(INCLUDE_OPTION66){var devInfo=$.act(ACT_GET,IGD_DEV_INFO,null,null,["modelName","X_TP_DevModelVersion","X_TP_BuildDate","X_TP_BuildTime"]);var sysCfg=$.act(ACT_GET,SYS_CFG,null,null,["signStatus"]);$.exe(function(err){if(!err){var modelName=devInfo.modelName.replace(/\s/g,"");var modelVersion=devInfo.X_TP_DevModelVersion.slice(0,devInfo.X_TP_DevModelVersion.indexOf("."));var sign="n";if(sysCfg.signStatus!="0"){sign="s"}$.id("backupConf").action="/cgi/"+modelName+"V"+modelVersion+devInfo.X_TP_BuildDate+devInfo.X_TP_BuildTime+sign+".bin"}})};</script>

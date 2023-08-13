@@ -1,0 +1,69 @@
+﻿<script language="javascript" type="text/javascript">function initEditDynIp(){var wan_iplist=$.wd.conn[$.wd.editIndex].obj;$.loadHelp("dynamicIp_h.htm");$.h($.id("dyn_ip"),wan_iplist.externalIPAddress?wan_iplist.externalIPAddress:"0.0.0.0");$.h($.id("dyn_mask"),wan_iplist.subnetMask?wan_iplist.subnetMask:"0.0.0.0");$.h($.id("dyn_gw"),wan_iplist.defaultGateway?wan_iplist.defaultGateway:"0.0.0.0");$.id("dyn_mtu").value=wan_iplist.maxMTUSize;if(wan_iplist.NATEnabled==1){$.id("dyn_enable_nat").checked=1;$.id("dyn_enable_fullnat").checked=(wan_iplist.X_TP_FullconeNATEnabled==1)?1:0}else{if(wan_iplist.NATEnabled==0){$.id("dyn_enable_nat").checked=0;$.id("dyn_enable_fullnat").disabled=1;$.id("dyn_enable_fullnat").checked=0}}if(wan_iplist.DNSOverrideAllowed==1){$.id("dyn_dns1").value=(wan_iplist.DNSServers).split(",")[0]?(wan_iplist.DNSServers).split(",")[0]:"0.0.0.0";$.id("dyn_dns2").value=(wan_iplist.DNSServers).split(",")[1]?(wan_iplist.DNSServers).split(",")[1]:"0.0.0.0"}$.id("dynamic_manual_dns").checked=wan_iplist.DNSOverrideAllowed==1?1:0;$.id("hostname").value=$.htmlEncodeStr(wan_iplist.X_TP_Hostname);$.id("unicast").checked=wan_iplist.X_TP_Unicast==1?1:0;$.id("dyn_ip_igmp_en").checked=(wan_iplist.X_TP_IGMPProxyEnabled==1)?1:0;$.id("dyn_ip_spi_en").checked=(wan_iplist.X_TP_FirewallEnabled==1)?1:0;doManualDns();if(INCLUDE_IPV6){$.id("dyn_ip_enable_v4").checked=(wan_iplist.X_TP_IPv4Enabled==1)?1:0;enableDynIPv4();$.id("dyn_ip_enable_v6").checked=(wan_iplist.X_TP_IPv6Enabled==1)?1:0;enableDynIPv6();$.id("dynamic_manual_dns6").checked=(wan_iplist.X_TP_IPv6DNSOverrideAllowed==1)?1:0;doManualDns6();$.h($.id("dyn_ip6"),wan_iplist.X_TP_ExternalIPv6Address?wan_iplist.X_TP_ExternalIPv6Address:"::");$.h($.id("dyn_plen"),wan_iplist.X_TP_PrefixLength);$.h($.id("dyn_ip6_gw"),wan_iplist.X_TP_DefaultIPv6Gateway?wan_iplist.X_TP_DefaultIPv6Gateway:"::");if(wan_iplist.X_TP_IPv6DNSOverrideAllowed==1){$.id("dyn_dns6_1").value=(wan_iplist.X_TP_IPv6DNSServers).split(",")[0]?(wan_iplist.X_TP_IPv6DNSServers).split(",")[0]:"::";$.id("dyn_dns6_2").value=(wan_iplist.X_TP_IPv6DNSServers).split(",")[1]?(wan_iplist.X_TP_IPv6DNSServers).split(",")[1]:"::"}if(INCLUDE_IPV6_SLAAC){$.id("dyn_ip6_addr_type_opt").selectedIndex=(wan_iplist.X_TP_IPv6AddressingType=="DHCPv6")?0:1}if(INCLUDE_IPV6_MLD){$.id("dyn_ip_mld_en").checked=(wan_iplist.X_TP_MLDProxyEnabled==1)?1:0}}}function setDefaultHostname(){var c;var ch="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.";var i=0;var hostname="";var hostnameLen=0;for(i=0;i<$.model.length;i++){c=$.model.charAt(i);if(ch.indexOf(c)==-1){if(hostnameLen==0||(hostnameLen>0&&hostname.charAt(hostnameLen-1)=="_")){continue}else{hostname+="_";hostnameLen++}}else{hostname+=c;hostnameLen++}}$.id("hostname").value=(hostnameLen>0&&hostname.charAt(hostnameLen-1)=="_")?hostname.substr(0,hostnameLen-1):hostname}function initDynIp(){showDynIp();if($.wd.conn[$.wd.editIndex].type=="dynamicIp"){initEditDynIp()}else{setDefaultHostname()}dftGtw=$.id("defaut_gateway_dynip");if(INCLUDE_IPV6){dftGtw6=$.id("default_gateway_dynip6")}initDefaultGwDNS()}function showDynIp(){if(INCLUDE_IPV6){showIPv6();$.id("dyn_ip_enable_v4").checked=1;enableDynIPv4();$.id("dyn_ip_enable_v6").checked=0;enableDynIPv6()}$.removeClass($.id("dyn_ip_elem_basic"),"nd");$.removeClass($.id("dynipClick"),"nd");$.removeClass($.id("dynipClick"),"cln");$.addClass($.id("dyn_ip_elem_adv"),"nd");$.loadHelp("dynamicIp_h.htm")}function enableDynIPv4(){if($.id("dyn_ip_enable_v4").checked==1){$.removeClass($.id("dyn_ip_basic_v4"),"nd");$.removeClass($.id("dyn_ip_adv_v4"),"nd")}else{$.addClass($.id("dyn_ip_basic_v4"),"nd");$.addClass($.id("dyn_ip_adv_v4"),"nd")}}function enableDynIPv6(){if($.id("dyn_ip_enable_v6").checked==1){$.removeClass($.id("dyn_ip_basic_v6"),"nd");$.removeClass($.id("dyn_ip_adv_v6"),"nd")}else{$.addClass($.id("dyn_ip_basic_v6"),"nd");$.addClass($.id("dyn_ip_adv_v6"),"nd")}if(INCLUDE_IPV6_SLAAC){$.removeClass($.id("dyn_ip6_addr_type"),"nd")}else{$.addClass($.id("dyn_ip6_addr_type"),"nd")}if(INCLUDE_IPV6_MLD){$.removeClass($.id("dyn_ip_mld"),"nd")}else{$.addClass($.id("dyn_ip_mld"),"nd")}}function doManualDns(){if($.id("dynamic_manual_dns").checked==1){$.removeClass($.id("dyn_ip_dns_tbl"),"nd")}else{$.addClass($.id("dyn_ip_dns_tbl"),"nd")}}function doManualDns6(){if($.id("dynamic_manual_dns6").checked==1){$.removeClass($.id("dyn_ip_dns6_tbl"),"nd")}else{$.addClass($.id("dyn_ip_dns6_tbl"),"nd")}}function DynIPClick(obj){if($.hasClass(obj,"cln")){$.addClass($.id("dyn_ip_elem_adv"),"nd");$.removeClass(obj,"cln")}else{$.removeClass($.id("dyn_ip_elem_adv"),"nd");$.addClass(obj,"cln")}}function dynNatClick(){if($.id("dyn_enable_nat").checked==1){$.id("dyn_enable_fullnat").disabled=0}else{if($.id("dyn_enable_nat").checked==0){$.id("dyn_enable_fullnat").checked=0;$.id("dyn_enable_fullnat").disabled=1}}}function addDynIpAttrs(){var element;wanArg.NATEnabled=$.id("dyn_enable_nat").checked?1:0;wanArg.X_TP_FullconeNATEnabled=$.id("dyn_enable_fullnat").checked?1:0;wanArg.X_TP_FirewallEnabled=$.id("dyn_ip_spi_en").checked?1:0;wanArg.X_TP_IGMPProxyEnabled=$.id("dyn_ip_igmp_en").checked?1:0;if(($.id("dyn_mtu").value>=576)&&($.id("dyn_mtu").value<=1500)){wanArg.MaxMTUSize=parseInt($.id("dyn_mtu").value,10)}else{$.alert(ERR_WAN_MTU_INVAD);element=$.id("dyn_mtu");if(element){element.focus();element.select()}return false}if($.id("dynamic_manual_dns").checked==1){wanArg.DNSOverrideAllowed=1;var temp_dnsaddr=$.id("dyn_dns1").value;var temp_secdnsaddr=$.id("dyn_dns2").value;var temp_dnsServers="";if(!INCLUDE_IPV6||$.id("dyn_ip_enable_v4").checked==1){if((temp_dnsaddr!="")&&(temp_dnsaddr!="0.0.0.0")&&($.ifip(temp_dnsaddr,true))){$.alert(ERR_WAN_DNSADDR_INVAD);element=$.id("dns_address");if(element){element.focus();element.select()}return false}if((temp_secdnsaddr!="")&&(temp_secdnsaddr!="0.0.0.0")&&($.ifip(temp_secdnsaddr,true))){$.alert(ERR_WAN_SECDNS_INVAD);element=$.id("second_dns");if(element){element.focus();element.select()}return false}}temp_dnsaddr=(temp_dnsaddr)?$.ip2ip(temp_dnsaddr):"0.0.0.0";temp_secdnsaddr=(temp_secdnsaddr)?$.ip2ip(temp_secdnsaddr):"0.0.0.0";if(!INCLUDE_IPV6||$.id("dyn_ip_enable_v4").checked==1){if((temp_dnsaddr+","+temp_secdnsaddr)=="0.0.0.0,0.0.0.0"){$.alert(ERR_WAN_DNS_INVAD);element=$.id("dns_address");if(element){element.focus();element.select()}return false}}wanArg.DNSServers=temp_dnsaddr+","+temp_secdnsaddr}else{wanArg.DNSOverrideAllowed=0}if(!charCompareA($.id("hostname").value,63,0)){$.alert(ERR_WAN_HOST_NAME_INVALID);var element=$.id("hostname");if(element){element.focus();element.select()}return false}wanArg.X_TP_Hostname=$.id("hostname").value;wanArg.X_TP_Unicast=$.id("unicast").checked==1?1:0;wanArg.enable=1;wanArg.connectionType="IP_Routed";wanArg.addressingType="DHCP";if($.wd.conn[$.wd.editIndex].type=="dynamicIp"){$.wd.l3ForwardingObj.__ifAliasName=dftGtw.options[dftGtw.selectedIndex].text}if(INCLUDE_IPV6){wanArg.X_TP_IPv4Enabled=($.id("dyn_ip_enable_v4").checked==1)?1:0;wanArg.X_TP_IPv6Enabled=($.id("dyn_ip_enable_v6").checked==1)?1:0;if(wanArg.X_TP_IPv4Enabled==0&&wanArg.X_TP_IPv6Enabled==0){$.alert(ERR_WAN6_IP_STACK_NONE);return false}if($.id("dynamic_manual_dns6").checked==1){wanArg.X_TP_IPv6DNSOverrideAllowed=1;var temp_dnsaddr=$.id("dyn_dns6_1").value;var temp_secdnsaddr=$.id("dyn_dns6_2").value;if(wanArg.X_TP_IPv6Enabled==1){if(temp_dnsaddr!=""&&temp_dnsaddr!="::"&&!isValidGLUIP6AddrStrict(temp_dnsaddr)){$.alert(ERR_WAN6_ADDR_INVAD);element=$.id("dyn_dns6_1");if(element){element.focus();element.select()}return false}if(temp_secdnsaddr!=""&&temp_secdnsaddr!="::"&&!isValidGLUIP6AddrStrict(temp_secdnsaddr)){$.alert(ERR_WAN6_ADDR_INVAD);element=$.id("dyn_dns6_2");if(element){element.focus();element.select()}return false}}temp_dnsaddr=(temp_dnsaddr)?temp_dnsaddr:"::";temp_secdnsaddr=(temp_secdnsaddr)?temp_secdnsaddr:"::";if(wanArg.X_TP_IPv6Enabled==1&&(temp_dnsaddr+","+temp_secdnsaddr)=="::,::"){$.alert(ERR_WAN6_DNS_INVAD);element=$.id("dyn_dns6_1");if(element){element.focus();element.select()}return false}wanArg.X_TP_IPv6DNSServers=temp_dnsaddr+","+temp_secdnsaddr}else{wanArg.X_TP_IPv6DNSOverrideAllowed=0}wanArg.X_TP_IPv6AddressingType="DHCPv6";if(INCLUDE_IPV6_SLAAC){if($.id("dyn_ip6_addr_type_opt").value=="slaac"){wanArg.X_TP_IPv6AddressingType="SLAAC"}}if(INCLUDE_IPV6_MLD){wanArg.X_TP_MLDProxyEnabled=$.id("dyn_ip_mld_en").checked?1:0}if($.wd.conn[$.wd.editIndex].type=="dynamicIp"){$.wd.l3Ip6ForwardingObj.__ifAliasName=dftGtw6.options[dftGtw6.selectedIndex].text}}return true};</script>
+
+<div id="dyn_ip_elem_basic" class="nd">
+	<p class="br IPv6 nd"></p>
+	<p class="IPv6 nd"><b class="item L T T_ip4en">Enable IPv4</b><input type="checkbox" id="dyn_ip_enable_v4" onclick="enableDynIPv4();" /></p>
+	<div id="dyn_ip_basic_v4">
+		<p><b class="item L T T_ipaddr">IP Address:</b><b style="padding-left:12px" id="dyn_ip">0.0.0.0</b></p>
+		<p><b class="item L T T_netmask">Subnet Mask:</b><b style="padding-left:12px" id="dyn_mask">0.0.0.0</b></p>
+		<p><b class="item L T T_gateway">Gateway:</b><b style="padding-left:12px" id="dyn_gw">0.0.0.0</b></p>
+		
+		<p class="br"></p>
+		<p><b class="item L T T_defgw">Default Gateway:</b><select id="defaut_gateway_dynip" class="L"></select></p>
+	</div>
+	
+	<p class="br IPv6 nd"></p>
+	<p class="IPv6 nd"><b class="item L T T_ip6en">Enable IPv6</b><input type="checkbox" id="dyn_ip_enable_v6" onclick="enableDynIPv6();" /></p>
+	<div id="dyn_ip_basic_v6">
+		<p class="IPv6 nd"><b class="item L T T_ip6addr">IPv6 Address:</b><b style="padding-left:12px" id="dyn_ip6">::</b></p>
+		<p class="IPv6 nd"><b class="item L T T_plen">Prefix Length:</b><b style="padding-left:12px" id="dyn_plen">0</b></p>
+		<p class="IPv6 nd"><b class="item L T T_ip6gw">IPv6 Gateway:</b><b style="padding-left:12px" id="dyn_ip6_gw">::</b></p>
+		<div id="dyn_ip6_addr_type">
+			<p class="IPv6 nd"><b class="item L T T_ip6addrconf">Addressing Type</b>
+			<select id="dyn_ip6_addr_type_opt" class="L">
+			<option value="dhcpv6" selected="selected">DHCPv6</option>
+			<option value="slaac">SLAAC</option>
+			</select></p>
+		</div>
+		
+		<p class="br IPv6 nd"></p>
+		<p class="IPv6 nd"><b class="item L T T_ip6defgw">IPv6 Default Gateway:</b><select id="default_gateway_dynip6" class="L"></select></p>
+	</div>
+
+</div>
+
+	<p class="br"></p>
+	
+<div class="cl nd" id="dynipClick" onclick="DynIPClick(this)"><p class="cl"></p></div>
+<div id="dyn_ip_elem_adv" class="nd">
+	<p><b class="item L">MTU(<span class="T T_bytes">bytes</span>):</b><input type="text" class="text" id="dyn_mtu" size="5" maxlength="4" value="1500"/> (<span class="T T_mtu1500">1500 as default</span>, <span class="T T_nochg">do not change unless necessary</span>)</p>
+	<div id="dyn_ip_adv_v4">
+		<p class="br IPv6 nd"></p>
+		<p><b class="item L T T_ennat">Enable NAT</b><input type="checkbox" id="dyn_enable_nat" checked="checked" onclick="dynNatClick();"/>&nbsp;</p>
+		<p class="nd"><b class="item L T T_enfullcone">Enable Fullcone NAT</b><input type="checkbox" id="dyn_enable_fullnat" />&nbsp;</p>
+		<p><b class="item L T T_enspi">Enable SPI Firewall</b><input type="checkbox" id="dyn_ip_spi_en" />&nbsp;</p>
+		<p><b class="item L T T_enigmp">Enable IGMP Proxy</b><input type="checkbox" id="dyn_ip_igmp_en" checked="true" />&nbsp;</p>
+		<p><b class="item L T T_unicast">Get IP with Unicast</b><input type="checkbox" id="unicast"/> <span class="T T_noreq">(It is usually not required)</span></p>
+		<p class="br"></p>
+		<p><b class="item L T T_dnsmanual">Set DNS server manually</b><input type="checkbox" id="dynamic_manual_dns" onclick="doManualDns();"/>&nbsp;</p>
+		<div id="dyn_ip_dns_tbl" class="nd">
+		<p><b class="item L T T_dns">DNS server:</b><input type="text" class="text" size="15" value="0.0.0.0" id="dyn_dns1" /></p>
+		<p><b class="item L T T_secdns">Secondary DNS Server:</b><input type="text" class="text" size="15" value="0.0.0.0" id="dyn_dns2" /></p>
+		</div>
+	</div>
+	<div id="dyn_ip_adv_v6">
+		<p class="br IPv6 nd"></p>
+		<div id="dyn_ip_mld">
+			<p class="IPv6 nd"><b class="item L T T_enmld">Enable MLD Proxy</b><input type="checkbox" id="dyn_ip_mld_en" checked="true" />&nbsp;</p>
+		</div>
+		<p class="IPv6 nd"><b class="item L T T_ip6dnsmanual">Set IPv6 DNS Server manually</b><input type="checkbox" id="dynamic_manual_dns6" onclick="doManualDns6();"/></p>
+		<div id="dyn_ip_dns6_tbl" class="nd">
+		<p class="IPv6 nd"><b class="item L T T_ip6dns">IPv6 DNS Server:</b><input type="text" class="text" size="15" value="::" id="dyn_dns6_1" /></p>
+		<p class="IPv6 nd"><b class="item L T T_ip6secdns">Secondary IPv6 DNS Server:</b><input type="text" class="text" size="15" value="::" id="dyn_dns6_2" /></p>
+		</div>
+	</div>
+	<p class="br IPv6 nd"></p>
+	<p><b class="item L T T_hostname">Host Name:</b><input type="text" class="text" size="15" id="hostname" maxlength="62" /></p>
+</div>
+
+<script language="JavaScript" type="text/javascript">initDynIp();</script>

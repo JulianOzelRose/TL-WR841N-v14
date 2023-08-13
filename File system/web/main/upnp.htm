@@ -1,0 +1,47 @@
+﻿<script language="javascript" type="text/javascript">var upnpTbl;var upnpCfgObj;function doUpdate(){if(upnpCfgObj.enable==0){upnpTbl=$.id("upnpTbl");while(upnpTbl.rows.length>0){upnpTbl.deleteRow(-1)}return}else{var portMappingList=$.act(ACT_GL,UPNP_PORTMAPPING,null,null);if($.exe()){return}var row;var cell;upnpTbl=$.id("upnpTbl");while(upnpTbl.rows.length>0){upnpTbl.deleteRow(-1)}for(var i=0;i<portMappingList.length;i++){row=upnpTbl.insertRow(-1);cell=row.insertCell(-1);cell.width="4%";cell.innerHTML=i+1;cell=row.insertCell(-1);cell.width="32%";cell.innerHTML+=portMappingList[i].portMappingDescription;cell=row.insertCell(-1);cell.width="14%";cell.innerHTML+=portMappingList[i].externalPort;cell=row.insertCell(-1);cell.width="10%";cell.innerHTML+=portMappingList[i].portMappingProtocol;cell=row.insertCell(-1);cell.width="14%";cell.innerHTML+=portMappingList[i].internalPort;cell=row.insertCell(-1);cell.width="17%";cell.innerHTML+=portMappingList[i].internalClient;cell=row.insertCell(-1);cell.innerHTML=portMappingList[i].portMappingEnabled?"<span class='T T_enabled'>"+m_str.enabled+"</span>":"<span class='T T_disabled'>"+m_str.disabled+"</span>"}$.resize(upnpTbl,8)}}function manualRefresh(){$.addLoading($.id("updateBtn"),500);doUpdate()}function doSubmit(){if(!$.hasClass($.id("enBtn"),"nd")){$.addLoading($.id("enBtn"));$.act(ACT_SET,UPNP_CFG,null,null,["Enable=1"]);$.exe(function(ret){if(ret){return}upnpCfgObj.enable=1;$.addClass($.id("upnp_dis"),"nd");$.addClass($.id("enBtn"),"nd");$.removeClass($.id("upnp_en"),"nd");$.removeClass($.id("disBtn"),"nd");$.removeLoading();doUpdate()})}else{$.addLoading($.id("enBtn"));$.act(ACT_SET,UPNP_CFG,null,null,["Enable=0"]);$.exe(function(ret){if(ret){return}upnpCfgObj.enable=0;$.addClass($.id("upnp_en"),"nd");$.addClass($.id("disBtn"),"nd");$.removeClass($.id("upnp_dis"),"nd");$.removeClass($.id("enBtn"),"nd");$.removeLoading();doUpdate()})}}function init(){upnpCfgObj=$.act(ACT_GET,UPNP_CFG);if($.exe()){return}if(upnpCfgObj.enable==1){$.removeClass($.id("upnp_en"),"nd");$.removeClass($.id("disBtn"),"nd")}else{$.removeClass($.id("upnp_dis"),"nd");$.removeClass($.id("enBtn"),"nd")}if(upnpCfgObj.enable==1){var portMappingList=$.act(ACT_GL,UPNP_PORTMAPPING,null,null);if($.exe()){return}var row;var cell;upnpTbl=$.id("upnpTbl");while(upnpTbl.rows.length>0){upnpTbl.deleteRow(-1)}for(var i=0;i<portMappingList.length;i++){row=upnpTbl.insertRow(-1);cell=row.insertCell(-1);cell.width="4%";cell.innerHTML=i+1;cell=row.insertCell(-1);cell.width="32%";cell.innerHTML=portMappingList[i].portMappingDescription;cell=row.insertCell(-1);cell.width="14%";cell.innerHTML=portMappingList[i].externalPort;cell=row.insertCell(-1);cell.width="10%";cell.innerHTML=portMappingList[i].portMappingProtocol;cell=row.insertCell(-1);cell.width="14%";cell.innerHTML=portMappingList[i].internalPort;cell=row.insertCell(-1);cell.width="17%";cell.innerHTML=portMappingList[i].internalClient;cell=row.insertCell(-1);cell.innerHTML=(portMappingList[i].portMappingEnabled==1)?"<span class='T T_enabled'>"+m_str.enabled+"</span>":"<span class='T T_disabled'>"+m_str.disabled+"</span>"}$.resize(upnpTbl,8)}$.auto(doUpdate,10000)};</script>
+
+
+
+<p class="et">UPnP</p>	
+<div class="con1 XL">
+<p class="ct"></p>	
+<p class="bl"></p>
+<div class="con2">
+
+
+<p class="L1">
+	<b class="item M T" id="t_status">Current UPnP Status:</b>
+	<b class="nd T T_enabled" id="upnp_en">Enabled</b>
+	<b class="nd T T_disabled" id="upnp_dis">disabled</b>
+	<input type=button class="button M nd T T_en" value="Enable" id="enBtn" onclick="doSubmit()"/>
+	<input type=button class="button M nd T T_dis" value="Disable" id="disBtn" onclick="doSubmit()"/>
+</p>
+<p class="br"></p>
+<p class="L1"></p>
+
+<p class="center T" id="t_list">Current UPnP Settings List</p>
+
+<div class="XXL thead" >
+<table class="XXL bdr tc">
+	<tr>
+	<th width="4%" class="T T_id">ID</th>
+	<th width ="32%" class="T" id="t_desc">App Description</th>
+	<th width="14%" class="T" id="t_export">External Port</th>
+	<th width="10%" class="T T_proto">Protocol</th>
+	<th width="14%" class="T" id="t_inport">Internal Port</th>
+	<th width="17%" class="T T_ipaddr">IP Address</th>
+	<th class="T T_status">Status</th>
+	</tr>
+</table>
+</div>
+<div class="XXL tbody">
+<table class="XXL bdr tc" id="upnpTbl">
+</table>
+</div>
+</div>
+<p class="bl"></p>
+<p class="tail" id="tail"><input type="button" class="button L T T_refresh" value="Refresh" id="updateBtn" onclick="manualRefresh()"/>
+</p>
+</div>
+
+<script language="javascript" type="text/javascript">$.loadHelpFrame("UpnpCfgHelpRpm.htm");init();</script>

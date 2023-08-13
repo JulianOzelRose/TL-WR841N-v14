@@ -1,0 +1,33 @@
+﻿<script language="javascript" type="text/javascript">var thisStk;var selAll;var index;var allStk;var staticIp_stack;var staticIp_stackIndex;function doAdd(){$.loadMain("dhcpStaticEdit.htm",["add"])}function doEdit(val){$.loadMain("dhcpStaticEdit.htm",["edit",val])}function doSelAll(){if(selAll==0){for(var i=1;i<=index;i++){var staticIpid="staticIpid"+i;$.id(staticIpid).checked=1}staticIp_stack=[];staticIp_stackIndex=index;for(var j=0;j<staticIp_stackIndex;j++){staticIp_stack[j]=allStk[j]}selAll=1}else{if(selAll==1){for(var i=1;i<=index;i++){var staticIpid="staticIpid"+i;$.id(staticIpid).checked=0}staticIp_stack=[];staticIp_stackIndex=0;selAll=0}}}function selEntry(){staticIp_stack=[];staticIp_stackIndex=0;for(var i=1;i<=index;i++){var tmpEntryId="staticIpid"+i;if($.id(tmpEntryId).checked==1){staticIp_stack[staticIp_stackIndex]=allStk[i-1];staticIp_stackIndex++}}}function clickSel(){if(selAll==1){$.id("selAll").checked=0;selAll=0}}function init(){selAll=0;index=0;allStk=[];staticIp_param=[];staticIp_stack=[];staticIp_stackIndex=0;staticIpList=$.act(ACT_GL,LAN_DHCP_STATIC_ADDR,null,null,["enable","chaddr","yiaddr"]);$.exe(function(err){if(!err){var tbl=$.id("sIpTbl");var row,cell;for(var i=0;i<staticIpList.length;i++){thisStk="["+staticIpList[i].__stack+"]";var stackParts=(staticIpList[i].__stack).split(",");var staticIpStack=stackParts[0];var stackIndex=brStackList.split(",");var nameIndex=brNameList.split(",");for(var j=0;j<stackIndex.length;j++){if(staticIpStack==stackIndex[j]){brName=nameIndex[j]}}row=tbl.insertRow(-1);index++;cell=row.insertCell(-1);cell.width="7%";cell.innerHTML="<input type='checkbox' id='staticIpid"+index+"' onclick='clickSel();'/>";cell=row.insertCell(-1);cell.innerHTML=staticIpList[i].chaddr;cell=row.insertCell(-1);cell.width="21%";cell.innerHTML=staticIpList[i].yiaddr;cell=row.insertCell(-1);cell.width="12%";cell.innerHTML=((staticIpList[i].enable==1)?"<span class='T T_enabled'>"+m_str.enabled+"</span>":"<span class='T T_disabled'>"+m_str.disabled+"</span>");cell=row.insertCell(-1);cell.width="9%";cell.innerHTML="<span class='a T T_edit' onclick='doEdit("+thisStk+");'>"+m_str.edit+"</span>";allStk[index-1]=staticIpList[i].__stack}$.resize($.id("sIpTbl"),8)}})}function doEnable(obj){selEntry();if(staticIp_stackIndex==0){$.alert(ERR_SEL_INVAD);return}$.addLoading(obj);for(var i=0;i<staticIp_stackIndex;i++){$.act(ACT_SET,LAN_DHCP_STATIC_ADDR,staticIp_stack[i],null,["enable=1"])}$.exe(function(err){if(!err){$.reload()}})}function doDisable(obj){selEntry();if(staticIp_stackIndex==0){$.alert(ERR_SEL_INVAD);return}$.addLoading(obj);for(var i=0;i<staticIp_stackIndex;i++){$.act(ACT_SET,LAN_DHCP_STATIC_ADDR,staticIp_stack[i],null,["enable=0"])}$.exe(function(err){if(!err){$.reload()}})}function doDel(obj){selEntry();if(staticIp_stackIndex==0){$.alert(ERR_SEL_INVAD);return}$.addLoading(obj);for(var i=0;i<staticIp_stackIndex;i++){$.act(ACT_DEL,LAN_DHCP_STATIC_ADDR,staticIp_stack[i],null)}$.exe(function(err){if(!err){$.reload()}})};</script>
+<p class="et T" id="et">DHCP Address Reservation</p>
+<div class="con1 XL">
+<p class="ct"></p>
+<p class="bl"></p>
+<div class="con2">
+<p class="L1 T" id="t_info">This page displays the static IP assigned by DHCP Server and allows you to configure it by clicking corresponding buttons.</p>
+<p class="br"></p>
+<div class="XL thead" ><table class="XL bdr tc">
+<tr>
+<th width="7%"><input type="checkbox" id="selAll" onclick="doSelAll();"/></th>
+<th class="T T_macaddr">MAC Address</th>
+<th class="T T_ipaddr" width="21%">IP Address</th>
+<th class="T T_group nd" width="23%">Group</th>
+<th class="T T_status" width="12%">Status</th>
+<th class="T T_edit" width="9%">Edit</th>
+</tr>
+</table></div>
+<div class="XL tbody"><table id="sIpTbl" class="XL bdr tc">
+</table></div>
+<p class="br"></p>
+<p class="L1">
+<input type="button" value="Add New" class="button XL T T_addnew" onclick="doAdd();"/>
+<input type="button" value="Enable Selected" class="button XL T T_ensel" onclick="doEnable(this);"/>
+<input type="button" value="Disable Selected" class="button XL T T_dissel" onclick="doDisable(this);"/>
+<input type="button" value="Delete Selected" class="button XL T T_delsel" onclick="doDel(this);"/>
+</p>
+</div>
+<p class="bl"></p>
+<p class="tail" id="tail"><input type="button" class="button L T T_refresh" value="Refresh" id="updateBtn" onclick="$.addLoading(this, 200, function(){$.reload()})"/></p>
+</div>
+<script language="javascript" type="text/javascript">$.loadHelpFrame("FixMapCfgHelpRpm.htm");var staticIpList;var brList=$.act(ACT_GL,L2_BRIDGING_ENTRY,null,null,["bridgeName"]);if(!$.exe()){var brStackList="";var brNameList="";for(var i=0;i<brList.length;i++){var brParts=(brList[i].__stack).split(",");brStackList+=brParts[0]+",";brNameList+=brList[i].bridgeName+","}}$.resize($.id("sIpTbl"),8);init();</script>
+

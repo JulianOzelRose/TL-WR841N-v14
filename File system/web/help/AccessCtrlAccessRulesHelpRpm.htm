@@ -1,0 +1,87 @@
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+<HTML>
+<HEAD><TITLE>Archer C7</TITLE>
+<META http-equiv=Pragma content=no-cache>
+<META http-equiv=Expires content="wed, 26 Feb 1997 08:21:57 GMT">
+<LINK href="../css/css_help.css" rel=stylesheet type="text/css">
+<SCRIPT language="javascript" type="text/javascript"></SCRIPT>
+
+<HTML><HEAD><TITLE></TITLE>
+<META http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+</head>
+<BODY><DIV>
+	<h1 class="header">Internet Access Control Rule Management Help</H1>
+	<p class="brief">The Router, providing convenient and strong <B>internet access control</B> function, can control the internet activities of hosts in the LAN. Moreover, you can flexibly combine the <B>Host List</B>, <B>Target List</B> and <B>Schedule</B> to restrict the Internet surfing of these hosts.</P>
+  
+<UL>
+		<li class="internet"><B>Enable Internet Access Control</B> -   Select the check box to enable the Internet Access Control function, so the Default Filter Rule can take effect.</LI>
+
+		<li class="description"><B>Description</B> -  Here displays the name of the rule and this name is unique.</LI>
+
+		<li class="lan_host"><B>LAN Host</B> -   Here displays the host selected in the corresponding rule.</LI>
+
+		<li class="target"><B>Target</B> -	Here displays the target selected in the corresponding rule.</LI>
+
+		<li class="schedule"><B>Schedule</B> - Here displays the schedule selected in the corresponding rule.</LI>
+
+		<li class="rule"><B>Rule</B>  - Allow or deny the packets not specified by any filtering rules to passthrough this device.</LI>
+
+		<li class="status"><B>Status</B>  - The status of the rule.</LI>
+
+		<li class="edit"><B>Edit</B> - Here you can edit an existing rule.</LI>
+</UL>
+
+<p class="for_exam"><B>For example</B>: If you do not allow the host with MAC address <font color="#C11C66">00:11:22:33:44:AA</font> to access <b>www.google.com</b> only from <b>18:00</b> to <b>20:00</b> on <b>Saturday and Sunday</b>, and <b>forbid</b> other hosts in the LAN to access the Internet, you should follow the settings below: </P>
+ 	<ol type=1>
+		<li class="rule_0">Click the submenu <b>Rule</b> of <b>Access Control</b> in the left to return to the Rule List page.  Select Enable Internet Access Control and choose "Allow the packets not specified by any filtering rules to passthrough this device".</lI>
+		<li class="host">Click the submenu <b>Host</b> of <b>Access Control</b> in the left to enter the Host List page. Add a new entry with the Host Description is Host_1 and MAC Address is 00:11:22:33:44:AA.</lI>
+		<li class="target_0">Click the submenu <b>Target</b> of <b>Access Control</b> in the left to enter the Target List page. Add a new entry with the Target Description is Target_1 and Domain Name is www.google.com.</lI>
+		<li class="schedule_0">Click the submenu <b>Schedule</b> of <b>Access Control</b> in the left to enter the Schedule List page. Add a new entry with the Schedule Description is Schedule_1, Day is Sat and Sun, Start Time is 1800 and Stop Time is 2000.</lI>		
+		<li class="rule_1">Click the submenu <b>Rule</b> of <b>Access Control</b> in the left, Click <b>Add New</b> button to add a new rule as follows:</lI>
+	</ol>
+	<table border="0" align="center" cellpadding="0" cellspacing="0" class="space">
+	<tr><td width="24">&nbsp;</td>
+	<td>
+		<ul>
+
+			<li class="s_0">In Rule Name field, create a name for the rule. Note that this name should be unique, for example Rule_1.</LI>
+			<li class="s_1">In Host field, select Host_1.</LI>
+			<li class="s_2">In Target field, select Target_1.</LI>
+			<li class="s_3">In Schedule field, select Schedule_1.</LI>
+			<li class="s_4">In Status field, select Enable.</LI>
+			<li class="s_5">Click Save to complete the settings.</LI>
+		</ul>
+	</td>
+	</tr></table>
+	<p class="s_6">Then you will go back to the Access Control Rule Management page and see the following list:</P>
+
+<table border="1" align="center" cellpadding="0" cellspacing="0" class="space">
+<tr>
+	<td CLASS="LISTB" align="center" width="30"><input disabled type="checkbox"></td>
+	<td CLASS="td_description" align="center" width="100">Description</td>
+	<td CLASS="td_lan" align="center" width="100">LAN Host</td>
+	<td CLASS="td_target" align="center" width="100">Target</td>
+	<td CLASS="td_sched" align="center" width="100">Schedule</td>
+	<td CLASS="td_rule" align="center" width="50">Rule</td>
+	<td CLASS="td_status" align="center" width="50">Status</td>
+	<td CLASS="td_edit" align="center" width="50" nowrap>Edit</td>
+</tr>
+<tr>
+	<td  align="center" width="30"><input disabled type="checkbox"></td>
+	<td  align="center" width="100">Rule_1</td>
+		<td  align="center" width="100">Host_1</td>
+		<td  align="center" width="100">Target_1</td>
+	<td  align="center" width="100">Schedule_1</td>
+	<td  class="td_allow" align="center" width="50">Allow</td>
+	<td  class="td_enable" align="center" width="100">Enable</td>
+	<td  class="td_edit" align="center" width="50" nowrap>Edit</td>
+</tr>
+</table>
+	<p class="add_new">Click the <b>Add New</b> button to add a new rule entry.</p>
+	<p class="enable_sele">Click the  <b>Enable Selected</b> button to enable the selected rules in the list.</p>
+	<p class="disable_sele">Click the  <b>Disable Selected</b> button to disable the selected rules in the list.</p>
+	<p class="delete_sele">Click the <b>Delete Selected</b> button to delete the selected entries in the table.</p>
+
+<p class="note"><b>Note:</b> The router will first try to match the packet with the enabled filtering rules one by one in the list and apply the first matching rule. If the packet is not specified by any filtering rules in the list, then the Default Filtering Rule will take effect.</p>
+</DIV></BODY></HTML>
+<script language="javascript" type="text/javascript">window.parent.$.transHelp(document.URL);</script>

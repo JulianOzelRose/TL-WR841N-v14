@@ -1,0 +1,20 @@
+﻿<script language="javascript" type="text/javascript">var showNum=10;function getTbl(staList){removeAll();var tbl=$.id("staTbl");var tIndex=1;$.each(staList,function(arg,index){if(guestObj.name==this.X_TP_HostName){row=tbl.insertRow(-1);cell=row.insertCell(-1);cell.innerHTML=tIndex;cell.width="4%";tIndex++;cell=row.insertCell(-1);cell.innerHTML=this.associatedDeviceMACAddress;cell.width="20%";cell=row.insertCell(-1);cell.innerHTML="<span class='T T_associated'>"+s_str.associated+"</span>";cell.width="15%";cell=row.insertCell(-1);cell.innerHTML=$.formatNum(this.X_TP_TotalPacketsReceived);cell.width="13%";cell=row.insertCell(-1);cell.innerHTML=$.formatNum(this.X_TP_TotalPacketsSent);cell.width="10%";cell=row.insertCell(-1);cell.innerHTML=vapGuest.SSID}});$.resize(tbl,showNum)}function removeAll(){var tbl=$.id("staTbl");while(tbl.rows.length>0){tbl.deleteRow(-1)}}function refresh(obj){var staList;if(INCLUDE_LAN_WLAN_MSSID){$.removeClass($.id("tlbHeadMssid"),"nd")}else{$.removeClass($.id("tlbHead"),"nd")}$.addLoading(obj);$.act(ACT_OP,ACT_OP_WLAN_UPDATE_ASSOC,wlanObj.__stack);$.exe(function(ret){if(!ret){staList=$.act(ACT_GS,LAN_WLAN_ASSOC_DEV,null,wlanObj.__stack,["AssociatedDeviceMACAddress","X_TP_TotalPacketsSent","X_TP_TotalPacketsReceived","X_TP_HostName"]);$.exe(function(ret){if(!ret){if(INCLUDE_LAN_WLAN_GUESTNETWORK){var count=0;$.each(staList,function(arg,index){if(this.X_TP_HostName==guestObj.name){count++}});$.h($.id("tip"),count)}getTbl(staList);$.removeLoading()}})}})};</script>
+<p class="et T" id="et">Guest Network Status</p>
+<div class="con1 L">
+<p class="ct"></p>
+<p class="bl"></p> 
+<div class="con2">
+<p align="left" class="T" id="t_info">This page displays the basic information of guests in this wireless network.</p>
+<p class="br"></p>
+<p align="left"><span class="T" id="t_tip">Current Connected Guest Network numbers:</span> <i class="bd" id="tip">0</i> <input type="button" class="button L T T_refresh" value="Refresh" id="refresh" onclick="refresh(this)" /></p>
+<p class="br"></p>
+<div class="XXL thead nd" id="tlbHead"><table class="L bdr tc"><tr><th width="5%">ID</th><th class="T T_macaddr" width="20%">Mac Address</th><th width="25%" class="T" id="t_curstat1">Current Status</th><th width="25%" class="T" id="t_rxpkts1">Received Packets</th><th class="T" id="t_txpkts1">Sent Packets</th></tr></table>
+</div>
+<div class="XXL thead nd" id="tlbHeadMssid"><table class="L bdr tc"><tr><th width="4%">ID</th><th class="T T_macaddr" width="20%">Mac Address</th><th width="15%" class="T" id="t_curstat2">Current Status</th><th width="13%" class="T" id="t_rxpkts2">Received Packets</th><th width="10%" class="T" id="t_txpkts2">Sent Packets</th><th>SSID</th></tr></table>
+</div>
+<div class="XXL tbody"><table class="L bdr tc" id="staTbl"></table></div>
+</div>
+<p class="bl"></p> 
+<p class="tail" id="tail"></p>
+</div>
+<script language="JavaScript" type="text/javascript">$.loadHelp();var wlanObj,wlanList,guestObj,vapList,vapGuest;wlanList=$.act(ACT_GL,LAN_WLAN,null,null,["name","X_TP_Band"]);if(!$.exe()){$.each(wlanList,function(arg,index){if("2.4GHz"==this.X_TP_Band){wlanObj=this}})}var vapList=$.act(ACT_GS,LAN_WLAN_MSSIDENTRY,null,wlanObj.__stack,["Name","SSID"]);guestObj=$.act(ACT_GET,LAN_WLAN_GUESTNET,wlanObj.__stack,null,["Enable","Name","IsModified","LANAccessEnable"]);if(!$.exe()){$.each(vapList,function(arg,index){if(this.name==guestObj.name){vapGuest=this}});refresh($.id("refresh"))}$.timeout($.reload,10000);</script>

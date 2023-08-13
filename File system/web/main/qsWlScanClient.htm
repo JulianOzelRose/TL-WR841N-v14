@@ -1,0 +1,38 @@
+﻿<script language="javascript" type="text/javascript">var showNum=10;var authMode=new Array(s_str.opensys,s_str.sharekey,s_str.auto,"WPA","WPA-PSK","WPA-None","WPA2","WPA2-PSK","WPA/WPA2","WPA/WPA2-PSK");var wepStatus=new Array("WEP","EncryptionDisabled","KeyAbsent","EncryptionNotSupported","TKIP","TKIP KeyAbsent","AES","AES KeyAbsent","TKIP or AES mix","TKIP or AES mix KeyAbsent","GroupWEP40","GroupWEP104");function removeAll(){var tlb=$.id("apTbl");while(tlb.rows.length>1){tlb.deleteRow(-1)}}function connect(apObj){var param={};param.wdsExist=0;if(apObj!=null){param.wdsExist=1;param.SSID=apObj.SSID;param.BSSID=apObj.BSSID;param.channel=apObj.channel;param.authMode=apObj.authMode;param.wepStatus=apObj.wepStatus}$.qf.next($.qd.sysMode,param)}function isBlockedChannel(channel,region){var index=0;if(INCLUDE_SCAN_ALL_CHANNELS==1){for(index=0;index<regionChannelList.length;index++){if(new RegExp(regionChannelList[index][0]).test(region)){break}}return(channel<regionChannelList[index][1][0]||channel>regionChannelList[index][1][1])}return false}function getTbl(apTable,page){var tbl=$.id("apTbl");removeAll();$.each(apList,function(arg,index){if(isBlockedChannel(this.channel,wlanObj.regulatoryDomain)){return}row=tbl.insertRow(-1);cell=row.insertCell(-1);cell.innerHTML=index+1;cell.width="26px";cell=row.insertCell(-1);cell.innerHTML=this.BSSID;cell.width="117px";cell=row.insertCell(-1);cell.innerHTML=this.SSID.replace(/\&/g,"&amp;").replace(/</g,"&lt;").replace(/ /g,"&nbsp;");cell.width="240px";cell=row.insertCell(-1);cell.innerHTML=this.RSSI;cell.width="100px";cell=row.insertCell(-1);cell.innerHTML=this.channel;cell.width="65px";cell=row.insertCell(-1);if(0==this.securityEnable){cell.innerHTML="<span class='T T_none'>"+m_str.none+"</span>"}else{var encryptType=authMode[this.authMode]+"/"+wepStatus[this.wepStatus];cell.innerHTML="<span>"+encryptType+"</span>"}cell.width="80px";cell=row.insertCell(-1);cell.innerHTML="<span class=a onclick=connect(apList["+index+"]);><span class='T T_conn'>"+m_str.conn+"</span></span>";cell.width="65px"});$.resize(tbl,showNum)}function refresh(obj){$.addLoading(obj);$.act(ACT_OP,ACT_OP_WLAN_SCAN,wlanObj.__stack);$.exe(function(ret){if(ret){return}apList=$.act(ACT_GS,LAN_WLAN_BSSDESC_ENTRY,null,wlanObj.__stack,["SSID","BSSID","SecurityEnable","Channel","RSSI","authMode","wepStatus"]);$.exe(function(ret){if(ret){return}setTip(apList.length);getTbl(apList);$.removeLoading()})})}function setTip(apNum){$.h($.id("tip"),apNum)};</script>
+<style>
+span.a span {
+    cursor: pointer;
+}
+</style>
+<p class="et T" id="et">AP List</p>
+<div class="con1 L">
+    <p class="ct"></p>
+    <p class="bl"></p>
+    <div class="con2">
+        <p class="line">
+            <span class="T" id="t_info">The scanned APs are as follows</span>
+        </p>
+        <p align="left">
+            <span class="T" id="t_aps">AP numbers:</span> <i class="bd" id="tip"></i>
+            <input type="button" class="button L ml T T_refresh" id="refresh" value="Refresh" onclick="refresh(this)" />
+        </p>
+        <div class="thead">
+            <table class="XL bdr tc" id="apTbl">
+                <tr>
+                    <th width="26px">ID</th>
+                    <th width="117px">BSSID</th>
+                    <th width="240px">SSID</th>
+                    <th width="100px" class="T" id="t_signal">Signal strength</th>
+                    <th width="65px" class="T T_channel">Channel</th>
+                    <th width="80px" class="T T_encryption">Encryption</th>
+                    <th width="65px" class="T T_conn">Connect</th>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <p class="bl"></p>
+    <p class="tail">
+        <input type="button" id="backBtn" class="button L T T_back" onclick="$.qf.prev()" value="Back" />
+    </p>
+</div>
+<script language="javascript" type="text/javascript">$.loadHelpFrame("QsWlScanClientHelpRpm.htm");if(INCLUDE_SCAN_ALL_CHANNELS==1){var regionChannelList=[["DB",[1,13]],["AL",[1,13]],["DZ",[1,13]],["AR",[1,13]],["AM",[1,13]],["AU",[1,13]],["AT",[1,13]],["AZ",[1,13]],["BH",[1,13]],["BY",[1,13]],["BE",[1,13]],["BZ",[1,13]],["BO",[1,13]],["BR",[1,13]],["BN",[1,13]],["BG",[1,13]],["CA",[1,11]],["CL",[1,13]],["CN",[1,13]],["CO",[1,11]],["CR",[1,13]],["HR",[1,13]],["CY",[1,13]],["CZ",[1,13]],["DK",[1,13]],["DO",[1,11]],["EC",[1,13]],["EG",[1,13]],["SV",[1,13]],["EE",[1,13]],["FI",[1,13]],["FR",[1,13]],["GE",[1,13]],["DE",[1,13]],["GR",[1,13]],["GT",[1,11]],["HN",[1,13]],["HK",[1,13]],["HU",[1,13]],["IS",[1,13]],["IN",[1,13]],["ID",[1,13]],["IQ",[1,13]],["IR",[1,13]],["IE",[1,13]],["IL",[1,13]],["IT",[1,13]],["JP",[1,13]],["JO",[1,13]],["KH",[1,13]],["KZ",[1,13]],["KP",[1,13]],["KR",[1,13]],["KW",[1,13]],["LV",[1,13]],["LB",[1,13]],["LI",[1,13]],["LT",[1,13]],["LU",[1,13]],["MO",[1,13]],["MK",[1,13]],["MY",[1,13]],["MX",[1,11]],["MC",[1,13]],["MA",[1,13]],["NL",[1,13]],["NZ",[1,13]],["NO",[1,11]],["OM",[1,13]],["PK",[1,13]],["PA",[1,11]],["PE",[1,13]],["PH",[1,13]],["PL",[1,13]],["PT",[1,13]],["PR",[1,11]],["PY",[1,13]],["QA",[1,13]],["RO",[1,13]],["RU",[1,13]],["SA",[1,13]],["SG",[1,13]],["SK",[1,13]],["SI",[1,13]],["ZA",[1,13]],["ES",[1,13]],["SE",[1,13]],["CH",[1,13]],["SY",[1,13]],["TW",[1,11]],["TH",[1,13]],["TT",[1,13]],["TN",[1,13]],["TR",[1,13]],["UA",[1,13]],["AE",[1,13]],["GB",[1,13]],["US",[1,11]],["UY",[1,13]],["UZ",[1,11]],["VE",[1,13]],["VN",[1,13]],["YE",[1,13]],["ZW",[1,13]],["RS",[1,13]],["MT",[1,13]],[".*",[1,13]]]}var apList,wlanList,wlanObj;wlanList=$.act(ACT_GL,LAN_WLAN,null,null,["name","X_TP_Band","RegulatoryDomain"]);if(!$.exe()){$.each(wlanList,function(){if("2.4GHz"==this.X_TP_Band){wlanObj=this}})}$.act(ACT_OP,ACT_OP_WLAN_SCAN,wlanObj.__stack);$.addLoading($.id("refresh"));$.exe(function(ret){if(ret){$.removeLoading($.id("refresh"));return}apList=$.act(ACT_GS,LAN_WLAN_BSSDESC_ENTRY,null,wlanObj.__stack,["SSID","BSSID","SecurityEnable","Channel","RSSI","authMode","wepStatus"]);$.exe(function(ret){if(ret){return}setTip(apList.length);getTbl(apList);$.removeLoading()})});</script>

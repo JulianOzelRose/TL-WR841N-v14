@@ -1,0 +1,40 @@
+﻿<html>
+<head><title></title>
+    <meta http-equiv=Content-Type content="text/html; charset=utf-8">
+    <link rel="stylesheet" href="../css/top.css"></link>
+    <script src="../js/custom.js" type="text/JavaScript"></script>
+</head>
+
+<body  leftMargin="0" topMargin="0" marginheight="0" marginwidth="0">
+<table cellpadding="0" cellspacing="0" width="100%">
+    <tr>
+        <td>
+            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tr>
+                    <td id="first-td">
+						<a OnClick="return NewW();" onMouseOver="return ShowUrl();" onMouseOut="return EraseUrl();">
+							<img src="../img/login/logo.png" border="0" style="cursor:pointer">
+						</a>
+					</td id="second-td">
+                    <td id="second-td">
+                        <table id="modelTbl">
+                            <tr>
+                                <td class="style1" ><span id="nameModel"></span></td>
+                            </tr>
+                            <tr>
+                                <td class="style2" ><span id="numModel"></span></td>
+                            </tr>
+                        </table>
+                    </td>
+					<td id="third-td">
+							<img src="../img/login/top-right.png">
+					</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    
+</table>
+</body>
+    <script type="text/javascript">var newWin;var url="http://"+our_web_site;document.getElementById("nameModel").innerHTML=window.parent.$.desc;document.getElementById("numModel").innerHTML=window.parent.m_str.bannermodel+window.parent.$.model;if(window.parent==window){window.location.href=url}function Click(){return false}document.oncontextmenu=Click;function NewW(){if(newWin){newWin.close()}newWin=window.open(url,"","scrollbars=yes,resizable=yes,toolbar=yes,status=yes,menubar=yes,scrollbar=yes,location=yes");return true}function ShowUrl(){status=url;return true}function EraseUrl(){status="";return true}var address;var errorFlag;function LoadPage(){if(true==errorFlag){parent.location.href="http://"+address}}function LoadNewIp(){errorFlag=true;setTimeout("LoadPage()",3000)}function stopLoad(){errorFlag=false};</script>
+</html>

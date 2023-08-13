@@ -1,0 +1,31 @@
+﻿<script language="javascript" type="text/javascript">function init(){if(opt=="add"){$.addClass($.id("groupEdit"),"nd");$.removeClass($.id("groupAdd"),"nd");var brList=$.act(ACT_GL,L2_BRIDGING_ENTRY,null,null,["bridgeName"]);var sel=$.id("groupView");if(!$.exe()){for(var i=0;i<brList.length;i++){var ipList=$.act(ACT_GS,LAN_IP_INTF,null,brList[i].__stack,["IPInterfaceIPAddress","IPInterfaceSubnetMask"]);if(!$.exe()){lanip=ipList[0].IPInterfaceIPAddress}var option=$.c("option");option.value=brList[i].__stack;option.text=brList[i].bridgeName;try{sel.add(option,null)}catch(e){sel.add(option)}}}}else{if(opt=="edit"){var tmpBrName;var stk=stack[0]+",0,0,0,0,0";var brList=$.act(ACT_GET,L2_BRIDGING_ENTRY,stk,null,["bridgeName"]);if(!$.exe()){tmpBrName=brList.bridgeName;if(tmpBrName=="Default"){var ipList=$.act(ACT_GS,LAN_IP_INTF,null,brList.__stack,["IPInterfaceIPAddress","IPInterfaceSubnetMask"]);if(!$.exe()){lanip=ipList[0].IPInterfaceIPAddress}tmpBrName=m_str.def}}$.addClass($.id("groupAdd"),"nd");$.removeClass($.id("groupEdit"),"nd");$.h($.id("brname"),tmpBrName);var fixIpEntry=$.act(ACT_GET,LAN_DHCP_STATIC_ADDR,stack,null,["enable","chaddr","yiaddr"]);if(!$.exe()){$.id("macAddr").value=fixIpEntry.chaddr;$.id("ipAddr").value=fixIpEntry.yiaddr;$.id("state").value=fixIpEntry.enable}}}}function doSubmit(){var element;if($.mac($.id("macAddr").value)){element=$.id("macAddr");if(element){element.focus();element.select()}return false}if($.ifip($.id("ipAddr").value)){element=$.id("ipAddr");if(element){element.focus();element.select()}return false}if($.id("ipAddr").value==lanip){$.alert(ERR_DHCP_PRESVR_IP_CONFLICT);element=$.id("ipAddr");if(element){element.focus();element.select()}return false}$.addLoading($.id("submitBtn"));var tmpIp=$.ip2ip($.id("ipAddr").value);if(opt=="add"){$.act(ACT_ADD,LAN_DHCP_STATIC_ADDR,null,$.id("groupView").value,["chaddr="+$.id("macAddr").value,"yiaddr="+tmpIp,"enable="+$.id("state").value])}else{if(opt=="edit"){$.act(ACT_SET,LAN_DHCP_STATIC_ADDR,stack,null,["chaddr="+$.id("macAddr").value,"yiaddr="+tmpIp,"enable="+$.id("state").value])}}$.exe(function(err){if(!err){$.loadMain("dhcpStatic.htm")}})};</script>
+<p class="et T" id="et">DHCP Address Reservation</p>
+<div class="con1 L">
+<p class="ct"></p>
+<p class="bl"></p>
+<div class="con2">
+<p><b class="T" id="t_info">The static IP of DHCP Server can be set on this page.</b></p>
+<p class="br"></p>
+<div id="groupEdit"class="nd">
+<p class="L2"><b class="item T T_group">Group:</b><b style="padding-left:12px" id="brname"></b></p>
+</div>
+<p class="L2"><b class="item T T_macaddr">MAC Address:</b><input id="macAddr" type="text" class="text" value="" size="17" maxlength="17"/></p>
+<p class="L2"><b class="item T T_ipaddr">IP Address:</b><input id="ipAddr" type="text" class="text" value="" size="17" maxlength="15"/></p>
+<div id="groupAdd" class="nd">
+<p class="L2 nd"><b class="item T T_group">Group:</b><select class="M" id="groupView"></select></p>
+</div>
+<p class="L2"><b class="item T T_status">Status:</b>
+<select class="M" id="state">
+<option value="0" selected="selected" class="T T_disabled">Disabled</option>
+<option value="1" class="T T_enabled">Enabled</option>
+</select>
+</p>
+</div>
+<p class="bl"></p>
+<p class="tail" id="tail">
+	<input type="button" class="button L T T_save" value="Save" id="submitBtn" onclick="doSubmit()" />
+	<input type="button" class="button L T T_back" value="Back" id="back" onclick="$.loadMain('dhcpStatic.htm')"/>
+</p>
+</div>
+<script language="javascript" type="text/javascript">$.loadHelp();var opt=$.mainParam[0];var stack=$.mainParam[1];var lanip="0.0.0.0";init();</script>
+

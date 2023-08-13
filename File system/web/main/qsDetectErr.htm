@@ -1,0 +1,28 @@
+﻿	
+<div class="con1 M">
+<p class="ct"></p>
+<p class="bl"></p>
+<div class="con2">
+<p><span class="T" id="t_reasons">The router is failed to detect your internet connection type, the following are the most likely reasons:</span></p>
+<p class="br"></p>
+<p><span class="T" id="t_reason1">1. The router was not power cycled.</span></p>
+<p><span class="T" id="t_reason1Detail">To solve this problem, please power cycle your router(turn if off and on) and wait 2 minutes to finish its initialization. If your router has a backup battery, please remove and reinsert its battery.</span></p>
+<p class="br"></p>
+<p><span class="T" id="t_reason2">2. The hardware connection is wrong.</span></p>
+<p><span class="T" id="t_reason2Detail">To solve this problem, please double-check the internet port(blue port) is fully inserted with the Ethernet cable from your router or other network device.</span></p>
+<p class="br"></p>
+<p><span class="T" id="t_reason3">3. Your ISP(Internet Service provider) assigned a fixed(static) IP to you.</span></p>
+<p><span class="T" id="t_reason3Detail">The router can not automatically detect such rare special network type, you need to enter the parameters manully.</span></p>
+<p class="br"></p>
+<p id="t_dhcp"><span class="T" id="t_options">Select one of the options below and click Next to preceed:</span></p>
+<p id="t_dhcp"><input type="radio" name="type" id="dhcp" value="dhcp"/><span class="T" id="t_dhcp_info1">Now I will reboot my router, wait for 2 minutes and proceed; Usually this operation will resolve most of the issues.</span></p>
+<p id="t_macclone"><input type="radio" name="type" id="macclone" value="macclone"/><span class="T" id="t_macclone_info1">I've rebooted the router before, now I will try to clone the MAC address from my original computer.</span></p>
+<p id="t_staip"><input type="radio" name="type" id="staip" value="staip"/><span class="T" id="t_staip_info1">Yes, my ISP assigns me a fixed IP address.</span></p>
+</div>
+<p class="bl"></p>
+<p class="tail ctr">
+<input type="button" class="button L T T_back" value="Back" onclick="$.qf.prev();" />
+<input type="button" class="button L T T_next" value="Next" onclick="nextPage();" />
+</p>
+</div>
+<script language="javascript" type="text/javascript">function nextPage(){if($.id("dhcp").checked==true){$.qd.type="dhcp";$.qf.next("dhcp")}else{if($.id("macclone").checked==true){$.qd.type="dhcp";$.qf.next("macclone")}else{if($.id("staip").checked==true){$.qf.next("staip")}else{alert(c_str.qs_selectOpt)}}}}$.id("macclone").checked=true;</script>

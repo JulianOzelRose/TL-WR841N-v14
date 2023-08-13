@@ -1,0 +1,17 @@
+﻿<script language="javascript" type="text/javascript">var oldPort;function doSave(obj){var arg;var httpCfg={};var appCfg={};arg=$.id("r_host").value;if(arg==""){arg="0.0.0.0"}if($.ip2num(arg)===0){httpCfg.httpRemoteEnabled=0}else{if($.ip2num(arg)===-1){httpCfg.httpRemoteEnabled=1;appCfg.remoteHost=""}else{if($.ifip(arg,true)){return $.alert(ERR_APP_REMOTE_IP)}httpCfg.httpRemoteEnabled=1;appCfg.remoteHost=arg}}arg=$.id("r_http_port").value;if($.num(arg,80,[1024,65535],true)){return $.alert(ERR_HTTP_REMOTE_PORT)}arg=parseInt(arg,10);if(arg==httpCfg.httpsRemotePort){return $.alert(ERR_HTTP_REMOTE_HTTPS_LOCAL_CONFILICT)}httpCfg.httpRemotePort=arg;var refresh;var newPort=httpCfg.httpRemotePort;if(!clientLocal&&appCfg.remoteHost&&appCfg.remoteHost!=clientIp){if(!confirm(c_str.refresh_dis)){return}refresh=true}else{if(!clientLocal&&newPort!=oldPort){if(!confirm(c_str.refresh)){return}refresh=true}}$.addLoading(obj);$.act(ACT_SET,HTTP_CFG,null,null,httpCfg);$.act(ACT_SET,APP_CFG,null,null,appCfg);$.exe(function(ret){if(!ret){if(refresh){$.refresh(null,newPort)}else{$.reload()}}else{$.errBack(ret,"manageCtrl.htm")}})}function init(){$.act(ACT_CGI,"/cgi/info");var httpCfg=$.act(ACT_GET,HTTP_CFG);var appCfg=$.act(ACT_GET,APP_CFG);if($.exe()){return}oldPort=httpCfg.httpRemotePort;$.id("r_http_port").value=httpCfg.httpRemotePort;if(httpCfg.httpRemoteEnabled==0){$.id("r_host").value="0.0.0.0"}else{if(appCfg.remoteHost==""){$.id("r_host").value="255.255.255.255"}else{$.id("r_host").value=appCfg.remoteHost}}};</script>
+<p class="et T" id="et">Remote Management</p>
+<div class="con1 L">
+<p class="ct"></p>
+<p class="bl"></p>
+<div class="con2">
+<div class="bdr L">
+<p><b class="item L T" id="t_port">Web Management Port:</b><input type="text" class="text" size="6" maxlength="5" id="r_http_port" /></p>
+<p><b class="item L T" id="t_host">Remote Management IP Address:</b><input type="text" class="text" size="15" maxlength="15" id="r_host" />
+<span id="t_for_all">(Enter 255.255.255.255 for all)</span>
+</p>
+</div>
+</div>
+<p class="bl"></p>
+<p class="tail" id="tail"><input type="button" class="button L T T_save" value="Save" onclick="doSave(this)" /></p>
+</div>
+<script language="javascript" type="text/javascript">$.loadHelpFrame("ManageControlHelpRpm.htm");init();</script>

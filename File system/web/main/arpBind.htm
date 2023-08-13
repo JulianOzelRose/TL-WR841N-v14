@@ -1,0 +1,32 @@
+﻿<script language="javascript" type="text/javascript">var selAll;var index;var param;var allStk;var arp_stack;var arp_stackIndex;var arpIpStr;function doAdd(){param[0]=0;$.loadMain("arpBindEdit.htm",param)}function doEdit(val){param[0]=1;param[1]=val;$.loadMain("arpBindEdit.htm",param)}function doSelAll(){if(selAll==0){for(var i=1;i<=index;i++){var arpid="arpid"+i;$.id(arpid).checked=1}arp_stack=[];arp_stackIndex=index;for(var j=0;j<arp_stackIndex;j++){arp_stack[j]=allStk[j]}selAll=1}else{if(selAll==1){for(var i=1;i<=index;i++){var arpid="arpid"+i;$.id(arpid).checked=0}arp_stack=[];arp_stackIndex=0;selAll=0}}}function selEntry(){arp_stackIndex=0;arp_stack=[];for(var i=1;i<=index;i++){var tmpEntryId="arpid"+i;if($.id(tmpEntryId).checked==1){arp_stack[arp_stackIndex]=allStk[i-1];arp_stackIndex++}}}function doClick(){if(selAll==1){$.id("selAll").checked=0;selAll=0}}function init(){selAll=0;index=0;allStk=[];param=[];arp_stack=[];arp_stackIndex=0;var arpCfg=$.act(ACT_GET,ARP_BIND,null,null,["enable"]);var arpList=$.act(ACT_GL,ARP_BIND_ENTRY,null,null);$.exe(function(err){if(!err){$.id("arpBind_en").checked=(arpCfg.enable==1)?1:0;$.id("arpBind_dis").checked=(arpCfg.enable==1)?0:1;var tbl=$.id("arptbl");$.each(arpList,function(){var thisStk="["+this.__stack+"]";var row=tbl.insertRow(-1);index++;var cell=row.insertCell(-1);cell.width="5%";cell.innerHTML="<input type='checkbox' id='arpid"+index+"' onclick='doClick();'/>";cell=row.insertCell(-1);cell.width="30%";cell.innerHTML=this.mac;cell=row.insertCell(-1);cell.width="26%";cell.innerHTML=$.num2ip(parseInt(this.ip,10));cell=row.insertCell(-1);cell.width="20%";cell.innerHTML=((this.state==1)?"<span class='T T_bound'>"+m_str.bound+"</span>":"<span class='T T_unbound'>"+m_str.unbound+"</span>");cell=row.insertCell(-1);cell.innerHTML="<span class='a T T_edit' onclick='doEdit("+thisStk+");'>"+m_str.edit+"</span>";allStk[index-1]=this.__stack});$.resize(tbl,8)}})}function doEnable(obj){selEntry();if(arp_stackIndex==0){$.alert(ERR_SEL_INVAD);return}$.addLoading(obj);for(var i=0;i<arp_stackIndex;i++){$.act(ACT_SET,ARP_BIND_ENTRY,arp_stack[i],null,["state=1"])}$.exe(function(err){if(!err){$.reload()}})}function doDisable(obj){selEntry();if(arp_stackIndex==0){$.alert(ERR_SEL_INVAD);return}$.addLoading(obj);for(var i=0;i<arp_stackIndex;i++){$.act(ACT_SET,ARP_BIND_ENTRY,arp_stack[i],null,["state=0"])}$.exe(function(err){if(!err){$.reload()}})}function doDel(obj){selEntry();if(arp_stackIndex==0){$.alert(ERR_SEL_INVAD);return}$.addLoading(obj);for(var i=0;i<arp_stackIndex;i++){$.act(ACT_DEL,ARP_BIND_ENTRY,arp_stack[i],null)}$.exe(function(err){if(!err){$.reload()}})}function saveArpEn(){$.addLoading($.id("saveArpEn"));if($.id("arpBind_en").checked==1){$.act(ACT_SET,ARP_BIND,null,null,["enable=1"])}else{if($.id("arpBind_dis").checked==1){$.act(ACT_SET,ARP_BIND,null,null,["enable=0"])}}$.exe(function(err){if(!err){$.removeLoading()}})};</script>
+<p class="et T" id="et">Binding Settings</p>
+<div class="con1 L">
+<p class="ct"></p>
+<p class="bl"></p>
+<div class="con2">
+<p><b class="item S T" id="t_bind">ARP Binding:</b>
+<input name="arpBind" id="arpBind_en" type="radio" /><span class="T T_en">Enable</span>
+<input id="arpBind_dis" name="arpBind" type="radio" checked /><span class="T T_dis">Disable</span>
+<input type="button" id="saveArpEn" class="button L T T_save" style="margin-left: 30px;" value="Save" onclick="saveArpEn();" /></p>
+<p class="br"></p>
+<div class="XL thead" ><table class="XL bdr tc">
+<tr>
+<th width="5%"><input type="checkbox" id="selAll" onclick="doSelAll();"/></th>
+<th width="30%" class="T T_macaddr">MAC Address</th>
+<th width="26%" class="T T_ipaddr">IP Address</th>
+<th width="20%" class="T" id="t_status">Bind</th>
+<th class="T T_edit">Edit</th>
+</tr>
+</table></div>
+<div class="XL tbody"><table id="arptbl" class="XL bdr tc"></table></div>
+<p class="br"></p>
+<p class="L1">
+<input type="button" class="button XL T T_addnew" value="Add New" onclick="doAdd();"/>
+<input type="button" class="button XL T T_ensel" value="Enable Selected" onclick="doEnable(this);"/>
+<input type="button" class="button XL T T_dissel" value="Disable Selected" onclick="doDisable(this);"/>
+<input type="button" class="button XL T T_delsel" value="Delete Selected" onclick="doDel(this);"/></p>
+</div>
+<p class="bl"></p>
+<p class="tail" id="tail"><input type="button" class="button L T T_refresh" value="Refresh" onclick="$.addLoading(this, 200, function(){$.reload()});" /></p>
+</div>
+<script language="javascript" type="text/javascript">$.loadHelpFrame("LanArpBindingHelpRpm.htm");init();</script>

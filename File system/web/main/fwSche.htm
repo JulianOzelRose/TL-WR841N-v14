@@ -1,0 +1,24 @@
+﻿<script language="javascript" type="text/javascript">var selAll;var index;var param;var allStk;var task_stack;var task_stackIndex;function doAdd(){param[0]=0;param[1]=0;$.loadMain("fwScheEdit.htm",param)}function doEdit(val){param[0]=1;param[1]=0;param[2]=val;$.loadMain("fwScheEdit.htm",param)}function doSelAll(){if(selAll==0){for(var i=1;i<=index;i++){var taskid="taskid"+i;$.id(taskid).checked=1}task_stack=[];task_stackIndex=index;for(var j=0;j<task_stackIndex;j++){task_stack[j]=allStk[j]}selAll=1}else{if(selAll==1){for(var i=1;i<=index;i++){var taskid="taskid"+i;$.id(taskid).checked=0}task_stack=[];task_stackIndex=0;selAll=0}}}function selEntry(){task_stack=[];task_stackIndex=0;for(var i=1;i<=index;i++){var tmpEntryId="taskid"+i;if($.id(tmpEntryId).checked==1){task_stack[task_stackIndex]=allStk[i-1];task_stackIndex++}}}function init(){selAll=0;index=0;allStk=[];param=[];task_stack=[];task_stackIndex=0;var taskList=$.act(ACT_GL,TASK_SCHEDULE,null,null,["entryName","isParentCtrl"]);if(!$.exe()){var tbl=$.id("tasktbl");$.each(taskList,function(){if(this.isParentCtrl==0){var thisStk="["+this.__stack+"]";var row=tbl.insertRow(-1);index++;var cell=row.insertCell(-1);cell.width="5%";cell.innerHTML="<input type='checkbox' id=\"taskid"+index+'"/>';cell=row.insertCell(-1);cell.innerHTML=this.entryName;cell=row.insertCell(-1);cell.width="15%";cell.innerHTML="<span class='a T T_edit' onclick='doEdit("+thisStk+");'>"+m_str.edit+"</span>";allStk[index-1]=this.__stack}});$.resize($.id("tasktbl"),8)}}function doDel(obj){selEntry();if(task_stackIndex==0){$.alert(ERR_SEL_INVAD);return}$.addLoading(obj);for(var i=0;i<task_stackIndex;i++){$.act(ACT_DEL,TASK_SCHEDULE,task_stack[i],null)}$.exe(function(ret){if(!ret){$.reload()}})};</script>
+<p class="et T" id="et">Schedule Settings</p>
+<div class="con1 M">
+<p class="ct"></p>
+<p class="bl"></p>
+<div class="con2">
+<p class="br"></p>
+<div class="M thead" ><table class="M bdr tc">
+<tr>
+<th width="5%"><input type="checkbox" id="selAll" onclick="doSelAll();"/></th>
+<th class="T T_desc">Description</th>
+<th width="15%" class="T T_edit">Edit</th>
+</tr>
+</table></div>
+<div class="M tbody"><table id="tasktbl" class="M bdr tc"></table></div>
+<p class="br"></p>
+<p class="L1">
+<input type="button" class="button XL T T_addnew" value="Add New" onclick="doAdd();"/>
+<input type="button" class="button XL T T_delsel" value="Delete Selected" onclick="doDel(this);"/></p>
+</div>
+<p class="bl"></p>
+<p class="tail" id="tail"></p>
+</div>
+<script language="javascript" type="text/javascript">$.loadHelpFrame("AccessCtrlTimeSchedHelpRpm.htm");init();</script>

@@ -1,0 +1,213 @@
+﻿<script language="javascript" type="text/javascript">var daysPerWeek=7;function addAttrs(){var element;if(($.id("year").value=="")||($.num($.id("year").value,[1970,2037],true))){$.alert(ERR_TIME_YEAR_INVAD);element=$.id("year");if(element){element.focus();element.select()}return false}if(($.id("month").value=="")||($.num($.id("month").value,[1,12],true))){$.alert(ERR_TIME_MONTH_INVAD);element=$.id("month");if(element){element.focus();element.select()}return false}if(($.id("day").value=="")||($.num($.id("day").value,[1,31],true))){$.alert(ERR_TIME_DAY_INVAD);element=$.id("day");if(element){element.focus();element.select()}return false}if(($.id("hour").value=="")||($.num($.id("hour").value,[0,23],true))){$.alert(ERR_TIME_HOUR_INVAD);element=$.id("hour");if(element){element.focus();element.select()}return false}if(($.id("minute").value=="")||($.num($.id("minute").value,[0,60],true))){$.alert(ERR_TIME_MINUTE_INVAD);element=$.id("minute");if(element){element.focus();element.select()}return false}if(($.id("second").value=="")||($.num($.id("second").value,[0,60],true))){$.alert(ERR_TIME_SECOND_INVAD);element=$.id("second");if(element){element.focus();element.select()}return false}if(($.id("ntpA").value!="")&&(!$.isdomain($.id("ntpA").value))){$.alert(ERR_TIME_NTP_SERVER);element=$.id("ntpA");if(element){element.focus();element.select()}return false}if(($.id("ntpB").value!="")&&(!$.isdomain($.id("ntpB").value))){$.alert(ERR_TIME_NTP_SERVER);element=$.id("ntpB");if(element){element.focus();element.select()}return false}return true}function doEnableDst(){if($.id("enableDST").checked==true){$.id("dst_start_month").disabled=false;$.id("dst_start_weekCount").disabled=false;$.id("dst_start_weekDay").disabled=false;$.id("dst_start_time").disabled=false;$.id("dst_end_month").disabled=false;$.id("dst_end_weekCount").disabled=false;$.id("dst_end_weekDay").disabled=false;$.id("dst_end_time").disabled=false}else{$.id("dst_start_month").disabled=true;$.id("dst_start_weekCount").disabled=true;$.id("dst_start_weekDay").disabled=true;$.id("dst_start_time").disabled=true;$.id("dst_end_month").disabled=true;$.id("dst_end_weekCount").disabled=true;$.id("dst_end_weekDay").disabled=true;$.id("dst_end_time").disabled=true}}function isLeapYear(year){return(((year%4==0)&&(year%100!=0))||(year%400==0))}function isValidDate(year,mon,date){var daysPerMonth=new Array(31,0,31,30,31,30,31,31,30,31,30,31);daysPerMonth[1]=isLeapYear(year)?29:28;return(date<=daysPerMonth[mon])}function getMday(year,mon,weekCnt,wDay){var ret=0;var dateTmp;wDay=(wDay+1)%daysPerWeek;dateTmp=new Date(year,mon,1);firstWday=parseInt(dateTmp.getDay(),10);ret=weekCnt*daysPerWeek+wDay-firstWday+1;if(wDay<firstWday){ret=ret+daysPerWeek}if(weekCnt==4&&!isValidDate(year,mon,ret)){ret=ret-daysPerWeek}if(ret<10){ret="0"+ret}return ret}function checkDstDate(){var dstStartString=$.id("dst_start_month").value+$.id("dst_start_weekCount").value+$.id("dst_start_weekDay").value+$.id("dst_start_time").value;var dstEndString=$.id("dst_end_month").value+$.id("dst_end_weekCount").value+$.id("dst_end_weekDay").value+$.id("dst_end_time").value;$.id("dst_start_year").innerHTML=$.id("year").value;if(dstStartString>dstEndString){$.id("dst_end_year").innerHTML=parseInt($.id("year").value,10)+1}else{$.id("dst_end_year").innerHTML=$.id("year").value}}function doSubmit(){var ret;if(!(ret=addAttrs())){return}$.addLoading($.id("saveBtn"));$.act(ACT_SET,TIME,null,null,["localTimeZone="+$.id("timezone").value,"NTPServer1="+$.id("ntpA").value,"NTPServer2="+$.id("ntpB").value]);$.act(ACT_SET,HOUR,null,null,["year="+$.id("year").value,"month="+parseInt($.id("month").value,10),"day="+parseInt($.id("day").value,10),"hours="+parseInt($.id("hour").value,10),"minutes="+parseInt($.id("minute").value,10),"seconds="+parseInt($.id("second").value,10)]);$.exe(function(ret){if(!ret){$.reload()}})}function getStatus(){$.id("GetTime").disabled=true;$.auto(function(){var timeobj=$.act(ACT_GET,TIME,null,null,["__status"]);if(!$.exe()){if(timeobj.__status==1){$.h($.id("t_stat"),"<span class='T T_getgmt'>"+s_str.getgmt+"</span>")}else{if(timeobj.__status==2){$.reload()}else{if(timeobj.__status==3){$.h($.id("t_stat"),"<span class='T T_gmtfail'>"+s_str.gmtfail+"</span>");$.id("GetTime").disabled=false}}}}},1000)}function doGetTime(){$.act(ACT_SET,TIME,null,null,["localTimeZone="+$.id("timezone").value,"NTPServer1="+$.id("ntpA").value,"NTPServer2="+$.id("ntpB").value]);$.act(ACT_OP,ACT_OP_NTP_REQUEST);if(!$.exe()){getStatus()}}function isEastEarthTime(){var now=new Date();var timeZone=now.getTimezoneOffset();if(timeZone<0){return true}else{return false}}function isDayLightTime(){var now=new Date();var start=new Date();var margin=0;start.setMonth(0);start.setDate(1);start.setHours(0);start.setMinutes(0);start.setSeconds(0);var middle=new Date(start.getTime());middle.setMonth(6);if((middle.getTimezoneOffset()-start.getTimezoneOffset())==0){return false}if(true==isEastEarthTime()){margin=Math.abs(start.getTimezoneOffset())>Math.abs(middle.getTimezoneOffset())?start.getTimezoneOffset():middle.getTimezoneOffset()}else{margin=Math.abs(start.getTimezoneOffset())<Math.abs(middle.getTimezoneOffset())?start.getTimezoneOffset():middle.getTimezoneOffset()}if(now.getTimezoneOffset()==margin){return true}else{return false}}function clientTimeZone(){var munites=new Date().getTimezoneOffset();var hour=parseInt(munites/60);if(true==isDayLightTime()){hour=hour+1}var munite=munites%60;var prefix="-";if(hour<=0||munite<0){prefix="+";hour=-hour;if(munite<0){munite=-munite}}hour=hour+"";munite=munite+"";if(hour.length==1){hour="0"+hour}if(munite.length==1){munite=":0"+munite}else{munite=":"+munite}return prefix+hour+munite}function doGetPCTime(){var today=new Date();var year=today.getFullYear();var month=today.getMonth()+1;var date=today.getDate();var hour=today.getHours();var min=today.getMinutes();var sec=today.getSeconds();$.id("year").value=year;$.id("month").value=month;$.id("day").value=date;$.id("hour").value=hour;$.id("minute").value=min;$.id("second").value=sec;$.id("timezone").value=clientTimeZone();if(WEB_INCLUDE_DST){checkDstDate()}}function doSaveDST(){var ret;var dstIsEnable=0;var dstStartYear,dstEndYear;var dstStartMday,dstEndMday;var dstStartArgs="",dstEndArgs="";if(WEB_INCLUDE_DST){if($.id("enableDST").checked==true){dstIsEnable=1;dstStartYear=parseInt($.id("dst_start_year").innerHTML,10);dstStartMday=getMday(dstStartYear,$.id("dst_start_month").selectedIndex,$.id("dst_start_weekCount").selectedIndex,$.id("dst_start_weekDay").selectedIndex);dstStartArgs=dstStartYear+"-"+$.id("dst_start_month").value+"-"+dstStartMday+"T"+$.id("dst_start_time").value;dstEndYear=parseInt($.id("dst_end_year").innerHTML,10);dstEndMday=getMday(dstEndYear,$.id("dst_end_month").selectedIndex,$.id("dst_end_weekCount").selectedIndex,$.id("dst_end_weekDay").selectedIndex);dstEndArgs=dstEndYear+"-"+$.id("dst_end_month").value+"-"+dstEndMday+"T"+$.id("dst_end_time").value;if(dstStartArgs>=dstEndArgs){dstEndYear+=1;dstEndArgs=dstEndYear+"-"+$.id("dst_end_month").value+"-"+dstEndMday+"T"+$.id("dst_end_time").value}}}$.addLoading($.id("saveDSTBtn"));if(WEB_INCLUDE_DST){if(dstIsEnable==1){$.act(ACT_SET,TIME,null,null,["daylightSavingsUsed="+dstIsEnable,"daylightSavingsStart="+dstStartArgs,"daylightSavingsEnd="+dstEndArgs,"X_TP_DaylightSavingsStartWeekCount="+$.id("dst_start_weekCount").value,"X_TP_DaylightSavingsEndWeekCount="+$.id("dst_end_weekCount").value])}else{$.act(ACT_SET,TIME,null,null,["daylightSavingsUsed="+dstIsEnable])}}else{$.act(ACT_SET,TIME,null,null,["daylightSavingsUsed=0"])}$.exe(function(ret){if(!ret){$.reload()}})};</script>
+
+<p class="et T" id="et">Time Settings</p>
+<div class="con1 XL">
+<p class="ct"></p>
+<p class="bl"></p>
+<div class="con2">
+
+<p class="st" id="t_time">Time Settings:</p>
+<p class="br"></p>
+<p class="L2"><b class="fl M T" id="t_zone">Time Zone:</b>
+<select name="timezone" id="timezone" width="300px" onchange="doGetTime()">
+<option value="-12:00" class="T T_city1">(GMT-12:00) Enewetak, Kwajalein</option>
+<option value="-11:00" class="T T_city2">(GMT-11:00) Midway Island, Samoa</option>
+<option value="-10:00" class="T T_city3">(GMT-10:00) Hawaii</option>
+<option value="-09:00" class="T T_city4">(GMT-09:00) Alaska</option>
+<option value="-08:00" selected class="T T_city5">(GMT-08:00) Pacific Time (US & Canada); Tijuana</option>
+<option value="-07:00" class="T T_city6">(GMT-07:00) Mountain Time (US & Canada); Arizona</option>
+<option value="-06:00" class="T T_city7">(GMT-06:00) Central Time (US & Canada); Central America, Mexico City</option>
+<option value="-05:00" class="T T_city8">(GMT-05:00) Eastern Time (US & Canada); Bogota, Lima</option>
+<option value="-04:30" class="T T_city9">(GMT-04:30) Caracas</option>
+<option value="-04:00" class="T T_city10">(GMT-04:00) Atlantic Time (Canada); Santiago, Asuncion</option>
+<option value="-03:30" class="T T_city11">(GMT-03:30) Newfoundland</option>
+<option value="-03:00" class="T T_city12">(GMT-03:00) Brasilia, Buenos Aires, Georgetown, Greenland</option>
+<option value="-02:00" class="T T_city13">(GMT-02:00) Mid-Atlantic</option>
+<option value="-01:00" class="T T_city14">(GMT-01:00) Azores, Cape Verde Is.</option>
+<option value="+00:00" class="T T_city15">(GMT) Greenwich Mean Time: Dublin, Edinburgh, London, Lisbon</option>
+<option value="+01:00" class="T T_city16">(GMT+01:00) Amsterdam, Berlin, Rome, Stockholm, Paris, Prague, Bratislava</option>
+<option value="+02:00" class="T T_city17">(GMT+02:00) Cairo, Athens, Istanbul, Minsk, Jerusalem, Kiev, Chisinau</option>
+<option value="+03:00" class="T T_city18">(GMT+03:00) Baghdad, Kuwait, Riyadh</option>
+<option value="+03:30" class="T T_city19">(GMT+03:30) Tehran</option>
+<option value="+04:00" class="T T_city20">(GMT+04:00) Abu Dhabi, Muscat, Baku, Tbilisi, Yerevan, Moscow, St.Petersburg</option>
+<option value="+04:30" class="T T_city21">(GMT+04:30) Kabul</option>
+<option value="+05:00" class="T T_city22">(GMT+05:00) Islamabad, Karachi, Tashkent</option>
+<option value="+05:30" class="T T_city23">(GMT+05:30) Madras, Kolkata, Mumbai, New Delhi</option>
+<option value="+05:45" class="T T_city24">(GMT+05:45) Katmandu</option>
+<option value="+06:00" class="T T_city25">(GMT+06:00) Almaty, Astana, Dhaka, Ekaterinburg, Bishkek</option>
+<option value="+06:30" class="T T_city26">(GMT+06:30) Rangoon</option>
+<option value="+07:00" class="T T_city27">(GMT+07:00) Bangkok, Jakarta, Hanoi, Novosibirsk</option>
+<option value="+08:00" class="T T_city28">(GMT+08:00) Beijing, Chongqing, Urumchi, Hong Kong, Taipei, Kuala Lumpur, Perth</option>
+<option value="+09:00" class="T T_city29">(GMT+09:00) Tokyo, Osaka, Sapporo, Seoul</option>
+<option value="+09:30" class="T T_city30">(GMT+09:30) Darwin, Adelaide</option>
+<option value="+10:00" class="T T_city31">(GMT+10:00) Brisbane, Guam, Canberra, Melbourne, Sydney, Yakutsk</option>
+<option value="+11:00" class="T T_city32">(GMT+11:00) Magadan, Solomon Is., New Caledonia</option>
+<option value="+12:00" class="T T_city33">(GMT+12:00) Fuji, Kamchatka Peninsula, Marshall Is., Wellington</option>
+<option value="+13:00" class="T T_city34">(GMT+13:00) Nukualofa</option>
+</select>
+</p>
+<p class="L2"><b class="fl M T" id="t_date">Date:</b>
+<input type="text" class="text" id="year" value="0" size="4" maxlength="4" onChange="checkDstDate()"/><span class="T" id="t_year">Year</span>
+<input type="text" class="text" id="month" value="0" size="4" maxlength="2"/><span class="T" id="t_month">Month</span>
+<input type="text" class="text" id="day" value="0" size="4" maxlength="2"/><span class="T" id="t_day">Day</span>
+</p>
+<p class="L2"><b class="fl M T T_time">Time:</b>
+<input type="text" class="text" id="hour" value="0" size="4" maxlength="2"/><span class="T" id="t_hour">Hour</span>
+<input type="text" class="text" id="minute" value="0" size="4" maxlength="2"/><span class="T" id="t_minute">Minute</span>
+<input type="text" class="text" id="second" value="0" size="4" maxlength="2"/><span class="T" id="t_second">Second</span>
+<b></b>
+<input id="GetPCTime" type="button" class="button XL T T_getPcTime" value="Get from PC" onclick="doGetPCTime()" />
+</p>
+<p class="br"></p>
+<p class="L2"><b class="fl L T" id="t_npt1">NTP Server 1:</b>
+<input type="text" id="ntpA" class="text" value="0.0.0.0" size="15" maxlength="31"/>
+<i class="T T_optional"><span class="T T_optional">(optional)</span></i>
+</p>
+<p class="L2"><b class="fl L T" id="t_npt2">NTP Server 2:</b>
+<input type="text" id="ntpB" class="text" value="0.0.0.0" size="15" maxlength="31"/>
+<i class="T T_optional"><span class="T T_optional">(optional)</span></i>
+</p>
+<p class="L2">
+<input id="GetTime" type="button" class="button XL T T_getGmt2" value="Get GMT" onclick="doGetTime()" /><span class="T" id="t_note">(Only when the Internet connection is on.)</span>
+</p>
+<p class="br"></p>
+<p class="tail" id="tail"><input type="button" class="button L T T_save" id="saveBtn" value="Save" onclick="doSubmit()" /></p>
+<p class="bl"></p>
+
+</div>
+<div id="div_dst" class="con2 nd">
+<p class="st" id="t_dst">Daylight Saving:</p>
+
+	<p class="br"></p>
+	<p class="L2"><b id="t_dst_en">Enable Daylight Saving:</b> 
+	<input id="enableDST" type="checkbox" onclick="doEnableDst()"/></p>
+	
+	<p class="L2"><b class="fl M T" id="t_dst_start">Start:</b>
+	 <span id="dst_start_year" hidden="hidden"></span> 
+	<select name="dst_start_month" id="dst_start_month" width="15px" onChange="checkDstDate()">
+	<option value="01" class="T T_Jan">Jan</option>
+	<option value="02" class="T T_Feb">Feb</option>
+	<option value="03" class="T T_Mar" selected >Mar</option>
+	<option value="04" class="T T_Apr">Apr</option>
+	<option value="05" class="T T_May">May</option>
+	<option value="06" class="T T_Jun">Jun</option>
+	<option value="07" class="T T_Jul">Jul</option>
+	<option value="08" class="T T_Aug">Aug</option>
+	<option value="09" class="T T_Sep">Sep</option>
+	<option value="10" class="T T_Oct">Oct</option>
+	<option value="11" class="T T_Nov">Nov</option>
+	<option value="12" class="T T_Dec">Dec</option>
+	</select>
+	<select name="dst_start_day" id="dst_start_weekCount" width="15px" onChange="checkDstDate()">
+	<option value="1" class="T T_First">First</option>
+	<option value="2" class="T T_nd2">2nd</option>
+	<option value="3" class="T T_rd3">3rd</option>
+	<option value="4" class="T T_th4">4th</option>
+	<option value="5" class="T T_last" selected >Last</option>
+	</select>
+	
+	<select name="dst_start_weekday" id="dst_start_weekDay" width="15px" onChange="checkDstDate()">
+	<option value="1" class="T T_Mon">Mon</option>
+	<option value="2" class="T T_Tue">Tue</option>
+	<option value="3" class="T T_Wed">Wed</option>
+	<option value="4" class="T T_Thu">Thu</option>
+	<option value="5" class="T T_Fri">Fri</option>
+	<option value="6" class="T T_Sat">Sat</option>
+	<option value="7" class="T T_Sun" selected >Sun</option>
+	</select>
+	
+	<select name="dst_start_time" id="dst_start_time" width="15px" onChange="checkDstDate()">
+	<option value="00:00:00" >00:00</option>
+	<option value="01:00:00" selected >01:00</option>
+	<option value="02:00:00" >02:00</option>
+	<option value="03:00:00" >03:00</option>
+	<option value="04:00:00" >04:00</option>
+	<option value="05:00:00" >05:00</option>
+	<option value="06:00:00" >06:00</option>
+	<option value="07:00:00" >07:00</option>
+	<option value="08:00:00" >08:00</option>
+	<option value="09:00:00" >09:00</option>
+	<option value="10:00:00" >10:00</option>
+	<option value="11:00:00" >11:00</option>
+	<option value="12:00:00" >12:00</option>
+	<option value="13:00:00" >13:00</option>
+	<option value="14:00:00" >14:00</option>
+	<option value="15:00:00" >15:00</option>
+	<option value="16:00:00" >16:00</option>
+	<option value="17:00:00" >17:00</option>
+	<option value="18:00:00" >18:00</option>
+	<option value="19:00:00" >19:00</option>
+	<option value="20:00:00" >20:00</option>
+	<option value="21:00:00" >21:00</option>
+	<option value="22:00:00" >22:00</option>
+	<option value="23:00:00" >23:00</option>
+	</select>
+	</p>
+	
+	<p class="L2"><b class="fl M T" id="t_dst_end">End:</b>
+	<span id="dst_end_year" hidden="hidden"></span>
+	<select name="dst_end_month" id="dst_end_month" width="15px" onChange="checkDstDate()">
+	<option value="01" class="T T_Jan">Jan</option>
+	<option value="02" class="T T_Feb">Feb</option>
+	<option value="03" class="T T_Mar">Mar</option>
+	<option value="04" class="T T_Apr">Apr</option>
+	<option value="05" class="T T_May">May</option>
+	<option value="06" class="T T_Jun">Jun</option>
+	<option value="07" class="T T_Jul">Jul</option>
+	<option value="08" class="T T_Aug">Aug</option>
+	<option value="09" class="T T_Sep">Sep</option>
+	<option value="10" class="T T_Oct" selected>Oct</option>
+	<option value="11" class="T T_Nov">Nov</option>
+	<option value="12" class="T T_Dec">Dec</option>
+	</select>
+	<select name="dst_end_day" id="dst_end_weekCount" width="15px" onChange="checkDstDate()">
+	<option value="1" class="T T_First">First</option>
+	<option value="2" class="T T_nd2">2nd</option>
+	<option value="3" class="T T_rd3">3rd</option>
+	<option value="4" class="T T_th4">4th</option>
+	<option value="5" class="T T_last" selected >Last</option>
+	</select>
+	
+	<select name="dst_end_weekday" id="dst_end_weekDay" width="15px" onChange="checkDstDate()">
+	<option value="1" class="T T_Mon">Mon</option>
+	<option value="2" class="T T_Tue">Tue</option>
+	<option value="3" class="T T_Wed">Wed</option>
+	<option value="4" class="T T_Thu">Thu</option>
+	<option value="5" class="T T_Fri">Fri</option>
+	<option value="6" class="T T_Sat">Sat</option>
+	<option value="7" class="T T_Sun" selected >Sun</option>
+	</select>
+	
+	<select name="dst_end_time" id="dst_end_time" width="15px" onChange="checkDstDate()">
+	<option value="00:00:00" >00:00</option>
+	<option value="01:00:00" >01:00</option>
+	<option value="02:00:00" selected >02:00</option>
+	<option value="03:00:00" >03:00</option>
+	<option value="04:00:00" >04:00</option>
+	<option value="05:00:00" >05:00</option>
+	<option value="06:00:00" >06:00</option>
+	<option value="07:00:00" >07:00</option>
+	<option value="08:00:00" >08:00</option>
+	<option value="09:00:00" >09:00</option>
+	<option value="10:00:00" >10:00</option>
+	<option value="11:00:00" >11:00</option>
+	<option value="12:00:00" >12:00</option>
+	<option value="13:00:00" >13:00</option>
+	<option value="14:00:00" >14:00</option>
+	<option value="15:00:00" >15:00</option>
+	<option value="16:00:00" >16:00</option>
+	<option value="17:00:00" >17:00</option>
+	<option value="18:00:00" >18:00</option>
+	<option value="19:00:00" >19:00</option>
+	<option value="20:00:00" >20:00</option>
+	<option value="21:00:00" >21:00</option>
+	<option value="22:00:00" >22:00</option>
+	<option value="23:00:00" >23:00</option>
+	</select>
+	</p>
+<p class="br"></p>
+<p class="tail" id="tail"><input type="button" class="button L T T_save" id="saveDSTBtn" value="Save" onclick="doSaveDST()" /></p>
+<p class="bl"></p>
+</div>
+</div>
+<script language="javascript" type="text/javascript">$.loadHelpFrame("DateTimeCfgHelpRpm.htm");var hour=$.act(ACT_GET,HOUR,null,null,["year","month","day","hours","minutes","seconds"]);var time={};if(WEB_INCLUDE_DST){time=$.act(ACT_GET,TIME,null,null,["localTimeZone","NTPServer1","NTPServer2","__status","daylightSavingsUsed","daylightSavingsStart","daylightSavingsEnd","X_TP_DaylightSavingsStartWeekCount","X_TP_DaylightSavingsEndWeekCount"])}else{time=$.act(ACT_GET,TIME,null,null,["localTimeZone","NTPServer1","NTPServer2","__status"])}if(!$.exe()){$.id("year").value=hour.year;$.id("month").value=hour.month;$.id("day").value=hour.day;$.id("hour").value=hour.hours;$.id("minute").value=hour.minutes;$.id("second").value=hour.seconds;$.id("ntpA").value=time.NTPServer1;$.id("ntpB").value=time.NTPServer2;$.id("timezone").value=time.localTimeZone?time.localTimeZone:"+08:00";if(time.__status==1){$.h($.id("t_stat"),"<span class='T T_getgmt'>"+s_str.getgmt+"</span>");getStatus()}if(WEB_INCLUDE_DST){$.removeClass($.id("div_dst"),"nd");$.id("enableDST").checked=(time.daylightSavingsUsed==1)?true:false;if(time.daylightSavingsStart!=""){startYear=parseInt(time.daylightSavingsStart.substr(0,4),10);dstStartMonth=parseInt(time.daylightSavingsStart.substr(5,2),10);dstStartMday=parseInt(time.daylightSavingsStart.substr(8,2),10);dstStartTime=parseInt(time.daylightSavingsStart.substr(11,2),10);dateTmp=new Date(startYear,dstStartMonth-1,dstStartMday);dstStartWeekCount=time.X_TP_DaylightSavingsStartWeekCount;dstStartWday=parseInt(dateTmp.getDay(),10);if(dstStartWday==0){dstStartWday=7}$.id("dst_start_month").options[dstStartMonth-1].selected=true;$.id("dst_start_weekCount").options[dstStartWeekCount-1].selected=true;$.id("dst_start_weekDay").options[dstStartWday-1].selected=true;$.id("dst_start_time").options[dstStartTime].selected=true}if(time.daylightSavingsEnd!=""){endYear=parseInt(time.daylightSavingsEnd.substr(0,4),10);dstEndMonth=parseInt(time.daylightSavingsEnd.substr(5,2),10);dstEndMday=parseInt(time.daylightSavingsEnd.substr(8,2),10);dstEndTime=parseInt(time.daylightSavingsEnd.substr(11,2),10);dateTmp=new Date(endYear,dstEndMonth-1,dstEndMday);dstEndWday=parseInt(dateTmp.getDay(),10);dstEndWeekCount=time.X_TP_DaylightSavingsEndWeekCount;if(dstEndWday==0){dstEndWday=7}$.id("dst_end_month").options[dstEndMonth-1].selected=true;$.id("dst_end_weekCount").options[dstEndWeekCount-1].selected=true;$.id("dst_end_weekDay").options[dstEndWday-1].selected=true;$.id("dst_end_time").options[dstEndTime].selected=true}checkDstDate();doEnableDst()}};</script>

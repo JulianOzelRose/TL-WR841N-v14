@@ -1,0 +1,15 @@
+﻿<script language="javascript" type="text/javascript">var login_url;$.loadHelpFrame("RestoreDefaultCfgHelpRpm.htm");if(INCLUDE_MULTIMODE_ROUTER){login_url="http://tplinkwifi.net/";var regex=/^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5]|0\d\d)(\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5]|0\d\d)){3}$/;if(regex.test(location.hostname)){if(INCLUDE_US_CPI_SPEC){login_url="http://192.168.15.15/"}else{login_url="http://192.168.0.1/"}}}else{login_url="http://tplinkap.net/"}function doRestore(){if(confirm(c_str.cdefaults)){$.act(ACT_OP,ACT_OP_FACTORY_RESET);$.exe(function(err){if(!err){$.guage(["<span class='T T_rebooting'>"+s_str.rebooting+"</span>","<span class='T T_wait_reboot'>"+s_str.wait_reboot+"</span>"],100,$.guageInterval,function(){window.parent.location.href=login_url})}$.act(ACT_OP,ACT_OP_REBOOT);$.exe(function(err){if(!err){$.deleteCookie("Authorization")}},true)})}else{return}};</script>
+<p class="et T" id="et">Factory Defaults</p>
+<div class="con1 M">
+<p class="ct"></p>
+<p class="bl"></p>
+<div class="con2">
+
+<p class="line T lbk" id="t_info">Click to restore the entire settings in this device to factory defaults. It is recommended that you back up your settings before you restore.</p>
+
+<p class="br"></p>
+<p class="line tail"><input type="button" class="button XL T" id="t_restore" value="Restore" onclick="doRestore();" /></p>
+</div>
+<p class="bl"></p>
+<p class="tail" id="tail">&nbsp;</p>
+</div>

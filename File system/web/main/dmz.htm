@@ -1,0 +1,18 @@
+﻿<script language="javascript" type="text/javascript">function init(){var dmzCfg=$.act(ACT_GET,DMZ_HOST_CFG,null,null);if(!$.exe()){$.id("dmzIp").value=dmzCfg.IPAddress?dmzCfg.IPAddress:"0.0.0.0";$.id("dmz_en").checked=(dmzCfg.enable==1)?1:0;$.id("dmz_dis").checked=(dmzCfg.enable==1)?0:1}}function checkConflictFtp(){var ftpServer=$.act(ACT_GET,FTP_SERVER,null,null,null);if($.exe()){return}if((ftpServer.enable==1)&&(ftpServer.accessFromInternet==1)){if(confirm(c_str.forwarding_ftp_conflict)){$.act(ACT_SET,FTP_SERVER,null,null,["accessFromInternet=0"]);$.exe();return true}else{$.reload();return false}}return true}function doSave(){if($.ifip($.id("dmzIp").value,true)){$.alert(ERR_IP_FORMAT);var element=$.id("dmzIp");if(element){element.focus();element.select()}return}var tmpIp=$.ip2ip($.id("dmzIp").value);var dmzSta=($.id("dmz_en").checked==1)?1:0;if(INCLUDE_USB_FTP_SERVER){if(!checkConflictFtp()){return}}$.addLoading($.id("saveBtn"));$.act(ACT_SET,DMZ_HOST_CFG,null,null,["enable="+dmzSta,"IPAddress="+tmpIp]);$.exe(function(ret){if(!ret){$.reload()}})};</script>
+<p class="et">DMZ</p>
+<div class="con1 L">
+<p class="ct"></p>
+<p class="bl"></p>
+<div class="con2">
+
+<p class="L2"><b class="item M T" id="t_status">DMZ Status:</b>
+<input name="dmz" id="dmz_en" type="radio" /><span class="T T_en">Enable</span>
+<input name="dmz" id="dmz_dis" type="radio" checked /><span class="T T_dis" checked>Disable</span>
+</p>
+<p class="br"></p>
+<p class="L2"><b class="item M T" id="t_hostip">DMZ Host IP Address:</b><input type="text" class="text" size="15" maxlength="15" id="dmzIp" value="0.0.0.0"/></p>
+</div>
+<p class="bl"></p>
+<p class="tail" id="tail"><input type="button" class="button L T T_save" value="Save" id="saveBtn" onclick="doSave();" /></p>
+</div>
+<script language="javascript" type="text/javascript">$.loadHelpFrame("DMZHelpRpm.htm");init();</script>

@@ -1,0 +1,36 @@
+﻿<script language="javascript" type="text/javascript">function initQSSShow(){var pinStr=devPIN.toString();var tempPIN="";for(var i=pinStr.length+1;i<=8;i++){tempPIN+="0"}tempPIN+=pinStr;if(1==qssEnable){$.h($.id("isQSSEn"),"&nbsp;<span class='T T_enabled' />"+m_str.enabled+"</span>");$.h($.id("qssEn"),'<input type=button class="button L T T_dis" value="'+m_str.dis+'" id="qssSwitch" onclick="turnOffQSS();"/>');$.id("genNew").disabled=false;$.id("addNew").disabled=false;$.id("restore").disabled=false;$.id("pinStatus").disabled=false}else{$.h($.id("isQSSEn"),"&nbsp;<span class='T T_disabled' />"+m_str.disabled+"</span>");$.h($.id("qssEn"),'<input type=button class="button L T T_en" value="'+m_str.en+'" id="qssSwitch" onclick="turnOnQSS()"/>');$.id("genNew").disabled=true;$.id("addNew").disabled=true;$.id("restore").disabled=true;$.id("pinStatus").disabled=true}if(1==setupLock){$.id("pinStatus").checked=true}else{$.id("pinStatus").checked=false}$.h($.id("curPIN"),"&nbsp;"+tempPIN);if(1==wlanEn){$.addClass($.id("apTip"),"nd")}else{$.id("qssSwitch").disabled=true;$.id("genNew").disabled=true;$.id("addNew").disabled=true;$.id("restore").disabled=true}if(1==SSIDAdvEnabled){$.addClass($.id("SSIDBroadcastTip"),"nd")}else{$.id("qssSwitch").disabled=true}if("Basic"==wlanObj.beaconType){if("WEPEncryption"==wlanObj.basicEncryptionModes){$.id("qssSwitch").disabled=true}else{$.addClass($.id("secTip"),"nd")}}else{if("WPA"==wlanObj.beaconType){if("PSKAuthentication"!=wlanObj.WPAAuthenticationMode||wlanObj.WPAEncryptionModes=="TKIPEncryption"){$.id("qssSwitch").disabled=true}else{$.addClass($.id("secTip"),"nd")}}else{if("11i"==wlanObj.beaconType||"WPAand11i"==wlanObj.beaconType){if("PSKAuthentication"!=wlanObj.IEEE11iAuthenticationMode||wlanObj.IEEE11iEncryptionModes=="TKIPEncryption"){$.id("qssSwitch").disabled=true}else{$.addClass($.id("secTip"),"nd")}}else{if(INCLUDE_LAN_WLAN_SAE&&"WPA3"==wlanObj.beaconType){$.id("qssSwitch").disabled=true}else{$.addClass($.id("secTip"),"nd")}}}}}function switchPIN(){var wlObj=wlanList[0];var pinLock=$.id("pinStatus").checked?1:0;$.addLoading($.id("pinStatus"));$.act(ACT_SET,LAN_WLAN_WPS,wlObj.__stack,null,["SetupLock="+pinLock]);$.act(ACT_SET,LAN_WLAN,wlObj.__stack,null,["SSIDAdvertisementEnabled="+SSIDAdvEnabled]);$.exe(function(ret){if(!ret){$.reload()}})}function turnOnQSS(){qssEnable=1;SSIDAdvEnabled=1;doSubmit()}function turnOffQSS(){qssEnable=0;doSubmit()}function addNewDev(){$.loadMain("wlQssAdv.htm")}function doSubmit(){var wlObj;wlObj=wlanList[0];$.addLoading($.id("qssEn"));$.act(ACT_SET,LAN_WLAN_WPS,wlObj.__stack,null,["Enable="+qssEnable,"DevicePassword="+devPIN]);$.act(ACT_SET,LAN_WLAN,wlObj.__stack,null,["SSIDAdvertisementEnabled="+SSIDAdvEnabled]);$.exe(function(ret){if(!ret){$.reload()}})}function getNewPIN(obj){$.addLoading(obj);$.act(ACT_OP,ACT_OP_WLAN_GET_NEW_PIN,wpsObj.__stack);$.exe(function(ret){if(!ret){$.reload()}})}function restorePIN(obj){$.addLoading(obj);$.act(ACT_OP,ACT_OP_WLAN_RESTORE_PIN,wpsObj.__stack);$.exe(function(ret){if(!ret){$.reload()}})}function openWl(obj){$.act(ACT_SET,LAN_WLAN,wlanObj.__stack,null,["Enable=1"]);$.addLoading(obj);$.exe(function(ret){if(!ret){$.reload()}})}function openSSIDBroadcast(obj){$.act(ACT_SET,LAN_WLAN,wlanObj.__stack,null,["SSIDAdvertisementEnabled=1"]);$.addLoading(obj);$.exe(function(ret){if(!ret){$.reload()}})};</script>
+<p class="et T" id="et">WPS Settings</p> 
+<div class="con1 M">
+<p class="ct"></p>
+<p class="bl"></p> 
+<div class="con2">
+<div id="apTip"><p align="left"><i><span class="T" id="t_wlqss_t2">Wireless Router Radio is disabled, Click</span><span class="a T" id="t_wlqss_t3" onclick="openWl(this)"> here</span><span class="T" id="t_wlqss_t4"> to enable it.</span></i></p></div>
+<div id="SSIDBroadcastTip"><p align="left"><i><span class="T" id="ssid_wps_1">Wireless SSID Broadcast is disabled, Click</span><span class="a T" id="ssid_wps_2" onclick="openSSIDBroadcast(this)"> here</span><span class="T" id="ssid_wps_3"> to enable it.</span></i></p></div>
+<div id="secTip"><p align="left"><i class="T" id="t_note">Note: The WPS function is not supported with WEP, WPA or TKIP encryption enabled.</i></p></div>
+<p>
+	<b class="item T">WPS:</b>
+	<b class="fl S" id="isQSSEn"></b>
+	<b id="qssEn"></b>
+</p>
+<p class="br"></p>
+<p>
+	<b class="item T" id="t_curpin">Current PIN: </b>
+	<b class="fl S" id="curPIN"></b>
+	<input type="button" class="button XL T" value="Restore PIN" onclick="restorePIN(this)" id="restore"/>
+	<input type="button" class="button XL T" value="Generate New PIN" onclick="getNewPIN(this)" id="genNew"/>
+</p>
+<p>
+	<b class="item">&nbsp;</b>
+	<input id="pinStatus" type="checkbox" value="0" onclick="switchPIN()"/><span class="T" id="t_pinDisabled">Disable Router's PIN</span>
+</p>
+<p class="br"></p>
+<p>
+	<b class="item T" id="t_addnewdev">Add a new device:</b>
+	<input type="button" class="button XL T" value="Add device" onclick="addNewDev();" id="addNew"/>
+</p>
+
+</div>
+<p class="bl"></p>
+<p class="tail" id="tail"></p>
+</div>
+<script language="javascript" type="text/javascript">if($.sysMode=="AP"){$.loadHelpFrame("WlanWpsHelpRpm_AP.htm")}else{$.loadHelpFrame("WlanWpsHelpRpm.htm")}var wlanList=$.act(ACT_GL,LAN_WLAN,null,null,["name","Enable","SSIDAdvertisementEnabled","X_TP_Configuration_Modified","BeaconType","WPAAuthenticationMode","WPAEncryptionModes","IEEE11iEncryptionModes","IEEE11iAuthenticationMode","BasicEncryptionModes","X_TP_Band"]);var wlanObj,wpsObj,wlanEn,wlanChanged,devPIN,qssEnable,SSIDAdvEnabled,setupLock;if(!$.exe()){wlanObj=wlanList[0];wpsObj=$.act(ACT_GET,LAN_WLAN_WPS,wlanObj.__stack,null,["Enable","DevicePassword","SetupLock"]);if(!$.exe()){devPIN=wpsObj.devicePassword;qssEnable=wpsObj.enable;setupLock=wpsObj.setupLock}wlanEn=wlanObj.enable;wlanChanged=wlanObj.X_TP_Configuration_Modified;SSIDAdvEnabled=wlanObj.SSIDAdvertisementEnabled}initQSSShow();</script>

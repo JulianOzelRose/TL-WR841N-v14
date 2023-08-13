@@ -1,0 +1,22 @@
+﻿<script language="javascript" type="text/javascript">var typeList;var stkList;var index;var defMac;var macOverride;var clonedMac;function init(){if($.qd.macclone==1){$.id("doClone").checked=true}else{if($.qd.macclone==0){$.id("notClone").checked=true}}}function doCollect(){$.qd.macclone=$.id("doClone").checked?1:0}function goPrev(){doCollect();$.qf.prev()}function goNext(){doCollect();if($.qd.sysMode){$.qf.next($.qd.sysMode)}else{$.qf.next()}};</script>
+<p class="et T" id="et">Quick Setup - MAC Clone</p>
+<div class="con1 M">
+<p class="ct"></p>
+<p class="bl"></p>
+<div class="con2">
+<p class="T" id="t_mac_tip">MAC(Media Access Control) address is a unique identifier that identifies your computer or device in the network. Some of the ISPs may register the MAC address of your computer which firstly connects to their services, and would not allow the Internet connection for any new computer or router. TP-LINK router can help you to "clone" or replicate the registered MAC address of your first computer.</p>
+<p class="br"></p>
+<p class="T" id="t_suggestion">In most of the cases, there is no need to clone the MAC address. But if you can't get the Internet connection after Quick Setup, please run it again and clone the MAC address for a try. </p>
+<p class="br"></p>
+<p id="t_notClone"><input type="radio" name="macclone" id="notClone" value="notClone" checked /><b id="t_noClone">No, I do NOT need to clone MAC address.</b></p>
+<p id="t_doClone"><input type="radio" name="macclone" id="doClone" value="doClone" /><b id="t_yesClone">YES, I need to clone MAC address.</b></p>
+<p class="T" id="t_makeSureNote" style="color:#C11C66">Note: please make sure your current computer is the one initially connected to your router or ISP’s device.</p>
+</div>
+</div>
+<p class="bl"></p>
+<p class="tail ctr">
+<input type="button" class="button L T T_back" value="Back" onclick="goPrev()" />
+<input type="button" class="button L T T_next" value="Next" onclick="goNext();" />
+</p>
+</div>
+<script language="javascript" type="text/javascript">$.loadHelpFrame("WzdWanMACHelpRpm.htm");init();</script>

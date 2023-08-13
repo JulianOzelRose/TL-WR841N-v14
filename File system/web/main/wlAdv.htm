@@ -1,0 +1,52 @@
+﻿<script language="javascript" type="text/javascript">function checkValue(){var bInt=$.id("beaconInt");var rtsInt=$.id("rtsInt");var fragTh=$.id("fragTh");var dtimTh=$.id("dtimTh");var ret;if(ret=$.num(bInt.value,[40,1000],true)){if(ret==ERR_NUM_INVAD){$.alert(ERR_WLAN_BEACONINTERVAL_INVAD)}else{if(ret==ERR_NUM_OUTRANGE){$.alert(ERR_WLAN_BEACONINTERVAL_OUTRANGE)}}bInt.focus();bInt.select();return false}if(ret=$.num(rtsInt.value,[1,2346],true)){if(ret==ERR_NUM_INVAD){$.alert(ERR_WLAN_RTSINTERVAL_INVAD)}else{if(ret==ERR_NUM_OUTRANGE){$.alert(ERR_WLAN_RTSINTERVAL_OUTRANGE)}}rtsInt.focus();rtsInt.select();return false}if(ret=$.num(fragTh.value,[256,2346],true)){if(ret==ERR_NUM_INVAD){$.alert(ERR_WLAN_FRAGTH_INVAD)}else{if(ret==ERR_NUM_OUTRANGE){$.alert(ERR_WLAN_FRAGTH_OUTRANGE)}}fragTh.focus();fragTh.select();return false}if(ret=$.num(dtimTh.value,[1,15],true)){if(ret==ERR_NUM_INVAD){$.alert(ERR_WLAN_DTIMTH_INVAD)}else{if(ret==ERR_NUM_OUTRANGE){$.alert(ERR_WLAN_DTIMTH_OUTRANGE)}}dtimTh.focus();dtimTh.select();return false}return true}function doSubmit(){var txPower=$.id("txPower").value;var bInt=$.id("beaconInt").value;var rtsInt=$.id("rtsInt").value;var fragTh=$.id("fragTh").value;var dtimTh=$.id("dtimTh").value;var sGI=$.id("shortGI").checked?1:0;var cISO=$.id("clientIso").checked?1:0;var wmeEn=$.id("wmeEn").checked?1:0;$.act(ACT_SET,LAN_WLAN,wlanObj.__stack,null,["TransmitPower="+txPower,"X_TP_BeaconInterval="+bInt,"X_TP_RTSThreshold="+rtsInt,"X_TP_FragmentThreshold="+fragTh,"X_TP_DTIMFrequency="+dtimTh,"X_TP_ShortGIEnable="+sGI,"X_TP_IsolateClients="+cISO,"WMMEnable="+wmeEn]);if(INCLUDE_LAN_WLAN_MSSID){var vapList=$.act(ACT_GS,LAN_WLAN_MSSIDENTRY,null,wlanObj.__stack,["IsolateClients","name"]);if(INCLUDE_LAN_WLAN_GUESTNETWORK){var guestObj=$.act(ACT_GET,LAN_WLAN_GUESTNET,wlanObj.__stack,null,["name"])}$.exe(function(ret){if(!ret){$.each(vapList,function(arg,index){if(INCLUDE_LAN_WLAN_GUESTNETWORK&&(guestObj.name==this.name)){}else{$.act(ACT_SET,LAN_WLAN_MSSIDENTRY,this.__stack,null,["IsolateClients="+cISO])}});$.exe(function(ret){if(!ret){$.reload()}})}})}else{$.exe(function(ret){if(!ret){$.reload()}})}}function setPowerList(){var i=0;var pList=$.id("txPower");var list=new Array();var opt;list=powerList.split(",");while((i=pList.options.length)>0){pList.remove(0)}$.each(list,function(arg,index){opt=$.c("option");opt.value=parseInt(this);if(this=="100"){opt.text=s_str.high}if(this=="50"){opt.text=s_str.medium}if(this=="20"){opt.text=s_str.low}try{pList.add(opt,null)}catch(e){pList.add(opt)}if(opt.value==wlanObj.transmitPower){pList.selectedIndex=index}})}function doSave(obj){if(true==checkValue()){$.addLoading(obj);doSubmit(obj)}}function doHelp(obj){$.loadHelp("no_h.htm")}function reboot(){$.loadMain("restart.htm")};</script>
+<p class="et T" id="et">Wirelsss Advanced</p>
+<div class="con1 M">
+<p class="ct"></p>
+<p class="bl"></p> 
+<div class="con2">
+<div class="nd" id="fragThTip"><p align="left"><i class="T" id="t_notice">Notice: For better performance, Fragmentation Threshold is disabled when wireless mode included 11n.</i></p></div>
+<p class="br"></p>
+<p>
+	<b class="item T" id="t_txpow">Transmit Power:</b>
+	<select name="list" id="txPower">
+	</select>
+	
+</p>
+<p> 
+  <b class="item T" id="t_beacon">Beacon Interval:</b> 
+  <input type="text" class="text" size="8"  maxlength="4" id="beaconInt" /> (40-1000)
+</p>
+<p> 
+  <b class="item T" id="t_rts">RTS Threshold:</b> 
+  <input type="text" class="text" size="8"  maxlength="4" id="rtsInt" /> (1-2346) 
+</p>
+<p> 
+  <b class="item T" id="t_frag">Fragmentation Threshold:</b> 
+  <input type="text" class="text" size="8"  maxlength="4" id="fragTh" /> (256-2346) 
+</p>
+<p> 
+  <b class="item T" id="t_dtim">DTIM Interval:</b> 
+  <input type="text" class="text" size="8"  maxlength="3" id="dtimTh" /> (1-15) 
+</p> 
+<p> 
+  <b class="item">&nbsp;</b> 
+  <input id="shortGI" type="checkbox"/> <span class="T" id="t_ensgi">Enable Short GI</span>
+</p>
+<p> 
+  <b class="item">&nbsp;</b> 
+  <input id="clientIso" type="checkbox"/> <span class="T" id="t_eniso">Enable Client isolation</span>
+</p>
+<p> 
+  <b class="item">&nbsp;</b> 
+  <input id="wmeEn" type="checkbox"/> <span class="T" id="t_enwmm" >Enable WMM</span>
+</p>
+
+</div>
+
+<p class="bl"></p>
+<p class="tail" id="tail">
+<input type="button" class="button L T T_save" value="Save" onclick="doSave(this);" />
+</p>
+</div>
+
+<script language="JavaScript" type="text/javascript">if($.sysMode=="AP"||$.sysMode=="Repeater"||$.sysMode=="Client"||$.sysMode=="MSSID"){$.loadHelpFrame("WlanAdvHelpRpm_AP.htm")}else{$.loadHelpFrame("WlanAdvHelpRpm.htm")}var advList=$.act(ACT_GL,LAN_WLAN,null,null,["name","X_TP_Configuration_Modified","TransmitPowerSupported","TransmitPower","Standard","X_TP_BeaconInterval","X_TP_RTSThreshold","X_TP_FragmentThreshold","X_TP_DTIMFrequency","X_TP_ShortGIEnable","X_TP_IsolateClients","WMMEnable"]);var powerList,wlanObj;if(!$.exe()){wlanObj=advList[0];$.id("txPower").value=wlanObj.transmitPower;$.id("beaconInt").value=wlanObj.X_TP_BeaconInterval;$.id("rtsInt").value=wlanObj.X_TP_RTSThreshold;$.id("fragTh").value=wlanObj.X_TP_FragmentThreshold;$.id("dtimTh").value=wlanObj.X_TP_DTIMFrequency;if(1==wlanObj.X_TP_ShortGIEnable){$.id("shortGI").checked=true}if(1==wlanObj.X_TP_IsolateClients){$.id("clientIso").checked=true}if($.sysMode=="Repeater"||$.sysMode=="MSSID"){$.id("clientIso").disabled=true}if(1==wlanObj.WMMEnable){$.id("wmeEn").checked=true}if("n"==wlanObj.standard||"n-only"==wlanObj.standard){$.id("wmeEn").disabled=true}if("g"==wlanObj.standard){$.id("shortGI").checked=false;$.id("shortGI").disabled=true}powerList=wlanObj.transmitPowerSupported;setPowerList()};</script>

@@ -1,0 +1,85 @@
+﻿<script language="javascript" type="text/javascript">var vlanObj,ispService;function doClick(){if($.id("iptv_enable").checked){$.removeClass($.id("adv_div_vlanisp"),"nd")}else{$.addClass($.id("adv_div_vlanisp"),"nd")}}function collectVlanCfg(){var tmp={};if($.id("iptv_enable").checked){$.qd.vlancfg.enable_adv=1;$.qd.vlancfg.workingMode=$.id("iptv_mode").value;$.qd.vlancfg.services=services;$.qd.vlancfg.vlan_ispService=ispService;tmp=getDefaultCfg($.qd.vlancfg.workingMode);doCollectData(tmp);if(doCheckData(tmp)==false){return false}$.qd.vlancfg.currVlan=tmp}else{$.qd.vlancfg.enable_adv=0}return true}function doCollect(){if(INCLUDE_UN_IPTV&&$.qd.sysMode=="Router"){if(false==collectVlanCfg()){return -1}}if($.id("ppp").checked){$.qd.type="ppp"}else{if($.id("br").checked){$.qd.type="br"}else{if($.id("dhcp").checked){if($.qd.sysMode&&$.qd.sysMode=="Hotspot"){$.qd.type="dhcph"}else{$.qd.type="dhcp"}}else{if($.id("staip").checked){$.qd.type="staip"}else{if($.id("pppoa").checked){$.qd.type="pppoa"}else{if($.id("ipoa").checked){$.qd.type="ipoa"}else{if($.id("l2tp").checked){$.qd.type="l2tp"}else{if($.id("pptp").checked){$.qd.type="pptp"}else{return false}}}}}}}}return true}function changeType(type){$.addClass($.id("detail_auto"),"nd");$.addClass($.id("detail_br"),"nd");$.addClass($.id("detail_ppp"),"nd");$.addClass($.id("detail_dhcp"),"nd");$.addClass($.id("detail_staip"),"nd");$.addClass($.id("detail_pppoa"),"nd");$.addClass($.id("detail_ipoa"),"nd");$.addClass($.id("detail_l2tp"),"nd");$.addClass($.id("detail_pptp"),"nd");$.removeClass($.id("detail_"+type),"nd")}function goNext(){var wanEthIntfObj=$.act(ACT_GET,WAN_ETH_INTF,pStk,null,["status"]);if($.qd.sysMode&&$.qd.sysMode=="Hotspot"){if(!$.exe()){wanEthIntfObj.status="Up"}}else{if($.qd.sysMode&&$.qd.sysMode=="Router"){var usb3gModemStatus="Unknow";if(INCLUDE_USB_3G_DONGLE){var wan3glnkcfgList=$.act(ACT_GL,WAN_USB_3G_LINK_CFG,null,null,["enable","cardName"])}if(!$.exe()){if(INCLUDE_USB_3G_DONGLE){$.each(wan3glnkcfgList,function(){if(this.enable==1){usb3gModemStatus=this.cardName;return false}})}if(wanEthIntfObj.status=="NoLink"){if(usb3gModemStatus!="Identify successfully"){return alert(c_str.qs_unplugged)}}}}else{if(!$.exe()){if(wanEthIntfObj.status=="NoLink"){return alert(c_str.qs_unplugged)}}}}var ret=doCollect();if(!INCLUDE_WAN_MODE||$.qd.sysMode=="DSL"){$.qd.del=[];if($.qd.gw){$.qd.del.push({stack:$.qd.gw.__stack,type:$.qd.gw.transportType?"ppp":"ip",name:$.qd.gw.name})}if($.qd.vc&&($.qd.vc.linkType=="IPoA"||$.qd.vc.linkType=="PPPoA"||$.qd.type=="ipoa"||$.qd.type=="pppoa")){$.each($.qd.conns,function(){if($.stkPop(this.__stack)==$.qd.vc.__stack&&(!$.qd.gw||this.name!=$.qd.gw.name)){$.qd.del.push({stack:this.__stack,type:this.transportType?"ppp":"ip",name:this.name})}})}else{if(!$.qd.gw&&$.qd.conns.length>=8){var gotbr=0;$.each($.qd.conns,function(){if(this.connectionType=="IP_Bridged"){if(!gotbr){gotbr=1;$.qd.del[0]={stack:this.__stack,type:this.transportType?"ppp":"ip",name:this.name}}else{if(this.__stack>$.qd.del[0].__stack){$.qd.del[0]={stack:this.__stack,type:this.transportType?"ppp":"ip",name:this.name}}}}else{if(gotbr){return}}$.qd.del[0]={stack:this.__stack,type:this.transportType?"ppp":"ip",name:this.name}})}}}if($.id("auto").checked&&(ret!==-1)){$.qd.detect=1;$.qd.detectBack=0;$.qf.next("auto")}else{if(ret==1){$.qd.detect=0;$.qf.next($.qd.type)}else{if(ret!==-1){alert(c_str.qs_selectOpt)}}}}function goPrev(){doCollect();$.qf.prev()};</script>
+<style type="text/css">
+b.item 
+{
+	width: 18% !important;
+	padding-left: 6%;
+	padding-right:0px;
+	text-align:left;
+}
+b.ispService
+{
+	width:150px;
+	display:inline-block;
+	text-align:right;
+	padding-right: 16px;
+}
+p.iptv_disable b, p.iptv_disable select, p.iptv_disable input
+{
+    color: #b3b3b3;
+}
+p.vidDisable .vid, p.vpriDisable .vpri, p.vlanTagDisable .tagEnable, p.vlanDisable .vlanEnable
+{
+    color: #b3b3b3;
+}
+</style>
+<p class="et"><span class="nd" id="title_dsl"><span class="T" id="et1">Quick Setup - ADSL Connection Type</span></span><span class="nd" id="title_eth"><span class="T" id="et2">Quick Setup - WAN Connection Type</span></span></p>
+<div class="con1 M">
+<p class="ct"></p>
+<p class="bl"></p>
+<div class="con2">
+<p class="T" id="t_tip">The Quick Setup is preparing to set up your internet connection, please choose one type below accord to your ISP. The detailed description will be displayed after you choose the corresponding type.</p>
+<p class="br"></p>
+<div id="auto_type">
+<p id="t_auto"><input type="radio" name="mode" id="auto" value="auto" onclick="changeType(this.value)" /><b id="t_autoDetect">Auto-Detect</b></p>
+<p id="detail_auto"class="nd"><span class="T" id="t_auto_info">Let the router automatically detect the internet connection type provided by your ISP.</span></p>
+</div>
+<p id="t_dhcp"><input type="radio" name="mode" id="dhcp" value="dhcp" onclick="changeType(this.value)" /><b class="T T_dynip_1">Dynamic IP (Most common option)</b></p>
+<p id="detail_dhcp" class="nd"><span class="T nd" id="t_dhcp_info1">(Get dynamic IP from ISP, also called IPoE Dynamic IP)</span><span class="T nd" id="t_dhcp_info2">For Cable/DSL/Broadband connection which makes your computer immediately online without any setting or signing-in.</span></p>
+
+<p id="t_staip"><input type="radio" name="mode" id="staip" value="staip" onclick="changeType(this.value)" /><b class="T T_staip">Static IP</b></p>
+<p id="detail_staip" class="nd"><span class="T nd" id="t_staip_info1">(Manually set the static IP address provided by your ISP, also called IPoE Static IP)</span><span class="T nd" id="t_staip_info2">Your ISP provides you specified IP parameters.</span></p>
+
+<p id="t_ppp"><input type="radio" name="mode" id="ppp" value="ppp" onclick="changeType(this.value)" /><b id="t_pppoe_ru">PPPoE/Russian PPPoE</b></p>
+<p id="detail_ppp" class="nd"><span class="T nd" id="t_ppp_info1">(Require a username and password, PPP over Ethernet)</span><span class="T nd" id="t_ppp_info2">You have DSL connection and is connected via PPPoE (Broadband Connection) on your computer or existing router.</span></p>
+
+<p id="t_pppoa" class="nd"><input type="radio" name="mode" id="pppoa" value="pppoa" onclick="changeType(this.value)"/><b>PPPoA</b></p>
+<p id="detail_pppoa" class="nd"><span class="T" id="t_pppoa_info">(Require a username and password, PPP over ATM)</span></p>
+
+<p id="t_ipoa" class="nd"><input type="radio" name="mode" id="ipoa" value="ipoa" onclick="changeType(this.value)" /><b>IPoA</b></p>
+<p id="detail_ipoa" class="nd"><span class="T" id="t_ipoa_info">(Manually set the static IP address provided by your ISP, also called IP Over ATM)</span></p>
+
+<p id="t_br" class="nd"><input type="radio" name="mode" id="br" value="br" onclick="changeType(this.value)" /><b class="T T_bridge">Bridge</b></p>
+<p id="detail_br" class="nd"><span class="T" id="t_br_info">(Dial up from the single computer or router)</span></p>
+<p id="eoa_info" class="nd T">Note: IPoA &amp; PPPoA don't support single-PVC-multi-connection. They are disabled for connections already exist in this PVC.</p>
+
+<p id="t_l2tp"><input type="radio" name="mode" id="l2tp" value="l2tp" onclick="changeType(this.value)" /><b id="t_l2tp_ru">L2TP/Russian L2TP</b></p>
+<p id="detail_l2tp" class="nd"><span class="T" id="t_l2tp_info1">In this type, you should fill in the username, password and IP address/Domain name of VPN Server provided by your ISP. Auto-Detect can't detect this connection type.</span></p>
+
+<p id="t_pptp"><input type="radio" name="mode" id="pptp" value="pptp" onclick="changeType(this.value)" /><b id="t_pptp_ru">PPTP/Russian PPTP</b></p>
+<p id="detail_pptp" class="nd"><span class="T" id="t_pptp_info1">In this type, you should fill in the username, password and IP address/Domain name of VPN Server provided by your ISP. Auto-Detect can't detect this connection type.</span></p>
+
+<p class="T" id="t_note" style="color:#C11C66">Note: For users in some areas(such as Russia, Ukraine etc.), please contact your ISP to choose connection type manually.</p>
+<p class="br"></p>
+<p id="adv_p_ispvlan" class="nd">
+<input type="checkbox" id="iptv_enable" onclick="doClick()" /><b id="t_more">More Advanced Settings</b>
+</p>
+<div id="adv_div_vlanisp" class="nd">
+<p>
+<b id="t_iptvmode">IPTV Mode:</b>
+	<select class="L" id="iptv_mode" onchange="showMode();">
+	</select>
+</p>
+<p class="br"></p>
+<div id="ispService"></div>
+<p class="br"></p>
+<div id="lan_setting"></div>
+</div>
+</div>
+<p class="bl"></p>
+<p class="tail ctr">
+<input type="button" class="button L T T_back" value="Back" onclick="goPrev()" />
+<input type="button" class="button L T T_next" value="Next" onclick="goNext();" />
+</p>
+</div>
+<script language="javascript" type="text/javascript">var pStk;(function(){$.loadHelpFrame("WzdWanTypeHelpRpm.htm");if(!INCLUDE_WAN_MODE||$.qd.sysMode=="DSL"){$.removeClass($.id("title_dsl"),"nd");$.removeClass($.id("t_br"),"nd");$.removeClass($.id("t_pppoa"),"nd");$.removeClass($.id("t_ipoa"),"nd");$.removeClass($.id("t_ppp_info1"),"nd");$.removeClass($.id("t_dhcp_info1"),"nd");$.removeClass($.id("t_staip_info1"),"nd")}else{$.removeClass($.id("title_eth"),"nd");$.removeClass($.id("t_ppp_info2"),"nd");$.removeClass($.id("t_dhcp_info2"),"nd");$.removeClass($.id("t_staip_info2"),"nd")}if(!$.mainParam){return $.loadMain("qsStart.htm")}if($.qd.type=="dhcph"){$.qd.type="dhcp"}if($.qd.detect==1){$.id("auto").checked=true;$.removeClass($.id("detail_auto"),"nd")}else{if($.qd.type&&!$.id($.qd.type).disabled){$.id($.qd.type).checked=true;$.removeClass($.id("detail_"+$.qd.type),"nd")}}var wanTypes=$.act(ACT_GL,WAN_COMMON_INTF_CFG,null,null,["WANAccessType"]);if(!$.exe()){$.each(wanTypes,function(){if(this.WANAccessType=="Ethernet"){pStk=this.__stack}})}if(INCLUDE_UN_IPTV&&$.qd.sysMode=="Router"){$.removeClass($.id("adv_p_ispvlan"),"nd");if($.qd.vlancfg==undefined){$.qd.vlancfg={}}if(default_mode_data[0]!==noIptvData){default_mode_data.splice(0,0,noIptvData)}initModeOptions();initISPService();vlanObj=$.act(ACT_GET,VLAN,null,null);ispService=$.act(ACT_GL,ISP_SERVICE,null,null);if(!$.exe()){if(vlanObj.workingMode==""){vlanObj.workingMode="automatic"}if($.qd.vlancfg.workingMode==undefined){$.qd.vlancfg.workingMode=vlanObj.workingMode}if($.qd.vlancfg.enable_adv==1){$.id("iptv_enable").checked=true}else{$.id("iptv_enable").checked=false}doClick();selectOptionByValue($.id("iptv_mode"),$.qd.vlancfg.workingMode);for(var modeIdx in default_mode_data){if($.qd.vlancfg.workingMode==default_mode_data[modeIdx].workingMode){showDefaultData(default_mode_data[modeIdx])}}if($.qd.vlancfg.currVlan==undefined){fillData()}else{fillDataCurrVlan($.qd.vlancfg.currVlan)}}}if(($.qd.realMode&&$.qd.realMode!="Router")||($.qd.sysMode&&$.qd.sysMode=="Hotspot")){$.addClass($.id("auto_type"),"nd");$.id("dhcp").checked=true}if(INCLUDE_RUSSIA_SPEC){$.addClass($.id("auto_type"),"nd")}})();</script>

@@ -1,0 +1,19 @@
+﻿<script language="javascript" type="text/javascript">function goBack(){$.loadMain("wlQss.htm")}function help(){}function checkPIN(pinStr){if(pinStr.length==0){$.alert(ERR_WLAN_PIN_EMPTY)}else{if(ret=$.num(pinStr,[0,99999999],true)){if(ret==ERR_NUM_INVAD){$.alert(ERR_WLAN_PIN_INVALID)}else{$.alert(ERR_WLAN_PIN_LEGNTH_INVALID)}}else{if(pinStr.length<8){$.alert(ERR_WLAN_PIN_LEGNTH_INVALID)}else{if(false==pinCheckSum(pinStr)){$.alert(ERR_WLAN_PIN_CHECKSUM_FAIL)}else{return true}}}}$.id("pin").focus();$.id("pin").select();return false}function pinCheckSum(pinStr){var pinNum=parseInt(pinStr,10);var accum=0;if(pinNum==0){return false}accum+=3*(Math.floor((pinNum/10000000))%10);accum+=1*(Math.floor((pinNum/1000000))%10);accum+=3*(Math.floor((pinNum/100000))%10);accum+=1*(Math.floor((pinNum/10000))%10);accum+=3*(Math.floor((pinNum/1000))%10);accum+=1*(Math.floor((pinNum/100))%10);accum+=3*(Math.floor((pinNum/10))%10);accum+=1*(pinNum%10);if(accum%10==0){return true}else{return false}}function connect(obj){var pinNum=0;if($.id("addNew1").checked){if(true==checkPIN($.id("pin").value)){pinNum=parseInt($.id("pin").value,10)}else{return}}$.addLoading(obj);$.act(ACT_SET,LAN_WLAN_WPS,wpsObj.__stack,null,["X_TP_State=InProgress","X_TP_PeerPassword="+pinNum]);$.exe(function(ret){if(!ret){$.reload()}})}function wpsStateShow(){if("Idle"==wpsState){$.addClass($.id("wpsState"),"nd")}else{var htmlStr;if("InProgress"==wpsState){htmlStr="<span class='T T_connecting'>"+m_str.connecting+"</span>";$.timeout($.reload,5000);$.id("addNew1").disabled=true;$.id("addNew2").disabled=true;$.id("pin").disabled=true;$.id("conDev").disabled=true}else{if("Success"==wpsState){htmlStr="<span class='T T_qss_ok'>"+s_str.qss_ok+"</span>"}else{htmlStr="<span class='T T_qss_fail'>"+s_str.qss_fail+"</span>"}}$.h($.id("wpsState"),"<p class=L2><i>"+htmlStr+"</i></p>")}};</script>
+<p class="et T" id="et">WPS Settings</p>
+<div class="con1 M">
+<p class="ct"></p>
+<p class="bl"></p>
+<div class="con2">
+<p>&nbsp;<input type="radio" name="addNewDev" id="addNew1"/><span class="T" id="t_enpin">Enter the new device's PIN.</span></p>
+<p class="L2">PIN: <input type="text" class="text" id="pin" maxlength="8" size="8" /></p>
+<p>&nbsp;<input type="radio" name="addNewDev" id="addNew2"/><span class="T" id="t_press">Press the WPS button of the new device in two minutes.</span></p>
+<div id="wpsState">
+</div>
+</div>
+<p class="bl"></p>
+<p class="tail" id="tail">
+<input type="button" class="button L T T_conn" value="Connect" onclick="connect(this);" id="conDev" />
+<input type="button" class="button L T T_back" value="Back" onclick="goBack();"/>
+</p>
+</div>
+<script language="javascript" type="text/javascript">$.loadHelp("wlQssAdv_h.htm");var wlanList=$.act(ACT_GL,LAN_WLAN,null,null,["name","X_TP_Band"]);var wpsObj,wpsState,wlanObj,wpsPeerPw;if(!$.exe()){wlanObj=wlanList[0];wpsObj=$.act(ACT_GET,LAN_WLAN_WPS,wlanObj.__stack,null,["X_TP_State","X_TP_PeerPassword"]);if(!$.exe()){wpsState=wpsObj.X_TP_State;wpsPeerPw=wpsObj.X_TP_PeerPassword}}if(wpsPeerPw>0){var tempPIN="";var pinStr=wpsPeerPw.toString();for(var i=pinStr.length+1;i<=8;i++){tempPIN+="0"}tempPIN+=pinStr;$.id("addNew1").checked=true;$.id("pin").value=tempPIN}else{$.id("addNew2").checked=true}wpsStateShow();</script>

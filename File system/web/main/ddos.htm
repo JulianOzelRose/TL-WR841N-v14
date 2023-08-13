@@ -1,0 +1,55 @@
+﻿<script language="javascript" type="text/javascript">function doView(){$.loadMain("ddos_host.htm",null)}function doSave(obj){var ddosArg={};ddosArg.enable=($.id("ddos_en").checked?1:0);ddosArg.enableIcmpFilter=($.id("icmpFilter").checked?1:0);ddosArg.icmpThreshold=parseInt($.id("icmpThreshold").value,10);ddosArg.enableUdpFilter=($.id("udpFilter").checked?1:0);ddosArg.udpThreshold=parseInt($.id("udpThreshold").value,10);ddosArg.enableSynFilter=($.id("synFilter").checked?1:0);ddosArg.synThreshold=parseInt($.id("synThreshold").value,10);ddosArg.forbidLanPing=($.id("lanPingFilter").checked?1:0);if(INCLUDE_FORBID_WAN_PING){ddosArg.forbidWanPing=($.id("wanPingFilter").checked?1:0)}$.act(ACT_SET,DDOS_CFG,null,null,ddosArg);$.addLoading(obj);$.exe(function(ret){if(!ret){$.reload()}})}function ddosInit(){var ddosCfg=$.act(ACT_GET,DDOS_CFG,null,null);if(!$.exe()){if(ddosCfg.enable==1){$.id("ddos_en").checked=true}else{$.id("ddos_dis").checked=true}if(ddosCfg.enableIcmpFilter==1){$.id("icmpFilter").checked=true}$.id("icmpThreshold").value=ddosCfg.icmpThreshold;if(ddosCfg.enableUdpFilter==1){$.id("udpFilter").checked=true}$.id("udpThreshold").value=ddosCfg.udpThreshold;if(ddosCfg.enableSynFilter==1){$.id("synFilter").checked=true}$.id("synThreshold").value=ddosCfg.synThreshold;if(ddosCfg.forbidLanPing==1){$.id("lanPingFilter").checked=true}if(INCLUDE_FORBID_WAN_PING){$.removeClass($.id("wanPingView"),"nd");if(ddosCfg.forbidWanPing==1){$.id("wanPingFilter").checked=true}}else{$.addClass($.id("wanPingView"),"nd")}disableDosProtectionSelect()}}function disableDosProtectionSelect(){var dosEnable=$.id("ddos_en").checked;var inputList=document.getElementsByTagName("input");$.each(inputList,function(){if(this.type=="text"||this.type=="checkbox"){if(this.id!="wanPingFilter"&&this.id!="lanPingFilter"){this.disabled=(!dosEnable)}}})};</script>
+<p class="et" id="et">Advanced Security</p>
+<div class="con1 L">
+<p class="ct"></p>
+<p class="bl"></p>
+<div class="con2">
+
+	<p class="L1">
+		<b class="T" id="t_dos">DoS Protection:</b>
+		<input type="radio" name="stat" id="ddos_en" value="1" onclick="disableDosProtectionSelect()" /><span class="T T_en">Enable</span>
+		<input type="radio" name="stat" id="ddos_dis" value="0" onclick="disableDosProtectionSelect()" /><span class="T T_dis">Disable</span>
+	</p>
+
+	<p class="br"></p>
+	<p class="L1">
+		<input type="checkbox" id="icmpFilter" /><span class="T" id="t_icmp">Enable ICMP-Flood Attack Filtering</span>
+	</p>
+	<p class="L1">
+		<b class="item" style="width:220px"><span class="T" id="t_icmpth">ICMP-Flood Packets Threshold</span> (5~3600): </b>
+		<input type="text" class="" id="icmpThreshold" size="5" maxlength="15" /><span class="T T_pps">packets/second</span>
+	</p>
+	
+	<p class="br"></p>
+	<p class="L1">
+		<input type="checkbox" id="udpFilter" /><span class="T" id="t_udp">Enable UDP-Flood Attack Filtering</span>
+	</p>
+	<p class="L1">
+		<b class="item" style="width:220px"><span class="T" id="t_udpth">UDP-Flood Packets Threshold</span> (5~3600) : </b>
+		<input type="text" class="" id="udpThreshold" size="5" maxlength="15" /><span class="T T_pps">packets/second</span>
+	</p>
+	
+	<p class="br"></p>
+	<p class="L1">
+		<input type="checkbox" id="synFilter" /><span class="T" id="t_sync">Enable TCP-SYN-Flood Attack Filtering</span>
+	</p>
+	<p class="L1">
+		<b class="item" style="width:220px"><span class="T" id="t_syncth">TCP-SYN-Flood Packets Threshold</span> (5~3600) : </b>
+		<input type="text" class="" id="synThreshold" size="5" maxlength="15" /><span class="T T_pps">packets/second</span>
+	</p>
+	
+	<p class="br"></p>
+	<p class="L1" class="nd" id="wanPingView">
+		<input type="checkbox" id="wanPingFilter" /><span class="T" id="t_denywan">Forbid Ping Packet From WAN Ports</span>
+	</p>
+	<p class="L1">
+		<input type="checkbox" id="lanPingFilter" /><span class="T" id="t_denylan">Forbid Ping Packet From LAN Port</span>
+	</p>
+</div>
+<p class="bl"></p>
+<p class="tail" id="tail">
+	<input type="button" id="save" class="button L T T_save" value="Save" onclick="doSave(this)"/>
+	<input type="button" id="t_list" class="button XXL T" value="Blocked DOS Host List" onclick="doView()"/>
+</p>
+</div>
+<script language="javascript" type="text/javascript">$.loadHelpFrame("MiscHelpRpm.htm");ddosInit();</script>

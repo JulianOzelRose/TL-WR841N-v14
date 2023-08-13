@@ -1,0 +1,19 @@
+﻿<script language="javascript" type="text/javascript">function goPrev(){$.qf.prev()}function wanDetect(){var wanTypeObj=$.act(ACT_GET,WAN_TYPE_DETECT,null,null,["state","wanType"]);if(!$.exe()){if(wanTypeObj.state==3){switch(wanTypeObj.wanType){case"0":$.qd.type="dhcp";break;case"1":$.qd.type="staip";break;case"2":$.qd.type="ppp";break;default:break}$.qd.detectBack=1;$.qf.next($.qd.type)}else{$.timeout(function(){wanDetect()},1500)}}}function doDetect(){var wanEthIntfObj=$.act(ACT_GET,WAN_ETH_INTF,pStk,null,["status"]);if(!$.exe()){if(wanEthIntfObj.status=="NoLink"){$.addClass($.id("t_detect"),"nd");$.removeClass($.id("unplugged"),"nd");$.removeClass($.id("doRetry"),"nd");return}else{$.removeClass($.id("t_detect"),"nd");$.addClass($.id("unplugged"),"nd");$.addClass($.id("doRetry"),"nd");$.act(ACT_OP,ACT_OP_WAN_TYPE_DETECT,null);if(!$.exe()){$.timeout(function(){wanDetect()},1500)}}}}function init(){$.loadHelpFrame("WzdWanTypeHelpRpm.htm");if($.qd.detectBack==1){goPrev()}else{var wanTypes=$.act(ACT_GL,WAN_COMMON_INTF_CFG,null,null,["WANAccessType"]);if(!$.exe()){$.each(wanTypes,function(){if(this.WANAccessType=="Ethernet"){pStk=this.__stack}})}doDetect()}};</script>
+<p class="et T" id="et">Quick Setup - Auto</p>
+<div class="con1 M">
+<p class="ct"></p>
+<p class="bl"></p>
+<div class="con2">
+<p class="T" id="t_detect">Detecting the connection type your ISP provides, please wait...</p>
+<div id="unplugged" class="nd">
+<p class="T" style="color:#C11C66">The cable is unplugged.</p>
+<p class="T"><b>Before continuing, please make sure the cable of the WAN port is well connected to your device.</b></p>
+</div>
+</div>
+<p class="bl"></p>
+<p class="tail ctr">
+<input type="button" id="doPrev" class="button L T T_back" value="Back" onclick="goPrev()" />
+<input type="button" id="doRetry" class="button L nd T T_retry" value="Retry" onclick="doDetect()" />
+</p>
+</div>
+<script language="javascript" type="text/javascript">var pStk;init();</script>

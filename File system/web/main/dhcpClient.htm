@@ -1,0 +1,24 @@
+﻿<script language="javascript" type="text/javascript">function init(){HostEntryList=$.act(ACT_GL,LAN_HOST_ENTRY,null,null,["leaseTimeRemaining","MACAddress","hostName","IPAddress"]);$.exe(function(err){if(!err){var tbl=$.id("hostTbl");var row,cell;var brName;for(var i=0;i<HostEntryList.length;i++){if(HostEntryList[i].leaseTimeRemaining==0){continue}row=tbl.insertRow(-1);cell=row.insertCell(-1);cell.width="10%";cell.innerHTML=i+1;cell=row.insertCell(-1);cell.innerHTML=((HostEntryList[i].hostName=="")?"Unknown":$.resizeStrList($.htmlEncodeStr(HostEntryList[i].hostName),20));cell=row.insertCell(-1);cell.width="25%";cell.innerHTML=HostEntryList[i].MACAddress;cell=row.insertCell(-1);cell.width="20%";cell.innerHTML=HostEntryList[i].IPAddress;cell=row.insertCell(-1);cell.width="20%";var hours=0;var minutes=0;var seconds=0;var leaseTime;if(HostEntryList[i].leaseTimeRemaining==-1){leaseTime="<span class='T T_permanent'>"+s_str.permanent+"</span>"}else{hours=parseInt((HostEntryList[i].leaseTimeRemaining)/(60*60),10);hours=hours<10?"0"+hours:hours;minutes=parseInt(((HostEntryList[i].leaseTimeRemaining)/60),10)%60;minutes=minutes<10?"0"+minutes:minutes;seconds=(HostEntryList[i].leaseTimeRemaining)%60;seconds=seconds<10?"0"+seconds:seconds;leaseTime=hours+":"+minutes+":"+seconds}cell.innerHTML=leaseTime}$.resize($.id("hostTbl"),8)}})};</script>
+<p class="et T" id="et">DHCP Clients List</p>
+<div class="con1 XL">
+<p class="ct"></p>
+<p class="bl"></p>
+<div class="con2">
+<p class="L1 T" id="t_info">This page displays the information of DHCP clients.</p>
+<p class="br"></p>
+<div class="XL thead" ><table class="XL bdr tc">
+<tr>
+<th class="T T_id" width="10%">ID</th>
+<th class="T" id="t_name" >Client Name</th>
+<th class="T T_macaddr" width="25%">MAC Address</th>
+<th class="T" id="t_ip" width="20%">Assigned IP</th>
+<th class="T" id="t_time" width="20%">Lease Time</th>
+</tr>
+</table></div>
+<div class="XL tbody"><table id="hostTbl" class="XL bdr tc"></table></div>
+</div>
+<p class="bl"></p>
+<p class="tail"><input type="button" class="button L T T_refresh" value="Refresh" id="updateBtn" onclick="$.addLoading(this, 200, function(){$.reload()});"/></p>
+</div>
+<script language="javascript" type="text/javascript">$.loadHelpFrame("AssignedIpAddrListHelpRpm.htm");var HostEntryList;init();</script>
+

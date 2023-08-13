@@ -1,0 +1,109 @@
+﻿<script language="javascript" type="text/javascript">var selAllQueue;var queueIndex;var allQueueStk;var queueStk;var queueStkIndex;var queueParam;var qosIntfCfg;var queueList;var selAllCls;var clsIndex;var allClsStk;var clsStk;var clsStkIndex;var clsParam;var clsList;var selAllApp;var appIndex;var allAppStk;var appStk;var appStkIndex;var appParam;var appList;var dscp_list=new Array(["AF13","56"],["AF12","48"],["AF11","40"],["CS1","32"],["AF23","88"],["AF22","80"],["AF21","72"],["CS2","64"],["AF33","120"],["AF32","112"],["AF31","104"],["CS3","96"],["AF43","152"],["AF42","144"],["AF41","136"],["CS4","128"],["EF","184"],["CS5","160"],["CS6","192"],["CS7","224"]);var dscp_list_num=20;var ethtype_list=new Array(["IP","2048"],["ARP","2054"],["802.1Q","33024"],["PPP_DISC","34915"],["PPP_SES","34916"]);var ethtype_list_num=5;var ip_proto_list=new Array(["TCP","6"],["UDP","17"],["ICMP","2"]);var ip_proto_list_num=3;var app_name_list=new Array(["VoIP","VOIP"],["TR069","TR069"],["Other","OTHER"]);var app_name_list_num=3;function doAddQueue(){queueParam[0]=0;$.loadMain("qosQueueEdit.htm",queueParam)}function doEditQueue(val){queueParam[0]=1;queueParam[1]=val;$.loadMain("qosQueueEdit.htm",queueParam)}function doSelAllQueue(){if(selAllQueue==0){for(var i=1;i<=queueIndex;i++){var queueId="queueId"+i;$.id(queueId).checked=1}queueStk=[];queueStkIndex=queueIndex;for(var j=0;j<queueStkIndex;j++){queueStk[j]=allQueueStk[j]}selAllQueue=1}else{if(selAllQueue==1){for(var i=1;i<=queueIndex;i++){var queueId="queueId"+i;$.id(queueId).checked=0}queueStk=[];queueStkIndex=0;selAllQueue=0}}}function doClickQueue(){if(selAllQueue==1){$.id("selAllQueue").checked=0;selAllQueue=0}}function selQueueEntry(){queueStkIndex=0;queueStk=[];for(var i=1;i<=queueIndex;i++){var tmpEntryId="queueId"+i;if($.id(tmpEntryId).checked==1){queueStk[queueStkIndex]=allQueueStk[i-1];queueStkIndex++}}}function initQueue(qosIntf,qosDir){var tbl=$.id("queuetbl");$.each(queueList,function(){if(qosIntf.__stack==$.stkPop(this.__stack,1)){var thisStk="["+this.__stack+"]";var row=tbl.insertRow(-1);queueIndex++;var cell=row.insertCell(-1);cell.width="5%";cell.innerHTML="<input type='checkbox' id='queueId"+queueIndex+"' onclick='doClickQueue();'/>";cell=row.insertCell(-1);cell.width="22%";cell.innerHTML=this.queueName;cell=row.insertCell(-1);cell.width="12%";cell.innerHTML=qosDir;cell=row.insertCell(-1);cell.width="12%";if(2==qosIntf.schedulerAlgorithm){cell.innerHTML="SP";cell=row.insertCell(-1);cell.width="12%";cell.innerHTML=this.queuePrecedence;cell=row.insertCell(-1);cell.width="10%";cell.innerHTML="";cell=row.insertCell(-1);cell.width="10%";cell.innerHTML=""}else{cell.innerHTML="WRR";cell=row.insertCell(-1);cell.width="12%";cell.innerHTML="";cell=row.insertCell(-1);cell.width="10%";cell.innerHTML=this.queueWeight;cell=row.insertCell(-1);cell.width="10%";cell.innerHTML=(this.forceWeightEnable==1)?"<span class='T_en'>Enable</span>":"<span class='T_dis'>Disable</span>"}cell=row.insertCell(-1);cell.width="10%";cell.innerHTML=(this.queueEnable==1)?"<span class='T_en'>"+m_str.en+"</span>":"<span class='T_dis'>"+m_str.dis+"</span>";cell=row.insertCell(-1);cell.width="7%";cell.innerHTML="<span class='a T_edit' onclick='doEditQueue("+thisStk+");'>"+m_str.edit+"</span>";allQueueStk[queueIndex-1]=this.__stack}})}function initQueueBothDir(){selAllQueue=0;queueIndex=0;allQueueStk=[];queueParam=[];queueStk=[];queueStkIndex=0;if(1!=qosIntfCfg[0].schedulerAlgorithm){initQueue(qosIntfCfg[0],"Upstream")}if(1!=qosIntfCfg[1].schedulerAlgorithm){initQueue(qosIntfCfg[1],"Downsteam")}$.resize($.id("queuetbl"),8)}function doDelQueue(obj){selQueueEntry();if(queueStkIndex==0){$.alert(ERR_SEL_INVAD);return}if(!confirm(c_str.qos_del_queue)){return}$.addLoading(obj);for(var i=0;i<queueStkIndex;i++){$.act(ACT_DEL,QOS_QUEUE,queueStk[i],null)}$.exe(function(ret){if(!ret){$.reload()}})}function doAddCls(){clsParam[0]=0;$.loadMain("qosClsEdit.htm",clsParam)}function doEditCls(val){clsParam[0]=1;clsParam[1]=val;$.loadMain("qosClsEdit.htm",clsParam)}function doSelAllCls(){if(selAllCls==0){for(var i=1;i<=clsIndex;i++){var clsId="clsId"+i;$.id(clsId).checked=1}clsStk=[];clsStkIndex=clsIndex;for(var j=0;j<clsStkIndex;j++){clsStk[j]=allClsStk[j]}selAllCls=1}else{if(selAllCls==1){for(var i=1;i<=clsIndex;i++){var clsId="clsId"+i;$.id(clsId).checked=0}clsStk=[];clsStkIndex=0;selAllCls=0}}}function doClickCls(){if(selAllCls==1){$.id("selAllCls").checked=0;selAllCls=0}}function selClsEntry(){clsStkIndex=0;clsStk=[];for(var i=1;i<=clsIndex;i++){var tmpEntryId="clsId"+i;if($.id(tmpEntryId).checked==1){clsStk[clsStkIndex]=allClsStk[i-1];clsStkIndex++}}}function initCls(){selAllCls=0;clsIndex=0;allClsStk=[];clsParam=[];clsStk=[];clsStkIndex=0;var tbl=$.id("clstbl");$.each(clsList,function(){var i=0;var thisStk="["+this.__stack+"]";var row=tbl.insertRow(-1);clsIndex++;var cell=row.insertCell(-1);$.addClass(cell,"tc");cell.innerHTML="<input type='checkbox' id='clsId"+clsIndex+"' onclick='doClickCls();'/>";cell=row.insertCell(-1);$.addClass(cell,"tc");cell.innerHTML=this.X_TP_ClassName;cell=row.insertCell(-1);$.addClass(cell,"tc");cell.innerHTML=this.classificationOrder;cell=row.insertCell(-1);$.addClass(cell,"tc");cell.innerHTML=this.classInterface;cell=row.insertCell(-1);var tmpcls="";if(""!=this.sourceMACAddress){tmpcls+="Src MAC Addr: "+this.sourceMACAddress;if(""!=this.sourceMACMask){tmpcls+="<br/>Src MAC Mask: "+this.sourceMACMask}}if(""!=this.destMACAddress){if(""!=tmpcls){tmpcls+="<br/>"}tmpcls+="Dest MAC Addr: "+this.destMACAddress;if(""!=this.destMACMask){tmpcls+="<br/>Dest MAC Mask: "+this.destMACMask}}if(-1!=this.ethertype){if(""!=tmpcls){tmpcls+="<br/>"}for(i=0;i<ethtype_list_num;i++){if(ethtype_list[i][1]==this.ethertype){tmpcls+="EtherType: "+ethtype_list[i][0]}}if(2048==this.ethertype){if(""!=this.sourceIP){if(""!=tmpcls){tmpcls+="<br/>"}tmpcls+="Src IP Addr: ";tmpcls+=this.sourceIP;if(""!=this.sourceMask){tmpcls+=" / "+this.sourceMask}}else{if(""!=this.sourceVendorClassID){if(""!=tmpcls){tmpcls+="<br/>"}tmpcls+="Src Vendor ID: ";tmpcls+=this.sourceVendorClassID}else{if(""!=this.sourceUserClassID){if(""!=tmpcls){tmpcls+="<br/>"}tmpcls+="Src User ID: ";tmpcls+=this.sourceUserClassID}}}if(""!=this.destIP){if(""!=tmpcls){tmpcls+="<br/>"}tmpcls+="Dest IP Addr: ";tmpcls+=this.destIP;if(""!=this.destMask){tmpcls+=" / "+this.destMask}}if(-1!=this.DSCPCheck){for(i=0;i<dscp_list_num;i++){if(this.DSCPCheck==dscp_list[i][1]){if(""!=tmpcls){tmpcls+="<br/>"}tmpcls+="DSCP Check: "+dscp_list[i][0];break}}}if(-1!=this.protocol){for(i=0;i<ip_proto_list_num;i++){if(this.protocol==ip_proto_list[i][1]){if(""!=tmpcls){tmpcls+="<br/>"}tmpcls+="Protocol: "+ip_proto_list[i][0];break}}if(6==this.protocol||17==this.protocol){if(-1!=this.sourcePort){if(""!=tmpcls){tmpcls+="<br/>"}tmpcls+="Src Port: "+this.sourcePort;if(-1!=this.sourcePortRangeMax){tmpcls+=" ~ "+this.sourcePortRangeMax}}if(-1!=this.destPort){if(""!=tmpcls){tmpcls+="<br/>"}tmpcls+="Dest Port: "+this.destPort;if(-1!=this.destPortRangeMax){tmpcls+=" ~ "+this.destPortRangeMax}}}}}else{if(33024==this.ethertype&&-1!=this.ethernetPriorityCheck){tmpcls+="802.1P Check: "+this.ethernetPriorityCheck}}}cell.innerHTML=tmpcls;cell=row.insertCell(-1);$.addClass(cell,"tc");cell.innerHTML=(qosIntfCfg[0].interfaceKey==this.X_TP_ClassInterface)?"Upstream":"Downstream";cell=row.insertCell(-1);$.addClass(cell,"tc");for(i=0;i<queueIndex;i++){if(queueList[i].queueKey==this.classQueue){cell.innerHTML=queueList[i].queueName;break}}cell=row.insertCell(-1);$.addClass(cell,"tc");if(-1!=this.DSCPMark){for(i=0;i<dscp_list_num;i++){if(this.DSCPMark==dscp_list[i][1]){cell.innerHTML=dscp_list[i][0];break}}}else{cell.innerHTML=""}cell=row.insertCell(-1);$.addClass(cell,"tc");cell.innerHTML=(-1!=this.ethernetPriorityMark)?this.ethernetPriorityMark:"";cell=row.insertCell(-1);$.addClass(cell,"tc");cell.innerHTML=(this.classificationEnable==1)?"<span class='T_en'>"+m_str.en+"</span>":"<span class='T_dis'>"+m_str.dis+"</span>";cell=row.insertCell(-1);$.addClass(cell,"tc");cell.innerHTML="<span class='a T_edit' onclick='doEditCls("+thisStk+");'>"+m_str.edit+"</span>";allClsStk[clsIndex-1]=this.__stack});$.resize($.id("clstbl"),8)}function doDelCls(obj){selClsEntry();if(clsStkIndex==0){$.alert(ERR_SEL_INVAD);return}$.addLoading(obj);for(var i=0;i<clsStkIndex;i++){$.act(ACT_DEL,CLASSIFICATION,clsStk[i],null)}$.exe(function(ret){if(!ret){$.reload()}})}function doAddApp(){appParam[0]=0;$.loadMain("qosAppEdit.htm",appParam)}function doEditApp(val){appParam[0]=1;appParam[1]=val;$.loadMain("qosAppEdit.htm",appParam)}function doSelAllApp(){if(selAllApp==0){for(var i=1;i<=appIndex;i++){var appId="appId"+i;$.id(appId).checked=1}appStk=[];appStkIndex=appIndex;for(var j=0;j<appStkIndex;j++){appStk[j]=allAppStk[j]}selAllApp=1}else{if(selAllApp==1){for(var i=1;i<=appIndex;i++){var appId="appId"+i;$.id(appId).checked=0}appStk=[];appStkIndex=0;selAllApp=0}}}function doClickApp(){if(selAllApp==1){$.id("selAllApp").checked=0;selAllApp=0}}function selAppEntry(){appStkIndex=0;appStk=[];for(var i=1;i<=appIndex;i++){var tmpEntryId="appId"+i;if($.id(tmpEntryId).checked==1){appStk[appStkIndex]=allAppStk[i-1];appStkIndex++}}}function initApp(){selAllApp=0;appIndex=0;allAppStk=[];appParam=[];appStk=[];appStkIndex=0;var tbl=$.id("apptbl");$.each(appList,function(){var i=0;var thisStk="["+this.__stack+"]";var row=tbl.insertRow(-1);appIndex++;var cell=row.insertCell(-1);$.addClass(cell,"tc");cell.innerHTML="<input type='checkbox' id='appId"+appIndex+"' onclick='doClickApp();'/>";cell=row.insertCell(-1);$.addClass(cell,"tc");for(i=0;i<app_name_list_num;i++){if(this.appName==app_name_list[i][1]){cell.innerHTML=app_name_list[i][0];break}}cell=row.insertCell(-1);$.addClass(cell,"tc");cell.innerHTML="Upstream";cell=row.insertCell(-1);$.addClass(cell,"tc");for(i=0;i<queueIndex;i++){if(queueList[i].queueKey==this.classQueue){cell.innerHTML=queueList[i].queueName;break}}cell=row.insertCell(-1);$.addClass(cell,"tc");if(-1!=this.DSCPMark){for(i=0;i<dscp_list_num;i++){if(this.DSCPMark==dscp_list[i][1]){cell.innerHTML=dscp_list[i][0];break}else{cell.innerHTML=""}}}cell=row.insertCell(-1);$.addClass(cell,"tc");cell.innerHTML=(-1!=this.ethernetPriorityMark)?this.ethernetPriorityMark:"";cell=row.insertCell(-1);$.addClass(cell,"tc");cell.innerHTML=(this.appEnable==1)?"<span class='T_en'>"+m_str.en+"</span>":"<span class='T_dis'>"+m_str.dis+"</span>";cell=row.insertCell(-1);$.addClass(cell,"tc");cell.innerHTML="<span class='a T_edit' onclick='doEditApp("+thisStk+");'>"+m_str.edit+"</span>";allAppStk[appIndex-1]=this.__stack});$.resize($.id("apptbl"),8)}function doDelApp(obj){selAppEntry();if(appStkIndex==0){$.alert(ERR_SEL_INVAD);return}$.addLoading(obj);for(var i=0;i<appStkIndex;i++){$.act(ACT_DEL,QOS_APP,appStk[i],null)}$.exe(function(ret){if(!ret){$.reload()}})};</script>
+<p class="et"><b>SP/WRR Settings</b></p>
+
+<p class="bl"></p>
+<div class="con1 XXL">
+	<p class="st">Queue</p>
+<div class="con2">
+
+	<p class="L1">Add, remove SP/WRR queues. Only when the Quality of Service is enabled and Scheduler Algorithm of upstream/downstream is SP/WRR can the queues take effect.</p>
+	<p class="br"></p>
+
+	<table class="XXL bdr tc" id="queuetbl" align="center" cellspacing="0" cellpadding="0">
+		<tr>
+			<th width="5%"><input type="checkbox" id="selAllQueue" onclick="doSelAllQueue();"/></th>
+			<th width="22%" class="T" id="queue_name">Queue Name</th>
+			<th width="12%" class="T" id="qos_dir">Direction</th>
+			<th width="12%" class="T" id="sch_algm">Scheduler Algorithm</th>
+			<th width="12%" class="T" id="pre">Precedence</th>
+			<th width="10%" class="T" id="weight">Weight (%)</th>
+			<th width="10%" class="T" id="force_weigth_en">Force Weight</th>
+			<th width="10%" class="T" id="queue_en">Status</th>
+			<th width="7%"  class="T" id="queue_list_edit">Edit</th>
+		</tr>
+	</table>
+
+	<p class="br"></p>
+	<p class="L1">
+		<input type="button" class="button XL T T_addnew" value="Add New" onclick="doAddQueue();"/>
+		<input type="button" class="button XL T T_delsel" value="Delete Selected" onclick="doDelQueue(this);"/>
+	</p>
+</div>
+</div>
+
+
+<p class="bl"></p>
+<div class="con1 XXL">
+	<p class="st">Flow Classification</p>
+<div class="con2">
+
+	<p class="L1">Add, remove flow classifiction rules which related to one SP or WRR queue. </p>
+	<p class="br"></p>
+	
+	<table class="bdr XXL" id="clstbl" cellspacing="0" cellpadding="0">
+		<tr>
+			<th rowspan="2" width="5%"><input type="checkbox" id="selAllCls" onclick="doSelAllCls();"/></th>
+			<th rowspan="2" width="13%" class="tc T" id="cls_name">Class Name</th>
+			<th rowspan="2" width="5%" class="tc T" id="cls_order">Order</th>
+			<td colspan="2" width="39%" class="tc T" ><b>Classification Criteria</b></td>
+			<td colspan="4" width="28%" class="tc T" ><b>Classification Result</b></td>
+			<th rowspan="2" width="5%" class="tc T" id="cls_en">Status</th>
+			<th rowspan="2" width="5%" class="tc T" id="cls_list_edit">Edit</th>
+		</tr>
+		<tr>
+			<th width="9%" class="tc T" id="ingress_intf">Ingress interface</th>
+			<th width="30%" class="tc T" id="criteria">Criteria</th>
+			<th width="8%" class="tc T" id="cls_qos_dir">Direction</th>
+			<th width="8%" class="tc T" id="cls_queue_name">Queue</th>
+			<th width="6%" class="tc T" id="dscp_mark">DSCP Mark</th>
+			<th width="6%" class="tc T" id="cos_mark">802.1P Mark</th>
+		</tr>
+	</table>
+
+	<p class="br"></p>
+	<p class="L1">
+		<input type="button" class="button XL T T_addnew" value="Add New" onclick="doAddCls();"/>
+		<input type="button" class="button XL T T_delsel" value="Delete Selected" onclick="doDelCls(this);"/>
+	</p>
+</div>
+</div>
+
+<div id = "appBussClass">
+<p class="bl"></p>
+<div class="con1 XXL" >
+	<p class="st">Business Classification</p>
+<div class="con2">
+
+	<p class="L1">Add, remove business classifiction rules. </p>
+	<p class="br"></p>
+
+	<table class="tc bdr XXL" id="apptbl" align="center" cellspacing="0" cellpadding="0">
+		<tr>
+			<th rowspan="2" width="5%"><input type="checkbox" id="selAllCls" onclick="doSelAllApp();"/></th>
+			<th colspan="1" width="20%" class="tc T" >Classification Criteria</th>
+			<td colspan="4" width="58%" class="tc T" ><b>Classification Result</b></td>
+			<th rowspan="2" width="10%" class="tc T" id="app_en">Status</th>
+			<th rowspan="2" width="7%" class="tc T" id="app_list_edit">Edit</th>
+		</tr>
+		<tr>
+			<th width="20%" class="tc T" id="app_name">Busniess Name</th> 
+			<th width="18%" class="tc T" id="app_qos_dir">Direction</th>
+			<th width="16%" class="tc T" id="app_queue_name">Queue</th>
+			<th width="12%" class="tc T" id="app_dscp_mark">DSCP Mark</th>
+			<th width="12%" class="tc T" id="app_cos_mark">802.1P Mark</th>
+		</tr>
+	</table>
+
+	<p class="br"></p>
+	<p class="L1">
+		<input type="button" class="button XL T T_addnew" value="Add New" onclick="doAddApp();"/>
+		<input type="button" class="button XL T T_delsel" value="Delete Selected" onclick="doDelApp(this);"/>
+	</p>
+</div>
+</div>
+</div>
+
+<p class="bl"></p>
+<p class="tail" id="tail"><input type="button" class="button L T T_refresh" value="Refresh" onclick="$.addLoading(this, 200, function(){$.reload()});" /></p>
+
+<script language="javascript" type="text/javascript">$.loadHelp();if(!INCLUDE_E8_APP){$.addClass($.id("appBussClass"),"nd")}qosIntfCfg=$.act(ACT_GL,QOS_INTF,null,null,["interfaceKey","schedulerAlgorithm"]);queueList=$.act(ACT_GL,QOS_QUEUE,null,null);clsList=$.act(ACT_GL,CLASSIFICATION,null,null);if(INCLUDE_E8_APP){appList=$.act(ACT_GL,QOS_APP,null,null)}if(!$.exe()){initQueueBothDir();initCls();if(INCLUDE_E8_APP){initApp()}};</script>

@@ -1,0 +1,38 @@
+﻿<script language="javascript" type="text/javascript">var realMode;function multiModeInit(){if($.mainParam){if($.qd.sysMode===undefined){var multiMode=$.act(ACT_GET,MULTIMODE,null,null);if(!$.exe()){if(multiMode.mode=="Router"){$.id("Router").checked=true;$.qd.realMode="Router"}else{if(sysMode.mode=="AP"){$.id("AP").checked=true;$.qd.realMode="AP"}else{if(sysMode.mode=="Repeater"){$.id("Repeater").checked=true;$.qd.realMode="Repeater"}else{if(sysMode.mode=="Client"){$.id("Client").checked=true;$.qd.realMode="Client"}else{if(sysMode.mode=="MSSID"){$.id("MSSID").checked=true;$.qd.realMode="MSSID"}else{if(sysMode.mode=="Hotspot"){$.id("Hotspot").checked=true;$.qd.realMode="Hotspot"}else{}}}}}}}}else{if($.qd.sysMode=="Router"){$.id("Router").checked=true}else{if($.qd.sysMode=="AP"){$.id("AP").checked=true}else{if($.qd.sysMode=="Repeater"){$.id("Repeater").checked=true}else{if($.qd.sysMode=="Client"){$.id("Client").checked=true}else{if($.qd.sysMode=="MSSID"){$.id("MSSID").checked=true}else{if($.qd.sysMode=="Hotspot"){$.id("Hotspot").checked=true}else{}}}}}}}$.removeClass($.id("title_qs"),"nd")}else{var multiMode=$.act(ACT_GET,MULTIMODE,null,null);if(!$.exe()){if(multiMode.mode=="Router"){realMode="Router";$.id("Router").checked=true}else{if(multiMode.mode=="AP"){realMode="AP";$.id("AP").checked=true}else{if(multiMode.mode=="Repeater"){realMode="Repeater";$.id("Repeater").checked=true}else{if(multiMode.mode=="Client"){realMode="Client";$.id("Client").checked=true}else{if(multiMode.mode=="MSSID"){realMode="MSSID";$.id("MSSID").checked=true}else{if(multiMode.mode=="Hotspot"){realMode="Hotspot";$.id("Hotspot").checked=true}}}}}}}$.removeClass($.id("title_sysMode"),"nd");$.removeClass($.id("b_save"),"nd");$.removeClass($.id("tail"),"ctr")}}function doSave(){var multiModeArg={};if($.id("Router").checked){multiModeArg.mode="Router"}else{if($.id("AP").checked){multiModeArg.mode="AP"}else{if($.id("Repeater").checked){multiModeArg.mode="Repeater"}else{if($.id("Client").checked){multiModeArg.mode="Client"}else{if($.id("MSSID").checked){multiModeArg.mode="MSSID"}else{if($.id("Hotspot").checked){multiModeArg.mode="Hotspot"}else{multiModeArg.mode="Router"}}}}}}if(multiModeArg.mode==realMode){$.alert(ERR_MULTI_MODE_ALREADY);return}var r=confirm(c_str.chgmod);if(r==true){$.addLoading($.id("b_save"));$.act(ACT_SET,MULTIMODE,null,null,multiModeArg);$.exe(function(ret){if(!ret){doReboot()}})}else{$.reload()}}function doReboot(){$.guage(["<span class='T_rebooting'>"+s_str.rebooting+"</span>","<span class='T T_wait_reboot'>"+s_str.wait_reboot+"</span>"],100,$.guageInterval,function(){$.refreshWindow()})}function doCollect(){if($.id("Router").checked){$.qd.sysMode="Router"}else{if($.id("AP").checked){$.qd.sysMode="AP"}else{if($.id("Repeater").checked){$.qd.sysMode="Repeater"}else{if($.id("Client").checked){$.qd.sysMode="Client"}else{if($.id("MSSID").checked){$.qd.sysMode="MSSID"}else{if($.id("Hotspot").checked){$.qd.sysMode="Hotspot"}else{$.qd.sysMode="Router"}}}}}}};</script>
+<p class="et"><span class="nd" id="title_sysMode"><span class="T" id="et1">Operation Mode</span></span><span class="nd" id="title_qs"><span class="T" id="et2">Quick Setup - Operation Mode</span></span></p>
+<div class="con1 M">
+<p class="ct"></p>
+<p class="bl"></p>
+<div class="con2">
+<p class="T" id="t_mode">Choose Operation Mode:</p>
+<p id="m_router" class="nd">
+<input type="radio" name="sysMode" id="Router" value="Router" checked />
+<b class="T" id="sysmod2">Wireless Router</b>
+</p>
+<p id="m_hotspot" class="nd">
+<input type="radio" name="sysMode" id="Hotspot" value="Hotspot" />
+<b class="T" id="sysmod7">Hotspot Router</b>
+</p>
+<p id="m_ap" class="nd">
+<input type="radio" name="sysMode" id="AP" value="AP" />
+<b class="T" id="sysmod4">Access Point</b>
+</p>
+<p id="m_re" class="nd">
+<input type="radio" name="sysMode" id="Repeater" value="Repeater" />
+<b class="T" id="sysmod6">Range Extender</b>
+</p>
+<p id="m_client" class="nd">
+<input type="radio" name="sysMode" id="Client" value="Client" />
+<b class="T" id="sysmod5">Client</b>
+</p>
+<p id="m_mssid" class="nd">
+<input type="radio" name="sysMode" id="MSSID" value="MSSID" />
+<b class="T" id="sysmod8">Multi-SSID</b>
+</p>
+</div>
+<p class="bl"></p>
+<p class="tail ctr" id="tail">
+<input type="button" class="button L nd T T_save" value="Save" id="b_save" onclick="doSave()" />
+</p>
+</div>
+<script language="javascript" type="text/javascript">if(INCLUDE_MULTIMODE_ROUTER){$.removeClass($.id("m_router"),"nd")}if(INCLUDE_MULTIMODE_AP){$.removeClass($.id("m_ap"),"nd")}if(INCLUDE_MULTIMODE_RE){$.removeClass($.id("m_re"),"nd")}if(INCLUDE_MULTIMODE_CLIENT){$.removeClass($.id("m_client"),"nd")}if(INCLUDE_MULTIMODE_MSSID){$.removeClass($.id("m_mssid"),"nd")}if(INCLUDE_MULTIMODE_HOTSPOT){$.removeClass($.id("m_hotspot"),"nd")}multiModeInit();$.loadHelpFrame("QsModeHelpRpm.htm");</script>

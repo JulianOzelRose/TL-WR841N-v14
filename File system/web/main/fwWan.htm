@@ -1,0 +1,25 @@
+﻿<script language="javascript" type="text/javascript">var selAll;var index;var param;var allStk;var wan_stack;var wan_stackIndex;function doAdd(){param[0]=0;param[1]=0;$.loadMain("fwWanEdit.htm",param)}function doEdit(val){param[0]=1;param[1]=0;param[2]=val;$.loadMain("fwWanEdit.htm",param)}function doSelAll(){if(selAll==0){for(var i=1;i<=index;i++){var wanid="wanid"+i;$.id(wanid).checked=1}wan_stack=[];wan_stackIndex=index;for(var j=0;j<wan_stackIndex;j++){wan_stack[j]=allStk[j]}selAll=1}else{if(selAll==1){for(var i=1;i<=index;i++){var wanid="wanid"+i;$.id(wanid).checked=0}wan_stack=[];wan_stackIndex=0;selAll=0}}}function selEntry(){wan_stackIndex=0;wan_stack=[];for(var i=1;i<=index;i++){var tmpEntryId="wanid"+i;if($.id(tmpEntryId).checked==1){wan_stack[wan_stackIndex]=allStk[i-1];wan_stackIndex++}}}function clickSel(){if(selAll==1){$.id("selAll").checked=0;selAll=0}}function init(){selAll=0;index=0;allStk=[];param=[];wan_stack=[];wan_stackIndex=0;var wanList=$.act(ACT_GL,EXTERNAL_HOST,null,null);var urlCfgList=$.act(ACT_GL,URL_CFG,null,null,["urlAddr"]);$.exe(function(err){if(!err){var tbl=$.id("wantbl");$.each(wanList,function(){if(this.isParentCtrl==0){var thisStk="["+this.__stack+"]";var row=tbl.insertRow(-1);index++;var cell=row.insertCell(-1);cell.width="5%";cell.innerHTML="<input type='checkbox' id='wanid"+index+"' onclick='clickSel();'/>";cell=row.insertCell(-1);cell.width="31%";cell.innerHTML=this.entryName;cell=row.insertCell(-1);if(this.type==0){var tmpIP;if((this.IPStart==0)&&(this.IPEnd==0)){tmpIP=""}else{if((this.IPStart==0)&&(this.IPEnd!=0)){tmpIP=$.num2ip(parseInt(this.IPEnd,10))}else{if((this.IPStart!=0)&&(this.IPEnd==0)){tmpIP=$.num2ip(parseInt(this.IPStart,10))}else{if(this.IPStart==this.IPEnd){tmpIP=$.num2ip(parseInt(this.IPStart,10))}else{if((this.IPStart!=0)&&(this.IPEnd!=0)){tmpIP=$.num2ip(parseInt(this.IPStart,10))+"-"+$.num2ip(parseInt(this.IPEnd,10))}}}}}var tmpPort;if((this.portStart==0)&&(this.portEnd==0)){tmpPort=""}else{if((this.portStart==0)&&(this.portEnd!=0)){tmpPort=this.portEnd}else{if((this.portStart!=0)&&(this.portEnd==0)){tmpPort=this.portStart}else{if(this.portStart==this.portEnd){tmpPort=this.portStart}else{if((this.portStart!=0)&&(this.portEnd!=0)){tmpPort=this.portStart+"-"+this.portEnd}}}}}if(tmpIP==""){cell.innerHTML=tmpPort}else{if(tmpPort==""){cell.innerHTML=tmpIP}else{cell.innerHTML=tmpIP+" /"+tmpPort}}}else{if(this.type==1){cell.innerHTML=this.mac}else{if(this.type==2){var tmpUrlList="";for(var i=0;i<this.urlIndexs.length;i++){if(this.urlIndexs.charAt(i)==1){tmpUrlList+=urlCfgList[i].urlAddr+" "}}cell.innerHTML=tmpUrlList?$.resizeStr(tmpUrlList,25):"<span class='T T_url_not_exist'>"+s_str.url_notexist+"</span>"}}}cell=row.insertCell(-1);cell.width="10%";cell.innerHTML="<span class='a T T_edit' onclick='doEdit("+thisStk+");'>"+m_str.edit+"</span>";allStk[index-1]=this.__stack}});$.resize($.id("wantbl"),8)}})}function doDel(obj){selEntry();if(wan_stackIndex==0){$.alert(ERR_SEL_INVAD);return}$.addLoading(obj);for(var i=0;i<wan_stackIndex;i++){$.act(ACT_DEL,EXTERNAL_HOST,wan_stack[i],null)}$.exe(function(err){if(!err){$.reload()}})};</script>
+<p class="et T" id="et">Target Settings</p>
+<div class="con1 L">
+<p class="ct"></p>
+<p class="bl"></p>
+<div class="con2">
+<p class="br"></p>
+<div class="XL thead" ><table class="XL bdr tc">
+<tr>
+<th width="5%"><input type="checkbox" id="selAll" onclick="doSelAll();"/></th>
+<th width="31%" class="T T_desc">Description</th>
+<th class="T" id="t_detail">Details</th>
+<th width="10%" class="T T_edit">Edit</th>
+</tr>
+</table></div>
+<div class="XL tbody"><table id="wantbl" class="XL bdr tc"></table></div>
+<p class="br"></p>
+<p class="L1">
+<input type="button" class="button XL T T_addnew" value="Add New" onclick="doAdd();"/>
+<input type="button" class="button XL T T_delsel" value="Delete Selected" onclick="doDel(this);"/></p>
+</div>
+<p class="bl"></p>
+<p class="tail" id="tail"></p>
+</div>
+<script language="javascript" type="text/javascript">$.loadHelpFrame("AccessCtrlAccessTargetsHelpRpm.htm");init();</script>

@@ -1,0 +1,42 @@
+﻿<script language="javascript" type="text/javascript">var lanip_dut;var lanmask_dut;function isSameSubnet(wanip,wanmask,lanip,lanmask){var wanip_num=$.ip2num(wanip);var wanmask_num=$.ip2num(wanmask);var lanip_num=$.ip2num(lanip);var lanmask_num=$.ip2num(lanmask);if((lanip_num&lanmask_num)==(wanip_num&lanmask_num)||((lanip_num&wanmask_num)==(wanip_num&wanmask_num))){return true}return false}function showSecondConnect(ipType){if(ipType){if(ipType=="dynamic"){$.removeClass($.id("secondDynIp"),"nd");$.addClass($.id("secondStaIp"),"nd")}else{$.removeClass($.id("secondStaIp"),"nd");$.addClass($.id("secondDynIp"),"nd")}}else{$.addClass($.id("secondStaIp"),"nd");$.addClass($.id("secondDynIp"),"nd")}}function doCollect(){$.qd.ppp.usr=$.id("usr").value;$.qd.ppp.pwd=$.id("pwd").value;$.qd.ppp.cfm=$.id("cfm").value;if($.id("secConnType_dyn").checked==true){$.qd.ppp.secondConnection="sec_conn_dynip"}else{if($.id("secConnType_sta").checked==true){$.qd.ppp.externalIPAddress=$.id("secondStaIpAddress").value;$.qd.ppp.subnetMask=$.id("secondStaIpMask").value;$.qd.ppp.secondConnection="sec_conn_staip"}else{$.qd.ppp.externalIPAddress=$.ip2ip("169.254.1.1");$.qd.ppp.subnetMask=$.ip2ip("255.255.255.255");$.qd.ppp.secondConnection="sec_conn_staip"}}}function goNext(){doCollect();if($.qd.ppp.usr==""){return $.alert(ERR_USERNAME_INVAD)}if($.qd.ppp.pwd!==$.qd.ppp.cfm){return $.alert(ERR_PWD_INVAD)}var ip=$.id("secondStaIpAddress");var mask=$.id("secondStaIpMask");var temp_ip=$.id("secondStaIpAddress").value;var temp_mask=$.id("secondStaIpMask").value;if($.id("secConnType_sta").checked==true){if($.ifip(temp_ip,true)){ip.focus();ip.select();return $.alert(ERR_STAIP_IP_INVAD)}if($.mask(temp_mask,true)){mask.focus();mask.select();return $.alert(ERR_STAIP_MASK_INVAD)}if($.ipmask(temp_ip,temp_mask,true)){ip.focus();ip.select();return $.alert(ERR_STAIP_IP_MASK_CONFLICT)}if(isSameSubnet(temp_ip,temp_mask,lanip_dut,lanmask_dut)){ip.focus();ip.select();return $.alert(CMM_WAN_IP_IP_IN_THE_SAME_SUBNET_WITH_LAN)}}if($.qd.sysMode){$.qf.next($.qd.sysMode)}else{$.qf.next()}}function goPrev(){doCollect();$.qf.prev()};</script>
+<p class="et T" id="et">Quick Setup - PPPoE</p>
+<div class="con1 M">
+<p class="ct"></p>
+<p class="bl"></p>
+<div class="con2">
+<p class="T" id="t_info">Please enter the Username and Password. If you forget them, please consult your ISP.</p>
+<p class="br"></p>
+<p><b class="item T T_username">Username:</b><input type="text" class="text" size="15" maxlength="63" id="usr" /></p>
+<p><b class="item T T_passwd">Password:</b><input type="password" class="text" size="15" maxlength="63" id="pwd" /></p>
+<p><b class="item T T_cfmpwd">Confirm Password:</b><input type="password" class="text" size="15" maxlength="63" id="cfm" /></p>
+</div>
+<div id="div_secConn">
+	<p class="br"></p>
+	<p><b class="item T" id="t_secondConn">Secondary Connection:</b>
+		<input type="radio" name="secondConnType" id="secConnType_disable" OnClick="showSecondConnect()" checked /><span class="T T_disabled">Disabled</span>
+		<input type="radio" name="secondConnType" id="secConnType_dyn" OnClick="showSecondConnect('dynamic')" /><span class="T T_dynip">Dynamic IP</span>
+		<input type="radio" name="secondConnType" id="secConnType_sta" OnClick="showSecondConnect('static')" /><span class="T T_staip">Static IP</span>
+		<span class="T" id="t_forDual">&nbsp;(For Dual Access)</span>
+	</p>
+	<div id="secondwarn" class="nd">
+	<p class="gray">
+		<b class="item T T_warn">Warning:</b><span class="fl"><span class="T" id="t_warn1">The secondary connection shouldn't be in the same subnet with pppoe connection.</span><br /></span>
+	</p>
+	</div>
+	<div id="secondDynIp"class="nd">
+		<p><b class="item L T T_ipaddr">IP Address:</b><b style="padding-left:12px" id="secondDynIpAddress">0.0.0.0</b></p>
+		<p><b class="item L T T_netmask">Subnet Mask:</b><b style="padding-left:12px" id="secondDynIpMask">0.0.0.0</b></p>
+	</div>
+	<div id="secondStaIp" class="nd">
+		<p><b class="item L T T_ipaddr">IP Address:</b><input type="text" class="text" id="secondStaIpAddress" value="0.0.0.0" size="15" maxlength="15" /></p>
+		<p><b class="item L T T_netmask">Subnet Mask:</b><input type="text" class="text" id="secondStaIpMask" value="0.0.0.0" size="15" maxlength="15" /></p>
+	</div>
+	<p class="br"></p>
+</div>
+<p class="bl"></p>
+<p class="tail ctr">
+<input type="button" class="button L T T_back" value="Back" onclick="goPrev()" />
+<input type="button" class="button L T T_next" value="Next" onclick="goNext()" />
+</p>
+</div>
+<script language="javascript" type="text/javascript">var multimodeObj;(function(){$.loadHelpFrame("WzdPPPoEHelpRpm.htm");if(!$.mainParam){return $.loadMain("qsStart.htm")}if(!$.qd.ppp){$.qd.ppp={}}if($.qd.ppp.usr!==undefined){$.id("usr").value=$.qd.ppp.usr}if($.qd.ppp.pwd!==undefined){$.id("pwd").value=$.qd.ppp.pwd;$.id("cfm").value=$.qd.ppp.cfm}if($.qd.ppp.secondConnection!==undefined){if($.qd.ppp.secondConnection=="sec_conn_dynip"){$.id("secConnType_dyn").checked=true;showSecondConnect("dynamic")}else{if($.qd.ppp.secondConnection=="sec_conn_staip"){if($.qd.ppp.externalIPAddress==undefined){$.id("secConnType_sta").checked=true;showSecondConnect("static")}else{if($.qd.ppp.externalIPAddress.substring(0,4)!="169."){$.id("secConnType_sta").checked=true;$.id("secondStaIpAddress").value=$.qd.ppp.externalIPAddress;$.id("secondStaIpMask").value=$.qd.ppp.subnetMask;showSecondConnect("static")}else{$.id("secConnType_disable").checked=true}}}else{$.id("secConnType_disable").checked=true}}}var lanIpIntfObj=$.act(ACT_GL,LAN_IP_INTF,null,null,["IPInterfaceIPAddress","IPInterfaceSubnetMask"]);if(INCLUDE_MULTIMODE){multimodeObj=$.act(ACT_GET,MULTIMODE,null,null)}if(!$.exe()){$.each(lanIpIntfObj,function(){lanip_dut=this.IPInterfaceIPAddress;lanmask_dut=this.IPInterfaceSubnetMask});if(INCLUDE_MULTIMODE){if(multimodeObj.mode=="Client"||multimodeObj.mode=="Repeater"||multimodeObj.mode=="AP"){lanip_dut=multimodeObj.router_IPInterfaceIPAddress;lanmask_dut=multimodeObj.router_IPInterfaceSubnetMask}}}})();</script>
