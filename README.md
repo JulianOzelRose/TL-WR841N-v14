@@ -49,8 +49,8 @@ At first I was only able to access the shell, but not issue commands -- I was st
 
 ![IMG_9832 - Copy](https://user-images.githubusercontent.com/95890436/208493479-fe79a047-e249-4d27-b693-82f5032896c4.jpg)
 
-## Dumping the file system
-To dump the router's file system, we will archive each directory, then upload to our PC using TFTP. Using the ```busybox``` command, we can see that the router uses a BusyBox with limited functionality.
+## Extracting the file system
+To extract the router's file system, we will archive each directory, then upload to our PC using TFTP. Using the ```busybox``` command, we can see that the router uses a BusyBox with limited functionality.
 While it has the ```tftp``` function which will be useful for uploading files from the router, there are no commands available to us to archive directories/files.
 To be able to archive directories and upload them, we will need to first upload a BusyBox binary with more functions defined. You can find a link to the one I used [here](https://busybox.net/downloads/binaries/1.21.1/).
 ```
@@ -92,7 +92,7 @@ We then ```cd``` over to the ```var/tmp``` directory, and use ```tftp``` to down
 https://github.com/JulianOzelRose/TL-WR841N-v14/assets/95890436/89f00c3e-eba8-4407-bf50-8c04f3d2f9a1
 
 With our new BusyBox binary, we can now archive directories. Using ```ls``` command from the root directory, we can see there are a total of 11 directories, as ```linuxrc``` is a script.
-So to dump the file system, we just need to archive each individual directory, and upload it via TFTP to our PC.
+So to extract the file system, we just need to archive each individual directory, and upload it via TFTP to our PC.
 
 ```
 ~ # ls
@@ -103,10 +103,10 @@ var      sys      proc     linuxrc  etc      bin
 https://github.com/JulianOzelRose/TL-WR841N-v14/assets/95890436/a60d247e-1f4d-4040-9cc5-ded4b511eb84
 
 With ```/web/``` archived and uploaded, we just have 10 directories left. It should be noted that some of these directories, particularly ```/dev/```, ```/proc/```, and ```/sys/``` are
-system-reserved directories that contain mostly symbolic links and other files which cannot be properly archived. In any case, we should be able to dump most of the file system using these methods.
+system-reserved directories that contain mostly symbolic links and other files which cannot be properly archived. In any case, we should be able to extract most of the file system using these methods.
 
 ## Extracting the firmware
-With the file system successfully dumped, the next logical step is to extract the firmware. Upon closer inspection
+With the file system successfully extracted, the next logical step is to extract the firmware. Upon closer inspection
 of the board, it appears to use the **cFeon 25QH32** series IC chip for storing its firmware. With the CH341A
 programmer, there are two ways to go about extracting the firmware from the IC chip:
 
