@@ -136,10 +136,12 @@ are a few tutorials online on how to mod the CH341A to work at 3.3v, which I rec
 your board's firmware chip.
 
 # Sources
-Because this router is very popular for reverse engineering, there are many guides on how to reverse it. I used the following sources to help me throughout this project.
-I recommend checking them out for an even more in-depth explanation on the hardware reversing process.
+I relied on the following sources to guide me throughout this project. These resources provide more in-depth explanations and insights into the hardware reversing process:
+
 - [Zero Day Initiative](https://www.zerodayinitiative.com/blog/2019/9/2/mindshare-hardware-reversing-with-the-tp-link-tl-wr841n-router)
 - [River Loop Security](https://www.riverloopsecurity.com/blog/2020/01/hw-101-uart/)
 - [Hackaday](https://hackaday.com/2019/09/12/dissecting-the-tl-wr841n-for-fun-and-profit/)
 - [OpenWrt](https://openwrt.org/toh/tp-link/tl-wr841nd)
 
+These guides were instrumental in helping me understand the various aspects of reverse engineering, hardware hacking, and working with router firmware.
+I recommend checking them out for a deeper understanding of the processes involved.
