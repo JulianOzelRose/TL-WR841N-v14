@@ -1,17 +1,18 @@
 # TL-WR841N-v14
-The TP-Link TL-WR841N is a relatively inexpensive 300mbps WiFi router. This makes it a perfect device for reverse engineering and hardware hacking projects. My goal here was to gain shell access via the router's UART debugging port and see what can be done from there. Please note that this guide is specific to v14.6 of the router -- some details may be slightly different for earlier or later hardware versions. Included in this repo is a partial file system dump of the router.
+The TP-Link TL-WR841N is a relatively inexpensive 300mbps WiFi router. This makes it a perfect device for reverse engineering and hardware hacking projects. My goal here was to gain shell access via the router's UART debugging port and see what can be done from there. Please note that this guide is specific to v14.6 of the router -- some details may be slightly different for earlier or later hardware versions. Included in this repo is a partial file system dump of the router, as well as a firmware dump.
 
 ![IMG_9762](https://user-images.githubusercontent.com/95890436/208492928-3936bd76-56dc-43e2-8519-299447747682.jpg)
 
-
-## Tools used
+## Tools
 #### Hardware
-- MM300 Digital Multimeter 
-- CH340G USB TTL UART Serial Converter 
-- Soldering kit from Pulsivo
-- Jumper cables
+- CH340G
+- CH341A
+- Digital multimeter
 - Header pins
+- Jumper wires 
+- Soldering kit
 #### Software
+- AsProgrammer
 - PuTTy
 - Tftpd64
 
@@ -31,7 +32,8 @@ After confirming that the UART port works at 3.3V and soldering a set of header 
 
 
 ## Obtaining shell access
-Once we have secured a connection between the serial USB converter to the router's UART port, we can now modify the settings in PuTTy for serial communication. The main value we need to know is the UART port's baud rate. It is possible to use a logic analyzer to figure out what the baud rate is. However, there are several baud rates that are very common, so it is often easier to guess common values until one works. In this particular case, the router's UART runs at **115200** baud rate. Other baud rates will produce garbage on the screen. We will also use the following settings:
+Once we have secured a connection between the serial USB converter to the router's UART port, we can now modify the settings in PuTTy for serial communication. The main value we need to know is the UART port's baud rate. It is possible to use a logic analyzer to figure out what the baud rate is. However, there are several baud rates that are very common, so it is often easier to guess common values until one works. In this particular case, the router's UART runs at **115200** baud rate. Other baud rates will produce garbage on the screen. So we will use the following settings in PuTTy:
+- ```Baud rate:``` 115200
 - ```Data bits:``` 8
 - ```Stop bits:``` 1
 - ```Parity:``` None
@@ -47,10 +49,10 @@ At first I was only able to access the shell, but not issue commands -- I was st
 
 ![IMG_9832 - Copy](https://user-images.githubusercontent.com/95890436/208493479-fe79a047-e249-4d27-b693-82f5032896c4.jpg)
 
-## Ripping the file system
-To rip the router's file system, we will archive each directory, then upload to our PC using TFTP. Using the ```busybox``` command, we can see that the router uses a BusyBox with limited functionality.
+## Dumping the file system
+To dump the router's file system, we will archive each directory, then upload to our PC using TFTP. Using the ```busybox``` command, we can see that the router uses a BusyBox with limited functionality.
 While it has the ```tftp``` function which will be useful for uploading files from the router, there are no commands available to us to archive directories/files.
-To be able to archive directories and upload them, we will need to first upload a BusyBox binary with more functions defined.
+To be able to archive directories and upload them, we will need to first upload a BusyBox binary with more functions defined. You can find a link to the one I used [here](https://busybox.net/downloads/binaries/1.21.1/).
 ```
 ~ # busybox
 BusyBox v1.19.2 (2022-08-16 12:08:08 CST) multi-call binary.
@@ -90,7 +92,7 @@ We then ```cd``` over to the ```var/tmp``` directory, and use ```tftpd``` to dow
 https://github.com/JulianOzelRose/TL-WR841N-v14/assets/95890436/89f00c3e-eba8-4407-bf50-8c04f3d2f9a1
 
 With our new BusyBox binary, we can now archive directories. Using ```ls``` command from the root directory, we can see there are a total of 11 directories, as ```linuxrc``` is a script.
-So to rip the file system, we just need to archive each individual directory, and upload it via TFTP to our PC, using Tftpd64 as a server.
+So to dump the file system, we just need to archive each individual directory, and upload it via TFTP to our PC, using Tftpd64 as a server.
 
 ```
 ~ # ls
@@ -101,7 +103,37 @@ var      sys      proc     linuxrc  etc      bin
 https://github.com/JulianOzelRose/TL-WR841N-v14/assets/95890436/a60d247e-1f4d-4040-9cc5-ded4b511eb84
 
 With ```/web/``` archived and uploaded, we just have 10 directories left. It should be noted that some of these directories, particularly ```/dev/```, ```/proc/```, and ```/sys/``` are
-system-reserved directories that contain mostly symbolic links and other files which cannot be properly archived. In any case, we should be able to rip most of the file system using these methods.
+system-reserved directories that contain mostly symbolic links and other files which cannot be properly archived. In any case, we should be able to dump most of the file system using these methods.
+
+## Extracting the firmware
+With the file system successfully dumped, the next logical step is to extract the firmware. Upon closer inspection
+of the board, it appears to use the EON 25QH32 series IC chip for storing its firmware. With the CH341A
+programmer, there are two ways to go about extracting the firmware from the IC chip:
+
+1. Place the programmer's clips directly on the chip.
+2. De-solder the chip, and re-solder it onto the programmer's SPI board.
+
+I had trouble getting a read on the IC chip using the first method. It seems that other people were able to get
+it to work this way. My hypothesis is that with this particular version of the board, reading the firmware with
+the clips also powers the microprocessor, which interferes with the programmer's ability to get a proper read.
+Instead, I used the second method and de-soldered the chip from the router, and re-soldered it directly onto my
+programmer's SPI board.
+
+#### Firmware chip soldered onto CH341A's SPI board
+![Firmware-IC-CH341A](https://github.com/JulianOzelRose/TL-WR841N-v14/assets/95890436/b81673fb-30d7-4051-a611-71ee7834658c)
+
+The SPI programmer was then able to extract the firmware with no issues. AsProgrammer does a good job at auto-detecting the firmware chip,
+so all that needed to be done was click 'read', and voila - it worked. Now here is what that firmware dump looks like from a hex editor,
+notice the highlighted strings from the bootloader:
+
+#### Firmware dump viewed from a hex editor
+![Firmware-HxD](https://github.com/JulianOzelRose/TL-WR841N-v14/assets/95890436/ddb2f801-cb34-44ff-b928-49e70ca24c60)
+
+## Note about CH341A and 3.3v chips
+It should also be noted that the firmware chip on this board operates at 3.3v, and there is a known issue with
+the CH341A programmer where the data lines operate at 5v, regardless of how the programmer is configured. There
+are a few tutorials online on how to mod the CH341A to work at 3.3v, which I recommend doing to avoid shorting
+your board's firmware chip.
 
 # Sources
 Because this router is very popular for reverse engineering, there are many guides on how to reverse it. I used the following sources to help me throughout this project.
