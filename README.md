@@ -21,7 +21,7 @@ The UART serial port is primarily used during the manufacturing process for debu
 
 ![photo_2022-12-16_14-12-06 (5)](https://user-images.githubusercontent.com/95890436/208197839-11598118-c562-45e7-9051-d94d1c914e86.jpg)
 ## Testing UART port voltages
-To avoid shorting both the TL-WR841N router and the serial USB device, we must first confirm that we are using the correct voltages. This is an important step, as using the wrong voltage can damage the router, the serial USB device, or both. UART ports are typically either 3.3V, or 5V. Thankfully, this particular version of the router has pre-labled pins -- so there is no ambiguity over which pin is ```RX```, ```TX```, ```GND```, or ```VCC```.
+To avoid shorting both the TL-WR841N router and the serial USB device, we must first confirm that we are using the correct voltages. This is an important step, as using the wrong voltage can damage the router, the serial USB device, or both. UART ports are typically either 3.3V, or 5V. Thankfully, this particular version of the router has pre-labeled pins -- so there is no ambiguity over which pin is ```RX```, ```TX```, ```GND```, or ```VCC```.
 
 Using a multimeter, I tested and confirmed a 3.3V ```VCC```, ```GND```, and ```TX``` pins. The ```RX``` pin reads at 0.0V, because it is essentially a listening port, just waiting for information. We can safely assume ```RX``` receives at 3.3V, just like the rest of the pins. Once the voltage is confirmed to be 3.3V, the next step is to connect the 3.3V serial USB converter.
 
@@ -86,13 +86,13 @@ proc on /proc type proc (rw,relatime)
 ramfs on /var type ramfs (rw,relatime)
 /sys on /sys type sysfs (rw,relatime)
 ```
-To upload our new BusyBox, we connect our router to our computer, either with a Cat 5 cable or wirelessely. Using Tftp64, we prepare our new BusyBox binary for upload.
-We then ```cd``` over to the ```var/tmp``` directory, and use ```tftpd``` to download the new binary, change its file permissions, and execute.
+To upload our new BusyBox, we connect our router to our computer, either with a Cat 5 cable or wirelessly. Using Tftp64, we prepare our new BusyBox binary for upload.
+We then ```cd``` over to the ```var/tmp``` directory, and use ```tftp``` to download the new binary, change its access permissions with ```chmod```, and then execute.
 
 https://github.com/JulianOzelRose/TL-WR841N-v14/assets/95890436/89f00c3e-eba8-4407-bf50-8c04f3d2f9a1
 
 With our new BusyBox binary, we can now archive directories. Using ```ls``` command from the root directory, we can see there are a total of 11 directories, as ```linuxrc``` is a script.
-So to dump the file system, we just need to archive each individual directory, and upload it via TFTP to our PC, using Tftpd64 as a server.
+So to dump the file system, we just need to archive each individual directory, and upload it via TFTP to our PC.
 
 ```
 ~ # ls
@@ -107,16 +107,16 @@ system-reserved directories that contain mostly symbolic links and other files w
 
 ## Extracting the firmware
 With the file system successfully dumped, the next logical step is to extract the firmware. Upon closer inspection
-of the board, it appears to use the EON 25QH32 series IC chip for storing its firmware. With the CH341A
+of the board, it appears to use the **cFeon 25QH32** series IC chip for storing its firmware. With the CH341A
 programmer, there are two ways to go about extracting the firmware from the IC chip:
 
 1. Place the programmer's clips directly on the chip.
-2. De-solder the chip, and re-solder it onto the programmer's SPI board.
+2. Desolder the chip, and resolder it onto the programmer's SPI board.
 
 I had trouble getting a read on the IC chip using the first method. It seems that other people were able to get
 it to work this way. My hypothesis is that with this particular version of the board, reading the firmware with
 the clips also powers the microprocessor, which interferes with the programmer's ability to get a proper read.
-Instead, I used the second method and de-soldered the chip from the router, and re-soldered it directly onto my
+Instead, I used the second method and desoldered the chip from the router, and resoldered it directly onto my
 programmer's SPI board.
 
 #### Firmware chip soldered onto CH341A's SPI board
@@ -130,7 +130,7 @@ notice the highlighted strings from the bootloader:
 ![Firmware-HxD](https://github.com/JulianOzelRose/TL-WR841N-v14/assets/95890436/ddb2f801-cb34-44ff-b928-49e70ca24c60)
 
 ## Note about CH341A and 3.3v chips
-It should also be noted that the firmware chip on this board operates at 3.3v, and there is a known issue with
+It should also be noted that the firmware chip on this board operates at 3.3v, and there is a known design flaw with
 the CH341A programmer where the data lines operate at 5v, regardless of how the programmer is configured. There
 are a few tutorials online on how to mod the CH341A to work at 3.3v, which I recommend doing to avoid shorting
 your board's firmware chip.
