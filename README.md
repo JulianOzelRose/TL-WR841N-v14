@@ -129,10 +129,10 @@ notice the highlighted strings from the bootloader:
 #### Firmware dump viewed from a hex editor
 ![Firmware-HxD](https://github.com/JulianOzelRose/TL-WR841N-v14/assets/95890436/ddb2f801-cb34-44ff-b928-49e70ca24c60)
 
-## Note about CH341A and 3.3v chips
-It should also be noted that the firmware chip on this board operates at 3.3v, and there is a known design flaw with
-the CH341A programmer where the data lines operate at 5v, regardless of how the programmer is configured. There
-are a few tutorials online on how to mod the CH341A to work at 3.3v, which I recommend doing to avoid shorting
+## Note about CH341A and 3.3V chips
+It should also be noted that the firmware chip on this board operates at 3.3V, and there is a known design flaw with
+the CH341A programmer where the data lines operate at 5V, regardless of how the programmer is configured. There
+are a few tutorials online on how to mod the CH341A to work at 3.3V, which I recommend doing to avoid shorting
 your board's firmware chip.
 
 # Sources
