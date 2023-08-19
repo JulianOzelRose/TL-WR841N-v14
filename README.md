@@ -1,5 +1,5 @@
 # TL-WR841N-v14
-The TP-Link TL-WR841N is a relatively inexpensive 300mbps WiFi router. This makes it a perfect device for reverse engineering and hardware hacking projects. My goal here was to gain shell access via the router's UART debugging port and see what can be done from there. Please note that this guide is specific to v14.6 of the router -- some details may be slightly different for earlier or later hardware versions. Included in this repo is a partial file system dump of the router, as well as a firmware dump.
+The TP-Link TL-WR841N is a relatively inexpensive 300mbps WiFi router. This makes it a perfect device for reverse engineering and hardware hacking projects. My goal here was to gain shell access via the router's UART debugging port and see what can be done from there. Please note that this guide is specific to v14.6 of the router — some details may be slightly different for earlier or later hardware versions. Included in this repo is a partial file system dump of the router, as well as a firmware dump.
 
 ![IMG_9762](https://user-images.githubusercontent.com/95890436/208492928-3936bd76-56dc-43e2-8519-299447747682.jpg)
 
@@ -21,7 +21,7 @@ The UART serial port is primarily used during the manufacturing process for debu
 
 ![photo_2022-12-16_14-12-06 (5)](https://user-images.githubusercontent.com/95890436/208197839-11598118-c562-45e7-9051-d94d1c914e86.jpg)
 ## Testing UART port voltages
-To avoid shorting both the TL-WR841N router and the serial USB device, we must first confirm that we are using the correct voltages. This is an important step, as using the wrong voltage can damage the router, the serial USB device, or both. UART ports are typically either 3.3V, or 5V. Thankfully, this particular version of the router has pre-labeled pins -- so there is no ambiguity over which pin is ```RX```, ```TX```, ```GND```, or ```VCC```.
+To avoid shorting both the TL-WR841N router and the serial USB device, we must first confirm that we are using the correct voltages. This is an important step, as using the wrong voltage can damage the router, the serial USB device, or both. UART ports are typically either 3.3V, or 5V. Thankfully, this particular version of the router has pre-labeled pins — so there is no ambiguity over which pin is ```RX```, ```TX```, ```GND```, or ```VCC```.
 
 Using a multimeter, I tested and confirmed a 3.3V ```VCC```, ```GND```, and ```TX``` pins. The ```RX``` pin reads at 0.0V, because it is essentially a listening port, just waiting for information. We can safely assume ```RX``` receives at 3.3V, just like the rest of the pins. Once the voltage is confirmed to be 3.3V, the next step is to connect the 3.3V serial USB converter.
 
@@ -45,7 +45,7 @@ https://github.com/JulianOzelRose/TL-WR841N-v14/assets/95890436/ef8f553b-256d-4c
 
 
 ## Bypassing write protection (read only console)
-At first I was only able to access the shell, but not issue commands -- I was stuck in a read-only console. I learned that this is because TP-Link shorts the ```RX``` pin of the UART port as a security measure. There is a single voltage-limiting resistor just next to the ```RX``` pin on this particular model. Pulling that resistor out with a pair of tweezers did the trick, and I was then able to write to the console and issue commands. Take note of the missing resistor at ```R18``` just above the ```RX``` pin.
+At first I was only able to access the shell, but not issue commands — I was stuck in a read-only console. I learned that this is because TP-Link shorts the ```RX``` pin of the UART port as a security measure. There is a single voltage-limiting resistor just next to the ```RX``` pin on this particular model. Pulling that resistor out with a pair of tweezers did the trick, and I was then able to write to the console and issue commands. Take note of the missing resistor at ```R18``` just above the ```RX``` pin.
 
 ![IMG_9832 - Copy](https://user-images.githubusercontent.com/95890436/208493479-fe79a047-e249-4d27-b693-82f5032896c4.jpg)
 
@@ -100,7 +100,7 @@ web      usr      sbin     mnt      lib      dev
 var      sys      proc     linuxrc  etc      bin
 ```
 
-https://github.com/JulianOzelRose/TL-WR841N-v14/assets/95890436/a60d247e-1f4d-4040-9cc5-ded4b511eb84
+https://github.com/JulianOzelRose/TL-WR841N-v14/assets/95890436/3f3a8536-2ee8-47a4-9731-62489bceeb0a
 
 With ```/web/``` archived and uploaded, we just have 10 directories left. It should be noted that some of these directories, particularly ```/dev/```, ```/proc/```, and ```/sys/``` are
 system-reserved directories that contain mostly symbolic links and other files which cannot be properly archived. In any case, we should be able to extract most of the file system using these methods.
@@ -110,21 +110,20 @@ With the file system successfully extracted, the next logical step is to extract
 of the board, it appears to use the **cFeon 25QH32** series IC chip for storing its firmware. With the CH341A
 programmer, there are two ways to go about extracting the firmware from the IC chip:
 
-1. Place the programmer's clips directly on the chip.
+1. Place the programmer's SOP clips directly on the chip.
 2. Desolder the chip, and resolder it onto the programmer's SPI board.
 
-I had trouble getting a read on the IC chip using the first method. It seems that other people were able to get
-it to work this way. My hypothesis is that with this particular version of the board, reading the firmware with
-the clips also powers the microprocessor, which interferes with the programmer's ability to get a proper read.
-Instead, I used the second method and desoldered the chip from the router, and resoldered it directly onto my
-programmer's SPI board.
+I had trouble getting a read on the IC chip using the first method. My hypothesis is that with this particular
+version of the board, reading the firmware with the SOP clips also powers the microprocessor, which interferes
+with the programmer's ability to get a proper read. Instead, I used the second method and desoldered the chip
+from the router, and resoldered it directly onto my programmer's SPI board.
 
 #### Firmware chip soldered onto CH341A's SPI board
 ![Firmware-IC-CH341A](https://github.com/JulianOzelRose/TL-WR841N-v14/assets/95890436/b81673fb-30d7-4051-a611-71ee7834658c)
 
-The SPI programmer was then able to extract the firmware with no issues. AsProgrammer does a good job at auto-detecting the firmware chip,
-so all that needed to be done was click 'read', and voila - it worked. Now here is what that firmware dump looks like from a hex editor,
-notice the highlighted strings from the bootloader:
+The SPI programmer was then able to extract the firmware with no issues. AsProgrammer does a good job at auto-detecting the firmware chip ID,
+so all that needed to be done was click 'Read IC', and voila — it worked. Now here is what that firmware dump looks like from a hex editor.
+Notice the highlighted strings from the bootloader.
 
 #### Firmware dump viewed from a hex editor
 ![Firmware-HxD](https://github.com/JulianOzelRose/TL-WR841N-v14/assets/95890436/ddb2f801-cb34-44ff-b928-49e70ca24c60)
