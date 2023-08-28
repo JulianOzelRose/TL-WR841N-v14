@@ -32,7 +32,7 @@ After confirming that the UART port works at 3.3V and soldering a set of header 
 
 
 ## Obtaining shell access
-Once we have secured a connection between the serial USB converter to the router's UART port, we can now modify the settings in PuTTy for serial communication. The main value we need to know is the UART port's baud rate. It is possible to use a logic analyzer to figure out what the baud rate is. However, there are several baud rates that are very common, so it is often easier to guess common values until one works. In this particular case, the router's UART runs at **115200** baud rate. Other baud rates will produce garbage on the screen. So we will use the following settings in PuTTy:
+Once we have secured a connection between the serial USB converter to the router's UART port, we can now modify the settings in PuTTy for serial communication. The main value we need to know is the UART port's baud rate. It is possible to use a logic analyzer to figure out what the baud rate is. However, there are several baud rates that are very common, so it is often easier to guess common values until one works. In this particular case, the router's UART runs at 115200 baud rate. Other baud rates will produce garbage on the screen. So we will use the following settings in PuTTy:
 - ```Baud rate:``` 115200
 - ```Data bits:``` 8
 - ```Stop bits:``` 1
@@ -76,8 +76,8 @@ Currently defined functions:
         rm, rmmod, route, sh, sleep, taskset, tftp, top, umount, vconfig
 ```
 
-Using the ```mount``` command, we can see that most of the router's file system is read only. While ```rootfs```, ```/proc/```, ```/sys/```, and ```ramfs``` are technically read-write,
-Linux typically restricts any write operations to these directories for security reasons. The only location we can reliably write to is the ```/var/``` directory.
+Using the ```mount``` command, we can see that most of the router's file system is read only. While rootfs, /proc/, /sys/, and ramfs are technically read-write,
+Linux typically restricts any write operations to these directories for security reasons. The only location we can reliably write to is the /var/ directory.
 ```
 ~ # mount
 rootfs on / type rootfs (rw)
@@ -87,11 +87,11 @@ ramfs on /var type ramfs (rw,relatime)
 /sys on /sys type sysfs (rw,relatime)
 ```
 To upload our new BusyBox, we connect our router to our computer, either with a Cat 5 cable or wirelessly. Using Tftp64, we prepare our new BusyBox binary for upload.
-We then ```cd``` over to the ```var/tmp``` directory, and use ```tftp``` to download the new binary, change its access permissions with ```chmod```, and then execute.
+We then ```cd``` over to the var/tmp directory, and use ```tftp``` to download the new binary, change its access permissions with ```chmod```, and then execute.
 
 https://github.com/JulianOzelRose/TL-WR841N-v14/assets/95890436/89f00c3e-eba8-4407-bf50-8c04f3d2f9a1
 
-With our new BusyBox binary, we can now archive directories. Using ```ls``` command from the root directory, we can see there are a total of 11 directories, as ```linuxrc``` is a script.
+With our new BusyBox binary, we can now archive directories. Using ```ls``` command from the root directory, we can see there are a total of 11 directories, as linuxrc is a script.
 So to extract the file system, we just need to archive each individual directory, and upload it via TFTP to our PC.
 
 ```
@@ -102,12 +102,12 @@ var      sys      proc     linuxrc  etc      bin
 
 https://github.com/JulianOzelRose/TL-WR841N-v14/assets/95890436/3f3a8536-2ee8-47a4-9731-62489bceeb0a
 
-With ```/web/``` archived and uploaded, we just have 10 directories left. It should be noted that some of these directories, particularly ```/dev/```, ```/proc/```, and ```/sys/``` are
+With /web/ archived and uploaded, we just have 10 directories left. It should be noted that some of these directories, particularly /dev/, /proc/, and /sys/ are
 system-reserved directories that contain mostly symbolic links and other files which cannot be properly archived. In any case, we should be able to extract most of the file system using these methods.
 
 ## Extracting the firmware
 With the file system successfully extracted, the next logical step is to extract the firmware. Upon closer inspection
-of the board, it appears to use the **cFeon 25QH32** series IC chip for storing its firmware. With the CH341A
+of the board, it appears to use the cFeon 25QH32 series IC chip for storing its firmware. With the CH341A
 programmer, there are two ways to go about extracting the firmware from the IC chip:
 
 1. Place the programmer's SOP clips directly on the chip.
