@@ -134,7 +134,7 @@ the CH341A programmer where the data lines operate at 5V, regardless of how the 
 are a few tutorials online on how to mod the CH341A to work at 3.3V, which I recommend doing to avoid shorting
 your board's firmware chip.
 
-# Sources
+## Sources
 I relied on the following sources to guide me throughout this project. These resources provide more in-depth explanations and insights into the hardware reversing process:
 
 - [Zero Day Initiative](https://www.zerodayinitiative.com/blog/2019/9/2/mindshare-hardware-reversing-with-the-tp-link-tl-wr841n-router)
