@@ -76,7 +76,7 @@ Currently defined functions:
         rm, rmmod, route, sh, sleep, taskset, tftp, top, umount, vconfig
 ```
 
-Using the ```mount``` command, we can see that most of the router's file system is read only. While ```rootfs```, ```/proc/```, ```/sys/```, and ```ramfs``` are technically read-write,
+Using the ```mount``` command, we can see that most of the router's file system is read only. While ```rootfs```, ```/proc/``` and ```/sys/``` are technically read-write,
 Linux typically restricts any write operations to these directories for security reasons. The only location we can reliably write to is the ```/var/``` directory.
 ```
 ~ # mount
