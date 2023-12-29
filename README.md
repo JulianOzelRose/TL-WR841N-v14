@@ -130,17 +130,17 @@ Notice the highlighted strings from the bootloader.
 
 ## Note about CH341A and 3.3V chips
 It should also be noted that the firmware chip on this board operates at 3.3V, and there is a known design flaw with
-the CH341A programmer where the data lines operate at 5V, regardless of how the programmer is configured. There
-are a few tutorials online on how to mod the CH341A to work at 3.3V, which I recommend doing to avoid shorting
-your board's firmware chip.
+the CH341A programmer where the data lines operate at 5V, regardless of how the programmer is configured. There are plenty of
+tutorials online on how to mod the CH341A to work at 3.3V, which I recommend doing to avoid shorting your board's firmware chip.
+You can find one such tutorial [here](https://www.youtube.com/watch?v=HwnzzF645hA).
 
 ## Sources
 I relied on the following sources to guide me throughout this project. These resources provide more in-depth explanations and insights into the hardware reversing process:
 
-- [Zero Day Initiative](https://www.zerodayinitiative.com/blog/2019/9/2/mindshare-hardware-reversing-with-the-tp-link-tl-wr841n-router)
-- [River Loop Security](https://www.riverloopsecurity.com/blog/2020/01/hw-101-uart/)
-- [Hackaday](https://hackaday.com/2019/09/12/dissecting-the-tl-wr841n-for-fun-and-profit/)
-- [OpenWrt](https://openwrt.org/toh/tp-link/tl-wr841nd)
+- [Zero Day Initiative - Hardware Reversing with the TP-Link TL-WR841N Router](https://www.zerodayinitiative.com/blog/2019/9/2/mindshare-hardware-reversing-with-the-tp-link-tl-wr841n-router)
+- [River Loop Security - Hardware Hacking 101: Getting a root shell via UART](https://www.riverloopsecurity.com/blog/2020/01/hw-101-uart/)
+- [Hackaday - Dissecting The TL-WR841N For Fun And Profit](https://hackaday.com/2019/09/12/dissecting-the-tl-wr841n-for-fun-and-profit/)
+- [OpenWrt - TP-Link TL-WR841ND](https://openwrt.org/toh/tp-link/tl-wr841nd)
 
 These guides were instrumental in helping me understand the various aspects of reverse engineering, hardware hacking, and working with router firmware.
 I recommend checking them out for a deeper understanding of the processes involved.
