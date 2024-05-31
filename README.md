@@ -44,7 +44,7 @@ After gaining access to the shell, I used the Linux command ```echo $USER``` to 
 https://github.com/JulianOzelRose/TL-WR841N-v14/assets/95890436/ef8f553b-256d-4cd7-80a0-edb2c1f17edf
 
 
-## Bypassing write protection (read only console)
+## Bypassing write protection (read-only console)
 At first I was only able to access the shell, but not issue commands — I was stuck in a read-only console. I learned that this is because TP-Link shorts the ```RX``` pin of the UART port as a security measure. There is a single voltage-limiting resistor just next to the ```RX``` pin on this particular model. Pulling that resistor out with a pair of tweezers did the trick, and I was then able to write to the console and issue commands. Take note of the missing resistor at ```R18``` just above the ```RX``` pin.
 
 ![IMG_9832 - Copy](https://user-images.githubusercontent.com/95890436/208493479-fe79a047-e249-4d27-b693-82f5032896c4.jpg)
@@ -134,13 +134,29 @@ the CH341A programmer where the data lines operate at 5V, regardless of how the 
 tutorials online on how to mod the CH341A to work at 3.3V, which I recommend doing to avoid shorting your board's firmware chip.
 You can find one such tutorial [here](https://www.youtube.com/watch?v=HwnzzF645hA).
 
-## Sources
-I relied on the following sources to guide me throughout this project. These resources provide more in-depth explanations and insights into the hardware reversing process:
+## Playing games on the router
+https://github.com/JulianOzelRose/TL-WR841N-v14/assets/95890436/4a0c7b87-587a-447e-84ba-0ba315b77cf7
 
+While this router has very light resources and a mostly read-only file system, it is possible to get it to run simple terminal games.
+I was able to get the router to play Tetris and Snake. If you wish to get the router to play games, you will want to find games that
+are either written in pure C or C++, without any dependencies. You will then need to use [Buildroot](https://buildroot.org/download.html)
+to compile the game as a statically-linked MIPS-32 little endian binary. Once you have Buildroot setup, here are the commands to compile:
+
+```
+# Compile C binary with uClibc toolchain
+mipsel-buildroot-linux-uclibc-gcc -mabi=32 -mfp32 -EL -static -o program program.c
+
+# Compile C++ binary with uClibc toolchain
+mipsel-buildroot-linux-uclibc-g++ -mabi=32 -mfp32 -EL -static -o program program.cpp
+
+# Strip binary
+mipsel-buildroot-linux-uclibc-strip program
+```
+
+
+## Sources
 - [Zero Day Initiative - Hardware Reversing with the TP-Link TL-WR841N Router](https://www.zerodayinitiative.com/blog/2019/9/2/mindshare-hardware-reversing-with-the-tp-link-tl-wr841n-router)
 - [River Loop Security - Hardware Hacking 101: Getting a root shell via UART](https://www.riverloopsecurity.com/blog/2020/01/hw-101-uart/)
 - [Hackaday - Dissecting The TL-WR841N For Fun And Profit](https://hackaday.com/2019/09/12/dissecting-the-tl-wr841n-for-fun-and-profit/)
 - [OpenWrt - TP-Link TL-WR841ND](https://openwrt.org/toh/tp-link/tl-wr841nd)
-
-These guides were instrumental in helping me understand the various aspects of reverse engineering, hardware hacking, and working with router firmware.
-I recommend checking them out for a deeper understanding of the processes involved.
+- [GitHub - Micro Tetris by troglobit](https://github.com/troglobit/tetris)
