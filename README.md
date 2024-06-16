@@ -135,7 +135,7 @@ tutorials online on how to mod the CH341A to work at 3.3V, which I recommend doi
 You can find one such tutorial [here](https://www.youtube.com/watch?v=HwnzzF645hA).
 
 ## Playing games on the router
-https://github.com/JulianOzelRose/TL-WR841N-v14/assets/95890436/4a0c7b87-587a-447e-84ba-0ba315b77cf7
+https://github.com/JulianOzelRose/TL-WR841N-v14/assets/95890436/d494b400-c690-41c8-b9e9-9db65216e253
 
 While this router has very light resources and a mostly read-only file system, it is possible to get it to run simple terminal games.
 I was able to get the router to play Tetris and Snake. If you wish to get the router to play games, you will want to find games that
